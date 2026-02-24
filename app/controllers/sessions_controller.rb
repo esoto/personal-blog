@@ -6,6 +6,7 @@ class SessionsController < ApplicationController
     user = User.authenticate_by(email: params[:email], password: params[:password])
 
     if user
+      reset_session
       session[:user_id] = user.id
       redirect_to admin_root_path, notice: "Logged in successfully."
     else
@@ -15,7 +16,7 @@ class SessionsController < ApplicationController
   end
 
   def destroy
-    session[:user_id] = nil
+    reset_session
     redirect_to root_path, notice: "Logged out."
   end
 end
