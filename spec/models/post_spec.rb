@@ -14,6 +14,13 @@ RSpec.describe Post, type: :model do
       expect(post.errors[:title]).to include("can't be blank")
     end
 
+    it "is invalid without a slug when auto-generation fails" do
+      post.title = nil
+      post.slug = nil
+      expect(post).not_to be_valid
+      expect(post.errors[:slug]).to include("can't be blank")
+    end
+
     it "is invalid with a duplicate slug" do
       described_class.create!(title: "My First Post", status: :draft)
       duplicate = described_class.new(title: "My First Post", status: :draft)
@@ -59,6 +66,12 @@ RSpec.describe Post, type: :model do
       expect(post.slug).to eq("custom-slug")
     end
 
+    it "generates a random slug when title parameterizes to blank" do
+      post = described_class.new(title: "!!!???")
+      post.validate
+      expect(post.slug).to match(/\A\h{16}\z/)
+    end
+
     it "does not regenerate slug on update if title changes" do
       post = described_class.create!(title: "Original Title", status: :draft)
       original_slug = post.slug
@@ -68,7 +81,7 @@ RSpec.describe Post, type: :model do
   end
 
   describe "slug uniqueness with suffix" do
-    it "appends a numeric suffix when slug already exists" do
+    it "appends a hex suffix when slug already exists" do
       described_class.create!(title: "Duplicate Title", status: :draft)
       second_post = described_class.create!(title: "Duplicate Title", status: :draft)
       expect(second_post.slug).to match(/\Aduplicate-title-\h+\z/)
@@ -79,7 +92,7 @@ RSpec.describe Post, type: :model do
       second = described_class.create!(title: "Same Title", status: :draft)
       third = described_class.create!(title: "Same Title", status: :draft)
 
-      slugs = [first.slug, second.slug, third.slug]
+      slugs = [ first.slug, second.slug, third.slug ]
       expect(slugs.uniq.length).to eq(3)
     end
   end
@@ -129,6 +142,16 @@ RSpec.describe Post, type: :model do
         results = described_class.recent
         published_posts = results.select { |p| p.published_at.present? }
         expect(published_posts).to eq(published_posts.sort_by(&:published_at).reverse)
+      end
+
+      it "places posts with NULL published_at last" do
+        results = described_class.recent
+        published_at_values = results.map(&:published_at)
+        non_nil = published_at_values.compact
+        nil_count = published_at_values.count(&:nil?)
+
+        expect(published_at_values.last(nil_count)).to all(be_nil)
+        expect(non_nil.length + nil_count).to eq(published_at_values.length)
       end
     end
   end

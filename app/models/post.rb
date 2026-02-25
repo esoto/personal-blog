@@ -4,13 +4,13 @@ class Post < ApplicationRecord
   enum :status, { draft: 0, published: 1 }
 
   validates :title, presence: true
-  validates :slug, uniqueness: true
+  validates :slug, presence: true, uniqueness: true
 
   before_validation :generate_slug, if: -> { slug.blank? }
 
   scope :published, -> { where(status: :published).where("published_at <= ?", Time.current) }
   scope :drafts, -> { where(status: :draft) }
-  scope :recent, -> { order(published_at: :desc) }
+  scope :recent, -> { order("published_at DESC NULLS LAST") }
 
   private
 
@@ -18,10 +18,14 @@ class Post < ApplicationRecord
     return if title.blank?
 
     base_slug = title.parameterize
-    self.slug = base_slug
+    base_slug = SecureRandom.hex(8) if base_slug.blank?
 
-    return unless self.class.exists?(slug: base_slug)
+    candidate = base_slug
 
-    self.slug = "#{base_slug}-#{SecureRandom.hex(4)}"
+    while self.class.exists?(slug: candidate)
+      candidate = "#{base_slug}-#{SecureRandom.hex(4)}"
+    end
+
+    self.slug = candidate
   end
 end
