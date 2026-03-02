@@ -1,0 +1,41 @@
+<%= form_with(model: [:admin, post]) do |f| %>
+  <% if post.errors.any? %>
+    <div>
+      <h2><%= pluralize(post.errors.count, "error") %> prohibited this post from being saved:</h2>
+      <ul>
+        <% post.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= f.label :title %>
+    <%= f.text_field :title %>
+  </div>
+
+  <div>
+    <%= f.label :excerpt %>
+    <%= f.text_area :excerpt %>
+  </div>
+
+  <div>
+    <%= f.label :body %>
+    <%= f.rich_text_area :body %>
+  </div>
+
+  <div>
+    <%= f.label :status %>
+    <%= f.select :status, Post.statuses.keys.map { |s| [s.capitalize, s] } %>
+  </div>
+
+  <div>
+    <%= f.label :published_at %>
+    <%= f.datetime_field :published_at %>
+  </div>
+
+  <div>
+    <%= f.submit %>
+  </div>
+<% end %>
