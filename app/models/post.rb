@@ -1,5 +1,7 @@
 class Post < ApplicationRecord
   has_rich_text :body
+  has_many :post_tags, dependent: :destroy
+  has_many :tags, through: :post_tags
 
   enum :status, { draft: 0, published: 1 }
 
