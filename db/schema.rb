@@ -58,7 +58,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_03_173052) do
     t.bigint "tag_id", null: false
     t.datetime "updated_at", null: false
     t.index ["post_id", "tag_id"], name: "index_post_tags_on_post_id_and_tag_id", unique: true
-    t.index ["post_id"], name: "index_post_tags_on_post_id"
     t.index ["tag_id"], name: "index_post_tags_on_tag_id"
   end
 
