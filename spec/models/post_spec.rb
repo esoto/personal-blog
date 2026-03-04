@@ -156,6 +156,25 @@ RSpec.describe Post, type: :model do
     end
   end
 
+  describe "tag associations" do
+    it "has many post_tags" do
+      expect(described_class.reflect_on_association(:post_tags).macro).to eq(:has_many)
+    end
+
+    it "has many tags through post_tags" do
+      association = described_class.reflect_on_association(:tags)
+      expect(association.macro).to eq(:has_many)
+      expect(association.options[:through]).to eq(:post_tags)
+    end
+
+    it "can be tagged" do
+      post.save!
+      tag = Tag.create!(name: "Ruby")
+      post.tags << tag
+      expect(post.reload.tags).to include(tag)
+    end
+  end
+
   describe "has_rich_text :body" do
     it "responds to body" do
       expect(post).to respond_to(:body)
