@@ -1,0 +1,27 @@
+<h1>Tags</h1>
+
+<p><%= link_to "New Tag", new_admin_tag_path %></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Slug</th>
+      <th>Posts</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @tags.each do |tag| %>
+      <tr>
+        <td><%= tag.name %></td>
+        <td><%= tag.slug %></td>
+        <td><%= tag.posts_count %></td>
+        <td>
+          <%= link_to "Edit", edit_admin_tag_path(tag) %>
+          <%= button_to "Delete", admin_tag_path(tag), method: :delete, data: { turbo_confirm: "Are you sure?" } %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
