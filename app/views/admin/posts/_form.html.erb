@@ -31,6 +31,16 @@
   </div>
 
   <div>
+    <%= f.label :tag_ids, "Tags" %>
+    <%= f.collection_check_boxes :tag_ids, Tag.all, :id, :name do |b| %>
+      <div>
+        <%= b.check_box %>
+        <%= b.label %>
+      </div>
+    <% end %>
+  </div>
+
+  <div>
     <%= f.label :published_at %>
     <%= f.datetime_field :published_at %>
   </div>
