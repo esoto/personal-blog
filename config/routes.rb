@@ -21,6 +21,10 @@ Rails.application.routes.draw do
     resources :tags, except: :show
   end
 
+  # Public posts
+  resources :posts, only: [:index], param: :slug
+  get "posts/:slug", to: "posts#show", as: :post_show
+
   # Defines the root path route ("/")
   root "pages#home"
 end
