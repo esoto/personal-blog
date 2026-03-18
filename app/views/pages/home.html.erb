@@ -1,1 +1,70 @@
-<h1>Welcome to the Blog</h1>
+<style>
+  @keyframes blink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0; }
+  }
+
+  .blinking-cursor {
+    animation: blink 1s infinite;
+  }
+
+  .terminal-text {
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+    letter-spacing: 0.05em;
+  }
+</style>
+
+<!-- Hero Section -->
+<section class="min-h-[600px] flex flex-col justify-center items-center mb-20 px-4 bg-gradient-to-b from-gray-900 via-gray-900 to-gray-800 rounded-lg border border-gray-700">
+  <div class="terminal-text max-w-2xl text-center">
+    <!-- Terminal Prompt -->
+    <div class="text-green-400 text-2xl md:text-3xl font-bold mb-8 flex items-center justify-center gap-2">
+      <span>&gt;_</span>
+      <span class="blinking-cursor">|</span>
+    </div>
+
+    <!-- Main Heading -->
+    <h1 class="text-4xl md:text-6xl font-bold text-gray-100 mb-6">
+      <span class="text-blue-400">Software Engineer</span> <span class="text-gray-400">|</span> Ruby <span class="text-gray-400">&</span> JavaScript
+    </h1>
+
+    <!-- Tagline -->
+    <p class="text-lg md:text-xl text-gray-300 mb-12 font-light">
+      Exploring code, design, and the intersection of technology and creativity.
+    </p>
+
+    <!-- CTA Button -->
+    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+      <a href="#posts" class="inline-block bg-blue-400 hover:bg-blue-500 text-gray-900 font-bold py-3 px-8 rounded-lg transition-colors">
+        Read Latest Posts
+      </a>
+      <a href="#" class="inline-block border border-blue-400 hover:bg-blue-400/10 text-blue-400 font-bold py-3 px-8 rounded-lg transition-colors">
+        View Projects
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Latest Posts Section -->
+<section id="posts" class="mb-20">
+  <div class="mb-12">
+    <h2 class="text-3xl md:text-4xl font-bold text-gray-100 mb-2">
+      <span class="text-green-400">Latest Posts</span>
+    </h2>
+    <div class="h-1 w-32 bg-gradient-to-r from-green-400 to-blue-400 rounded-full"></div>
+  </div>
+
+  <% if @posts.any? %>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <% @posts.each do |post| %>
+        <%= render "shared/post_card", post: post %>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="bg-gray-800 rounded-lg p-12 border border-gray-700 text-center">
+      <p class="text-gray-400 text-lg">
+        <span class="text-yellow-400">No posts yet</span> — check back soon for fresh content!
+      </p>
+    </div>
+  <% end %>
+</section>
