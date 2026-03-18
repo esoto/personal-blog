@@ -28,6 +28,9 @@ Rails.application.routes.draw do
   # Public tags
   get "tags/:slug", to: "tags#show", as: :tag
 
+  # Static pages
+  get "about", to: "pages#about"
+
   # Defines the root path route ("/")
   root "pages#home"
 end
