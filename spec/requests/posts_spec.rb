@@ -86,6 +86,11 @@ RSpec.describe "Posts", type: :request do
         get post_show_path(slug: post.slug)
         expect(response.body).to include("Test Post")
       end
+
+      it "includes the clipboard Stimulus controller on the post body" do
+        get post_show_path(slug: post.slug)
+        expect(response.body).to include('data-controller="clipboard"')
+      end
     end
 
     context "with a draft post" do
