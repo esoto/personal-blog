@@ -1,27 +1,56 @@
-<h1>Posts</h1>
+<% content_for(:title) { "Posts" } %>
 
-<p><%= link_to "New Post", new_admin_post_path %></p>
+<div class="mb-8 flex justify-between items-center">
+  <div>
+    <h1 class="text-4xl font-bold text-text-primary mb-2">Posts</h1>
+    <p class="text-text-secondary">Manage all your blog posts</p>
+  </div>
+  <%= link_to "New Post", new_admin_post_path, class: "px-6 py-3 bg-accent-blue hover:bg-accent-blue/90 text-bg-primary font-semibold rounded-lg transition-fast" %>
+</div>
 
-<table>
-  <thead>
-    <tr>
-      <th>Title</th>
-      <th>Status</th>
-      <th>Published At</th>
-      <th>Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @posts.each do |post| %>
-      <tr>
-        <td><%= link_to post.title, admin_post_path(post) %></td>
-        <td><%= post.status.capitalize %></td>
-        <td><%= post.published_at&.strftime("%Y-%m-%d %H:%M") %></td>
-        <td>
-          <%= link_to "Edit", edit_admin_post_path(post) %>
-          <%= button_to "Delete", admin_post_path(post), method: :delete, data: { turbo_confirm: "Are you sure?" } %>
-        </td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+<div class="bg-bg-surface border border-border rounded-lg overflow-hidden">
+  <% if @posts.any? %>
+    <div class="overflow-x-auto">
+      <table class="w-full">
+        <thead>
+          <tr class="border-b border-border">
+            <th class="px-6 py-4 text-left text-sm font-semibold text-text-secondary">Title</th>
+            <th class="px-6 py-4 text-left text-sm font-semibold text-text-secondary">Status</th>
+            <th class="px-6 py-4 text-left text-sm font-semibold text-text-secondary">Published At</th>
+            <th class="px-6 py-4 text-left text-sm font-semibold text-text-secondary">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @posts.each do |post| %>
+            <tr class="border-b border-border hover:bg-bg-surface-hover transition-fast">
+              <td class="px-6 py-4">
+                <%= link_to post.title, admin_post_path(post), class: "text-accent-blue hover:text-accent-blue/80 font-medium transition-fast" %>
+              </td>
+              <td class="px-6 py-4">
+                <% if post.status == "published" %>
+                  <span class="inline-block px-3 py-1 bg-accent-green/10 text-accent-green text-sm font-medium rounded-full">Published</span>
+                <% else %>
+                  <span class="inline-block px-3 py-1 bg-accent-orange/10 text-accent-orange text-sm font-medium rounded-full">Draft</span>
+                <% end %>
+              </td>
+              <td class="px-6 py-4 text-text-secondary text-sm">
+                <%= post.published_at&.strftime("%b %d, %Y") || "—" %>
+              </td>
+              <td class="px-6 py-4">
+                <div class="flex gap-3">
+                  <%= link_to "Edit", edit_admin_post_path(post), class: "text-accent-blue hover:text-accent-blue/80 transition-fast" %>
+                  <%= button_to "Delete", admin_post_path(post), method: :delete, data: { turbo_confirm: "Are you sure?" }, form: { class: "inline" }, class: "text-accent-orange hover:text-accent-orange/80 transition-fast bg-none border-none p-0 cursor-pointer" %>
+                </div>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% else %>
+    <div class="px-6 py-12 text-center">
+      <p class="text-text-secondary mb-6">No posts yet. Create your first one to get started!</p>
+      <%= link_to "Create Post", new_admin_post_path, class: "inline-block px-6 py-3 bg-accent-blue hover:bg-accent-blue/90 text-bg-primary font-semibold rounded-lg transition-fast" %>
+    </div>
+  <% end %>
+</div>

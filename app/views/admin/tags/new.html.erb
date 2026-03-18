@@ -1,5 +1,10 @@
-<h1>New Tag</h1>
+<% content_for(:title) { "New Tag" } %>
 
-<%= render "form", tag: @tag %>
+<div class="mb-8">
+  <h1 class="text-4xl font-bold text-text-primary mb-2">Create New Tag</h1>
+  <p class="text-text-secondary"><%= link_to "← Back to Tags", admin_tags_path, class: "text-accent-blue hover:text-accent-blue/80 transition-fast" %></p>
+</div>
 
-<p><%= link_to "Back to Tags", admin_tags_path %></p>
+<div class="bg-bg-surface border border-border rounded-lg p-8 max-w-lg">
+  <%= render "form", tag: @tag %>
+</div>

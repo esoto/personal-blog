@@ -1,5 +1,10 @@
-<h1>Edit Post</h1>
+<% content_for(:title) { "Edit Post" } %>
 
-<%= render "form", post: @post %>
+<div class="mb-8">
+  <h1 class="text-4xl font-bold text-text-primary mb-2">Edit Post</h1>
+  <p class="text-text-secondary"><%= link_to "← Back to Posts", admin_posts_path, class: "text-accent-blue hover:text-accent-blue/80 transition-fast" %></p>
+</div>
 
-<p><%= link_to "Back to Posts", admin_posts_path %></p>
+<div class="bg-bg-surface border border-border rounded-lg p-8">
+  <%= render "form", post: @post %>
+</div>

@@ -1,1 +1,41 @@
 @import "tailwindcss";
+
+@theme {
+  --color-bg-primary: #0d1117;
+  --color-bg-surface: #161b22;
+  --color-bg-surface-hover: #1c2128;
+  --color-text-primary: #e6edf3;
+  --color-text-secondary: #8b949e;
+  --color-text-muted: #484f58;
+  --color-accent-blue: #58a6ff;
+  --color-accent-green: #39d353;
+  --color-accent-orange: #f0883e;
+  --color-border: #30363d;
+  --color-border-hover: #58a6ff;
+}
+
+@layer base {
+  body {
+    @apply bg-bg-primary text-text-primary;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  }
+
+  code,
+  pre {
+    font-family: 'JetBrains Mono', 'Monaco', 'Menlo', monospace;
+  }
+}
+
+@layer utilities {
+  .prose-dark {
+    @apply prose prose-invert;
+  }
+
+  .transition-fast {
+    @apply transition-all duration-200;
+  }
+
+  .focus-ring {
+    @apply outline-none ring-2 ring-accent-blue ring-offset-2 ring-offset-bg-surface;
+  }
+}
