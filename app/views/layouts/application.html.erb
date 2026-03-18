@@ -16,6 +16,10 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
+    <%# Highlight.js for syntax highlighting %>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets@11.11.1/styles/github-dark.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets@11.11.1/highlight.min.js"></script>
+
     <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
     <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
 
@@ -44,7 +48,7 @@
             <%= link_to "Posts", posts_path, class: "text-text-primary hover:text-accent-blue transition-fast" %>
             <%= link_to "Tags", posts_path, class: "text-text-primary hover:text-accent-blue transition-fast" %>
             <% if logged_in? %>
-              <%= link_to "Admin", admin_dashboard_path, class: "px-4 py-2 bg-bg-surface-hover border border-border hover:border-accent-blue text-text-primary rounded transition-fast" %>
+              <%= link_to "Admin", admin_root_path, class: "px-4 py-2 bg-bg-surface-hover border border-border hover:border-accent-blue text-text-primary rounded transition-fast" %>
             <% end %>
           </div>
         </div>
