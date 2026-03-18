@@ -40,7 +40,7 @@ RSpec.describe "Posts", type: :request do
       before do
         12.times do |i|
           Post.create!(
-            title: "Post #{i + 1}",
+            title: "Article-#{format('%02d', i + 1)}",
             status: :published,
             published_at: (12 - i).days.ago,
             excerpt: "Excerpt #{i + 1}"
@@ -50,16 +50,18 @@ RSpec.describe "Posts", type: :request do
 
       it "shows only 10 posts on page 1" do
         get posts_path
-        expect(response.body).to include("Post 1")
-        expect(response.body).to include("Post 10")
-        expect(response.body).not_to include("Post 11")
+        # Newest first: Article-12, 11, ..., 03
+        expect(response.body).to include("Article-12")
+        expect(response.body).to include("Article-03")
+        expect(response.body).not_to include("Article-02")
       end
 
       it "shows remaining posts on page 2" do
         get posts_path(page: 2)
-        expect(response.body).to include("Post 11")
-        expect(response.body).to include("Post 12")
-        expect(response.body).not_to include("Post 1")
+        # Oldest 2: Article-02, Article-01
+        expect(response.body).to include("Article-02")
+        expect(response.body).to include("Article-01")
+        expect(response.body).not_to include("Article-12")
       end
     end
   end
@@ -96,13 +98,15 @@ RSpec.describe "Posts", type: :request do
       end
 
       it "returns 404" do
-        expect { get post_show_path(slug: draft_post.slug) }.to raise_error(ActiveRecord::RecordNotFound)
+        get post_show_path(slug: draft_post.slug)
+        expect(response).to have_http_status(:not_found)
       end
     end
 
     context "with a non-existent slug" do
       it "returns 404" do
-        expect { get post_show_path(slug: "nonexistent") }.to raise_error(ActiveRecord::RecordNotFound)
+        get post_show_path(slug: "nonexistent")
+        expect(response).to have_http_status(:not_found)
       end
     end
   end
