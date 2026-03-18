@@ -19,13 +19,13 @@ RSpec.describe "Admin::Posts with Tags", type: :request do
               title: "Ruby on Rails Guide",
               excerpt: "A comprehensive guide",
               status: "draft",
-              tag_ids: [ruby_tag.id, rails_tag.id]
+              tag_ids: [ ruby_tag.id, rails_tag.id ]
             }
           }
         }.to change(Post, :count).by(1)
 
         created_post = Post.last
-        expect(created_post.tags).to match_array([ruby_tag, rails_tag])
+        expect(created_post.tags).to match_array([ ruby_tag, rails_tag ])
       end
 
       it "creates a post with no tags" do
@@ -51,7 +51,7 @@ RSpec.describe "Admin::Posts with Tags", type: :request do
               title: "Web Development Tips",
               excerpt: "Some tips",
               status: "draft",
-              tag_ids: [web_tag.id]
+              tag_ids: [ web_tag.id ]
             }
           }
         }.to change(Post, :count).by(1)
@@ -71,21 +71,21 @@ RSpec.describe "Admin::Posts with Tags", type: :request do
 
         patch admin_post_path(blog_post), params: {
           post: {
-            tag_ids: [ruby_tag.id, rails_tag.id]
+            tag_ids: [ ruby_tag.id, rails_tag.id ]
           }
         }
 
-        expect(blog_post.reload.tags).to match_array([ruby_tag, rails_tag])
+        expect(blog_post.reload.tags).to match_array([ ruby_tag, rails_tag ])
       end
 
       it "replaces tags on a post" do
         blog_post.tags << ruby_tag
         blog_post.tags << rails_tag
-        expect(blog_post.reload.tags).to match_array([ruby_tag, rails_tag])
+        expect(blog_post.reload.tags).to match_array([ ruby_tag, rails_tag ])
 
         patch admin_post_path(blog_post), params: {
           post: {
-            tag_ids: [web_tag.id]
+            tag_ids: [ web_tag.id ]
           }
         }
 
@@ -109,12 +109,12 @@ RSpec.describe "Admin::Posts with Tags", type: :request do
         patch admin_post_path(blog_post), params: {
           post: {
             title: "Updated Post Title",
-            tag_ids: [ruby_tag.id, web_tag.id]
+            tag_ids: [ ruby_tag.id, web_tag.id ]
           }
         }
 
         expect(blog_post.reload.title).to eq("Updated Post Title")
-        expect(blog_post.tags).to match_array([ruby_tag, web_tag])
+        expect(blog_post.tags).to match_array([ ruby_tag, web_tag ])
       end
     end
   end
@@ -157,14 +157,14 @@ RSpec.describe "Admin::Posts with Tags", type: :request do
             title: "Published Post with Tags",
             excerpt: "A published post",
             status: "published",
-            tag_ids: [ruby_tag.id, rails_tag.id]
+            tag_ids: [ ruby_tag.id, rails_tag.id ]
           }
         }
       end
 
       created_post = Post.last
       expect(created_post.published?).to be true
-      expect(created_post.tags).to match_array([ruby_tag, rails_tag])
+      expect(created_post.tags).to match_array([ ruby_tag, rails_tag ])
     end
 
     it "maintains tag associations across multiple updates" do
@@ -172,7 +172,7 @@ RSpec.describe "Admin::Posts with Tags", type: :request do
 
       # First update: add tags
       patch admin_post_path(blog_post), params: {
-        post: { tag_ids: [ruby_tag.id] }
+        post: { tag_ids: [ ruby_tag.id ] }
       }
       expect(blog_post.reload.tags).to contain_exactly(ruby_tag)
 
@@ -180,15 +180,15 @@ RSpec.describe "Admin::Posts with Tags", type: :request do
       patch admin_post_path(blog_post), params: {
         post: {
           title: "Updated Title",
-          tag_ids: [ruby_tag.id, rails_tag.id]
+          tag_ids: [ ruby_tag.id, rails_tag.id ]
         }
       }
-      expect(blog_post.reload.tags).to match_array([ruby_tag, rails_tag])
+      expect(blog_post.reload.tags).to match_array([ ruby_tag, rails_tag ])
 
       # Third update: change tags while keeping title
       patch admin_post_path(blog_post), params: {
         post: {
-          tag_ids: [web_tag.id]
+          tag_ids: [ web_tag.id ]
         }
       }
       expect(blog_post.reload.tags).to contain_exactly(web_tag)
