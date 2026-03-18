@@ -116,7 +116,7 @@ RSpec.describe "Pages", type: :request do
           status: :published,
           published_at: 1.day.ago
         )
-        post.tags << [tag1, tag2]
+        post.tags << [ tag1, tag2 ]
         post
       end
 
