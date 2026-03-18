@@ -5,7 +5,7 @@
   <div class="relative z-10">
     <!-- Title -->
     <h3 class="text-xl font-bold text-accent-blue mb-3 group-hover:text-accent-green transition-fast">
-      <%= link_to post.title, post_path(post) %>
+      <%= link_to post.title, post_show_path(slug: post.slug) %>
     </h3>
 
     <!-- Excerpt -->
