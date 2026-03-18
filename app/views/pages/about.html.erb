@@ -1,0 +1,56 @@
+<% content_for(:title) { "About" } %>
+
+<% content_for(:head) do %>
+  <meta property="og:title" content="About — Personal Blog">
+  <meta property="og:description" content="Software engineer passionate about building great products.">
+  <meta property="og:type" content="website">
+<% end %>
+
+<div>
+  <!-- Header -->
+  <div class="mb-12">
+    <h1 class="text-4xl font-bold text-text-primary mb-2">About Me</h1>
+    <p class="text-text-secondary">A bit about who I am and what I do</p>
+  </div>
+
+  <!-- Bio Section -->
+  <div class="bg-bg-surface border border-border rounded-lg p-8 mb-8">
+    <div class="prose-custom">
+      <p class="text-text-primary text-lg leading-relaxed mb-6">
+        Hi! I'm a <span class="text-accent-blue font-medium">Software Engineer</span> passionate about building
+        great products and sharing what I learn along the way.
+      </p>
+
+      <p class="text-text-secondary leading-relaxed mb-6">
+        I write about software development, engineering practices, and the tools I use daily.
+        This blog is my space to share thoughts, tutorials, and things I find interesting.
+      </p>
+
+      <p class="text-text-secondary leading-relaxed">
+        When I'm not coding, you can find me exploring new technologies, contributing to
+        open source, or enjoying a good cup of coffee.
+      </p>
+    </div>
+  </div>
+
+  <!-- Links Section -->
+  <div class="bg-bg-surface border border-border rounded-lg p-8 mb-8">
+    <h2 class="text-2xl font-bold text-text-primary mb-6">Find Me Online</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <a href="#" class="flex items-center gap-3 p-4 bg-bg-primary border border-border rounded-lg hover:border-accent-blue transition-fast group">
+        <span class="text-text-secondary group-hover:text-accent-blue transition-fast">GitHub</span>
+      </a>
+      <a href="#" class="flex items-center gap-3 p-4 bg-bg-primary border border-border rounded-lg hover:border-accent-blue transition-fast group">
+        <span class="text-text-secondary group-hover:text-accent-blue transition-fast">Twitter</span>
+      </a>
+      <a href="#" class="flex items-center gap-3 p-4 bg-bg-primary border border-border rounded-lg hover:border-accent-blue transition-fast group">
+        <span class="text-text-secondary group-hover:text-accent-blue transition-fast">LinkedIn</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- Back Link -->
+  <div class="pt-8 border-t border-border">
+    <%= link_to "← Back to Home", root_path, class: "text-accent-blue hover:text-accent-green transition-fast" %>
+  </div>
+</div>
