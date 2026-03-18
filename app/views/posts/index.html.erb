@@ -1,0 +1,38 @@
+<% content_for(:title) { "Posts" } %>
+
+<div class="max-w-4xl mx-auto">
+  <h1 class="text-4xl font-bold text-gray-100 mb-12">Posts</h1>
+
+  <% if @posts.any? %>
+    <div class="space-y-8 mb-12">
+      <% @posts.each do |post| %>
+        <%= render "shared/post_card", post: post %>
+      <% end %>
+    </div>
+
+    <!-- Pagination -->
+    <div class="flex items-center justify-between mt-12 pt-8 border-t border-gray-700">
+      <div class="text-gray-400 text-sm">
+        Page <%= @page %> of <%= (@total_posts.to_f / @per_page).ceil %>
+      </div>
+
+      <div class="flex gap-4">
+        <% if @page > 1 %>
+          <%= link_to "← Previous", posts_path(page: @page - 1), class: "px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded transition-colors" %>
+        <% else %>
+          <button disabled class="px-4 py-2 bg-gray-700 text-gray-500 rounded cursor-not-allowed">← Previous</button>
+        <% end %>
+
+        <% if @page < (@total_posts.to_f / @per_page).ceil %>
+          <%= link_to "Next →", posts_path(page: @page + 1), class: "px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded transition-colors" %>
+        <% else %>
+          <button disabled class="px-4 py-2 bg-gray-700 text-gray-500 rounded cursor-not-allowed">Next →</button>
+        <% end %>
+      </div>
+    </div>
+  <% else %>
+    <div class="text-center py-12">
+      <p class="text-gray-400 text-lg">No posts published yet.</p>
+    </div>
+  <% end %>
+</div>
