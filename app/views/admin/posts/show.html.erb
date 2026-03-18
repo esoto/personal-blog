@@ -1,14 +1,60 @@
-<h1><%= @post.title %></h1>
+<% content_for(:title) { @post.title } %>
 
-<p><strong>Status:</strong> <%= @post.status.capitalize %></p>
-<p><strong>Published At:</strong> <%= @post.published_at&.strftime("%Y-%m-%d %H:%M") || "Not published" %></p>
-<p><strong>Excerpt:</strong> <%= @post.excerpt %></p>
-
-<div>
-  <%= @post.body %>
+<div class="mb-8">
+  <div class="flex justify-between items-start mb-4">
+    <div>
+      <h1 class="text-4xl font-bold text-text-primary mb-2"><%= @post.title %></h1>
+      <p class="text-text-secondary"><%= link_to "← Back to Posts", admin_posts_path, class: "text-accent-blue hover:text-accent-blue/80 transition-fast" %></p>
+    </div>
+    <%= link_to "Edit", edit_admin_post_path(@post), class: "px-4 py-2 bg-accent-blue hover:bg-accent-blue/90 text-bg-primary font-semibold rounded-lg transition-fast" %>
+  </div>
 </div>
 
-<p>
-  <%= link_to "Edit", edit_admin_post_path(@post) %>
-  <%= link_to "Back to Posts", admin_posts_path %>
-</p>
+<div class="bg-bg-surface border border-border rounded-lg p-8">
+  <!-- Metadata -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 pb-8 border-b border-border">
+    <!-- Status -->
+    <div>
+      <p class="text-text-secondary text-sm font-medium mb-2">Status</p>
+      <% if @post.status == "published" %>
+        <span class="inline-block px-3 py-1 bg-accent-green/10 text-accent-green text-sm font-medium rounded-full">Published</span>
+      <% else %>
+        <span class="inline-block px-3 py-1 bg-accent-orange/10 text-accent-orange text-sm font-medium rounded-full">Draft</span>
+      <% end %>
+    </div>
+
+    <!-- Published At -->
+    <div>
+      <p class="text-text-secondary text-sm font-medium mb-2">Published At</p>
+      <p class="text-text-primary"><%= @post.published_at&.strftime("%b %d, %Y at %I:%M %p") || "Not published" %></p>
+    </div>
+
+    <!-- Tags -->
+    <div>
+      <p class="text-text-secondary text-sm font-medium mb-2">Tags</p>
+      <% if @post.tags.any? %>
+        <div class="flex flex-wrap gap-2">
+          <% @post.tags.each do |tag| %>
+            <span class="inline-block bg-bg-primary border border-border text-text-primary text-xs font-medium px-3 py-1 rounded-full"><%= tag.name %></span>
+          <% end %>
+        </div>
+      <% else %>
+        <p class="text-text-secondary text-sm">No tags</p>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- Excerpt -->
+  <div class="mb-8">
+    <p class="text-text-secondary text-sm font-medium mb-2">Excerpt</p>
+    <p class="text-text-primary"><%= @post.excerpt %></p>
+  </div>
+
+  <!-- Body -->
+  <div class="mb-8">
+    <p class="text-text-secondary text-sm font-medium mb-4">Content</p>
+    <div class="prose-dark">
+      <%= @post.body %>
+    </div>
+  </div>
+</div>

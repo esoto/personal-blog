@@ -1,38 +1,45 @@
 <% content_for(:title) { "Posts" } %>
 
-<div class="max-w-4xl mx-auto">
-  <h1 class="text-4xl font-bold text-gray-100 mb-12">Posts</h1>
+<div>
+  <!-- Header -->
+  <div class="mb-12">
+    <h1 class="text-4xl font-bold text-text-primary mb-2">Posts</h1>
+    <p class="text-text-secondary">Explore my latest articles and thoughts</p>
+  </div>
 
   <% if @posts.any? %>
-    <div class="space-y-8 mb-12">
+    <!-- Posts Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
       <% @posts.each do |post| %>
         <%= render "shared/post_card", post: post %>
       <% end %>
     </div>
 
     <!-- Pagination -->
-    <div class="flex items-center justify-between mt-12 pt-8 border-t border-gray-700">
-      <div class="text-gray-400 text-sm">
-        Page <%= @page %> of <%= (@total_posts.to_f / @per_page).ceil %>
+    <div class="flex items-center justify-between pt-8 border-t border-border">
+      <div class="text-text-secondary text-sm font-medium">
+        Page <span class="text-accent-blue"><%= @page %></span> of <span class="text-accent-blue"><%= (@total_posts.to_f / @per_page).ceil %></span>
       </div>
 
       <div class="flex gap-4">
         <% if @page > 1 %>
-          <%= link_to "← Previous", posts_path(page: @page - 1), class: "px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded transition-colors" %>
+          <%= link_to "← Previous", posts_path(page: @page - 1), class: "px-4 py-2 bg-bg-surface hover:bg-bg-surface-hover border border-border hover:border-accent-blue text-text-primary font-medium rounded transition-fast" %>
         <% else %>
-          <button disabled class="px-4 py-2 bg-gray-700 text-gray-500 rounded cursor-not-allowed">← Previous</button>
+          <button disabled class="px-4 py-2 bg-bg-surface border border-border text-text-muted rounded cursor-not-allowed opacity-50">← Previous</button>
         <% end %>
 
         <% if @page < (@total_posts.to_f / @per_page).ceil %>
-          <%= link_to "Next →", posts_path(page: @page + 1), class: "px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded transition-colors" %>
+          <%= link_to "Next →", posts_path(page: @page + 1), class: "px-4 py-2 bg-bg-surface hover:bg-bg-surface-hover border border-border hover:border-accent-blue text-text-primary font-medium rounded transition-fast" %>
         <% else %>
-          <button disabled class="px-4 py-2 bg-gray-700 text-gray-500 rounded cursor-not-allowed">Next →</button>
+          <button disabled class="px-4 py-2 bg-bg-surface border border-border text-text-muted rounded cursor-not-allowed opacity-50">Next →</button>
         <% end %>
       </div>
     </div>
   <% else %>
-    <div class="text-center py-12">
-      <p class="text-gray-400 text-lg">No posts published yet.</p>
+    <!-- Empty State -->
+    <div class="bg-bg-surface border border-border rounded-lg p-12 text-center">
+      <p class="text-text-secondary text-lg mb-6">No posts published yet.</p>
+      <p class="text-text-muted text-sm">Check back soon for fresh content!</p>
     </div>
   <% end %>
 </div>

@@ -1,21 +1,27 @@
-<%= form_with(model: [:admin, tag]) do |f| %>
+<%= form_with(model: [:admin, tag], local: true) do |f| %>
+  <!-- Error Messages -->
   <% if tag.errors.any? %>
-    <div>
-      <h2><%= pluralize(tag.errors.count, "error") %> prohibited this tag from being saved:</h2>
-      <ul>
+    <div class="mb-6 bg-bg-primary border border-accent-orange rounded-lg px-4 py-4">
+      <h2 class="text-accent-orange font-semibold mb-3">
+        <%= pluralize(tag.errors.count, "error") %> prohibited this tag from being saved:
+      </h2>
+      <ul class="space-y-1 text-accent-orange text-sm">
         <% tag.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
+          <li>• <%= message %></li>
         <% end %>
       </ul>
     </div>
   <% end %>
 
-  <div>
-    <%= f.label :name %>
-    <%= f.text_field :name %>
+  <!-- Name Field -->
+  <div class="mb-6">
+    <%= f.label :name, "Tag Name", class: "block text-text-primary font-semibold mb-2" %>
+    <%= f.text_field :name, placeholder: "e.g., Ruby, Rails, Web Development", class: "w-full px-4 py-2 bg-bg-primary border border-border rounded-lg text-text-primary placeholder-text-muted focus:outline-none focus:ring-2 focus:ring-accent-blue focus:border-transparent transition-fast" %>
   </div>
 
-  <div>
-    <%= f.submit %>
+  <!-- Submit Buttons -->
+  <div class="flex gap-4">
+    <%= f.submit "Save Tag", class: "px-6 py-3 bg-accent-green hover:bg-accent-green/90 text-bg-primary font-semibold rounded-lg transition-fast cursor-pointer" %>
+    <%= link_to "Cancel", admin_tags_path, class: "px-6 py-3 border border-border hover:border-accent-blue text-text-primary font-semibold rounded-lg transition-fast" %>
   </div>
 <% end %>

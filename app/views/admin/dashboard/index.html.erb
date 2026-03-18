@@ -1,2 +1,71 @@
-<h1>Admin Dashboard</h1>
-<p>Welcome, <%= current_user.email %>.</p>
+<% content_for(:title) { "Admin Dashboard" } %>
+
+<div class="mb-12">
+  <h1 class="text-4xl font-bold text-text-primary mb-2">Admin Dashboard</h1>
+  <p class="text-text-secondary">Welcome, <span class="text-accent-blue"><%= current_user.email %></span></p>
+</div>
+
+<!-- Stats Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+  <!-- Total Posts Card -->
+  <div class="bg-bg-surface border border-border rounded-lg p-6 hover:border-accent-blue transition-fast">
+    <div class="flex items-center justify-between">
+      <div>
+        <p class="text-text-secondary text-sm font-medium mb-1">Total Posts</p>
+        <p class="text-3xl font-bold text-text-primary"><%= Post.count %></p>
+      </div>
+      <div class="w-12 h-12 bg-accent-blue/10 rounded-lg flex items-center justify-center">
+        <svg class="w-6 h-6 text-accent-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- Published Posts Card -->
+  <div class="bg-bg-surface border border-border rounded-lg p-6 hover:border-accent-green transition-fast">
+    <div class="flex items-center justify-between">
+      <div>
+        <p class="text-text-secondary text-sm font-medium mb-1">Published</p>
+        <p class="text-3xl font-bold text-text-primary"><%= Post.where(status: "published").count %></p>
+      </div>
+      <div class="w-12 h-12 bg-accent-green/10 rounded-lg flex items-center justify-center">
+        <svg class="w-6 h-6 text-accent-green" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- Draft Posts Card -->
+  <div class="bg-bg-surface border border-border rounded-lg p-6 hover:border-accent-orange transition-fast">
+    <div class="flex items-center justify-between">
+      <div>
+        <p class="text-text-secondary text-sm font-medium mb-1">Drafts</p>
+        <p class="text-3xl font-bold text-text-primary"><%= Post.where(status: "draft").count %></p>
+      </div>
+      <div class="w-12 h-12 bg-accent-orange/10 rounded-lg flex items-center justify-center">
+        <svg class="w-6 h-6 text-accent-orange" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- Total Tags Card -->
+  <div class="bg-bg-surface border border-border rounded-lg p-6 hover:border-accent-blue transition-fast">
+    <div class="flex items-center justify-between">
+      <div>
+        <p class="text-text-secondary text-sm font-medium mb-1">Total Tags</p>
+        <p class="text-3xl font-bold text-text-primary"><%= Tag.count %></p>
+      </div>
+      <div class="w-12 h-12 bg-accent-blue/10 rounded-lg flex items-center justify-center">
+        <svg class="w-6 h-6 text-accent-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path></svg>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="bg-bg-surface border border-border rounded-lg p-8">
+  <h2 class="text-2xl font-bold text-text-primary mb-6">Quick Actions</h2>
+  <div class="flex flex-col sm:flex-row gap-4">
+    <%= link_to "Create New Post", new_admin_post_path, class: "inline-block px-6 py-3 bg-accent-blue hover:bg-accent-blue/90 text-bg-primary font-semibold rounded-lg transition-fast" %>
+    <%= link_to "Create New Tag", new_admin_tag_path, class: "inline-block px-6 py-3 bg-accent-green hover:bg-accent-green/90 text-bg-primary font-semibold rounded-lg transition-fast" %>
+    <%= link_to "View All Posts", admin_posts_path, class: "inline-block px-6 py-3 border border-border hover:border-accent-blue text-text-primary font-semibold rounded-lg transition-fast" %>
+  </div>
+</div>
