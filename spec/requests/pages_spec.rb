@@ -50,7 +50,6 @@ RSpec.describe "Pages", type: :request do
       end
 
       it "limits to 5 posts" do
-        # Create 7 posts
         6.times do |i|
           Post.create!(
             title: "Post #{i + 3}",
@@ -61,8 +60,9 @@ RSpec.describe "Pages", type: :request do
         end
 
         get root_path
-        # Should only show 5 posts
-        expect(response.body.scan(/Excerpt/).count).to eq(5)
+        # 8 total posts, homepage shows only 5 most recent
+        # Each post card renders exactly one <h3> heading
+        expect(response.body.scan(/<h3/).count).to eq(5)
       end
     end
 
