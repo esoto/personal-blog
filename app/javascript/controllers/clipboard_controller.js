@@ -2,6 +2,7 @@ import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
   connect() {
+    this.feedbackTimers = new WeakMap()
     this.addCopyButtons()
   }
 
@@ -54,7 +55,7 @@ export default class extends Controller {
     const button = event.currentTarget
     const pre = button.closest("pre")
     const code = pre.querySelector("code")
-    const text = (code || pre).textContent
+    const text = code ? code.textContent : this.getPreTextContent(pre)
 
     try {
       await navigator.clipboard.writeText(text)
@@ -62,6 +63,12 @@ export default class extends Controller {
     } catch {
       this.fallbackCopy(text, button)
     }
+  }
+
+  getPreTextContent(pre) {
+    const clone = pre.cloneNode(true)
+    clone.querySelectorAll("[data-clipboard-button]").forEach((el) => el.remove())
+    return clone.textContent
   }
 
   fallbackCopy(text, button) {
@@ -83,6 +90,9 @@ export default class extends Controller {
   }
 
   showCopiedFeedback(button) {
+    const existingTimer = this.feedbackTimers.get(button)
+    if (existingTimer) clearTimeout(existingTimer)
+
     const label = button.querySelector("[data-label]")
     const originalIcon = button.querySelector("svg")
 
@@ -91,12 +101,15 @@ export default class extends Controller {
     button.classList.remove("text-text-secondary")
     originalIcon.outerHTML = this.checkIconSvg
 
-    setTimeout(() => {
+    const timer = setTimeout(() => {
       label.textContent = "Copy"
       button.classList.remove("text-accent-green", "border-accent-green")
       button.classList.add("text-text-secondary")
       button.querySelector("svg").outerHTML = this.copyIconSvg
+      this.feedbackTimers.delete(button)
     }, 2000)
+
+    this.feedbackTimers.set(button, timer)
   }
 
   get copyIconSvg() {
