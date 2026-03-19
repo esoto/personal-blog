@@ -19,6 +19,12 @@ Rails.application.routes.draw do
     root "dashboard#index"
     resources :posts
     resources :tags, except: :show
+    resources :comments, only: [ :index, :destroy ] do
+      member do
+        patch :approve
+        patch :spam
+      end
+    end
   end
 
   # Public posts
