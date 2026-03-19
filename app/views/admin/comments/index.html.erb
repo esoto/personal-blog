@@ -1,0 +1,69 @@
+<% content_for(:title) { "Comments" } %>
+
+<div class="mb-8">
+  <h1 class="text-4xl font-bold text-text-primary mb-2">Comments</h1>
+  <p class="text-text-secondary">Moderate user comments across all posts</p>
+</div>
+
+<!-- Status Filter Tabs -->
+<div class="flex gap-2 mb-8">
+  <% Comment.statuses.each_key do |status| %>
+    <% count = @status_counts.fetch(status, 0) %>
+    <%= link_to admin_comments_path(status: status),
+        class: "px-4 py-2 rounded-lg font-medium text-sm transition-fast #{@status == status ? 'bg-accent-blue text-bg-primary' : 'bg-bg-surface border border-border text-text-secondary hover:text-text-primary hover:border-accent-blue'}" do %>
+      <%= status.capitalize %> (<%= count %>)
+    <% end %>
+  <% end %>
+</div>
+
+<div class="bg-bg-surface border border-border rounded-lg overflow-hidden">
+  <% if @comments.any? %>
+    <div class="overflow-x-auto">
+      <table class="w-full">
+        <thead>
+          <tr class="border-b border-border">
+            <th class="px-6 py-4 text-left text-sm font-semibold text-text-secondary">Author</th>
+            <th class="px-6 py-4 text-left text-sm font-semibold text-text-secondary">Comment</th>
+            <th class="px-6 py-4 text-left text-sm font-semibold text-text-secondary">Post</th>
+            <th class="px-6 py-4 text-left text-sm font-semibold text-text-secondary">Date</th>
+            <th class="px-6 py-4 text-left text-sm font-semibold text-text-secondary">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @comments.each do |comment| %>
+            <tr class="border-b border-border hover:bg-bg-surface-hover transition-fast">
+              <td class="px-6 py-4">
+                <div class="text-text-primary font-medium"><%= comment.author_name %></div>
+                <div class="text-text-secondary text-sm"><%= comment.email %></div>
+              </td>
+              <td class="px-6 py-4 text-text-primary text-sm max-w-xs">
+                <%= tag.span truncate(comment.body, length: 100), title: comment.body %>
+              </td>
+              <td class="px-6 py-4 text-text-secondary text-sm">
+                <%= comment.post.title %>
+              </td>
+              <td class="px-6 py-4 text-text-secondary text-sm whitespace-nowrap">
+                <%= comment.created_at.strftime("%b %d, %Y %H:%M") %>
+              </td>
+              <td class="px-6 py-4">
+                <div class="flex gap-3">
+                  <% unless comment.approved? %>
+                    <%= button_to "Approve", approve_admin_comment_path(comment), method: :patch, form: { class: "inline" }, class: "text-accent-green hover:text-accent-green/80 transition-fast bg-none border-none p-0 cursor-pointer text-sm font-medium" %>
+                  <% end %>
+                  <% unless comment.spam? %>
+                    <%= button_to "Spam", spam_admin_comment_path(comment), method: :patch, form: { class: "inline" }, class: "text-accent-orange hover:text-accent-orange/80 transition-fast bg-none border-none p-0 cursor-pointer text-sm font-medium" %>
+                  <% end %>
+                  <%= button_to "Delete", admin_comment_path(comment), method: :delete, data: { turbo_confirm: "Are you sure you want to delete this comment?" }, form: { class: "inline" }, class: "text-red-400 hover:text-red-300 transition-fast bg-none border-none p-0 cursor-pointer text-sm font-medium" %>
+                </div>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% else %>
+    <div class="px-6 py-12 text-center">
+      <p class="text-text-secondary">No <%= @status %> comments.</p>
+    </div>
+  <% end %>
+</div>
