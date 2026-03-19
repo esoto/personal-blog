@@ -39,6 +39,11 @@
     </div>
   </article>
 
+  <section class="mb-8 space-y-8" id="comments">
+    <%= render "posts/comments", comments: @comments %>
+    <%= render "posts/comment_form", post: @post, comment: @comment %>
+  </section>
+
   <!-- Back link at bottom -->
   <div class="flex justify-between items-center pt-6 border-t border-border">
     <%= link_to "← Back to posts", posts_path, class: "text-accent-blue hover:text-accent-green transition-fast" %>

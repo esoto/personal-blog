@@ -30,6 +30,7 @@ Rails.application.routes.draw do
   # Public posts
   resources :posts, only: [ :index ], param: :slug
   get "posts/:slug", to: "posts#show", as: :post_show
+  post "posts/:slug/comments", to: "comments#create", as: :post_comments
 
   # Public tags
   get "tags/:slug", to: "tags#show", as: :tag
