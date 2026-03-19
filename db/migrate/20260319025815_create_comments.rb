@@ -11,5 +11,8 @@ class CreateComments < ActiveRecord::Migration[8.1]
     end
 
     add_index :comments, :status
+    add_index :comments, [ :post_id, :status, :created_at ],
+              order: { created_at: :desc },
+              name: "index_comments_on_post_status_created"
   end
 end

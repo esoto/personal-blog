@@ -59,6 +59,31 @@ RSpec.describe Comment, type: :model do
       expect(comment).not_to be_valid
       expect(comment.errors[:post]).to include("must exist")
     end
+
+    it "rejects author_name longer than 100 characters" do
+      comment = Comment.new(valid_attributes.merge(author_name: "a" * 101))
+      expect(comment).not_to be_valid
+      expect(comment.errors[:author_name]).to include("is too long (maximum is 100 characters)")
+    end
+
+    it "rejects email longer than 254 characters" do
+      comment = Comment.new(valid_attributes.merge(email: "a" * 243 + "@example.com"))
+      expect(comment).not_to be_valid
+      expect(comment.errors[:email]).to include("is too long (maximum is 254 characters)")
+    end
+
+    it "rejects body longer than 5000 characters" do
+      comment = Comment.new(valid_attributes.merge(body: "a" * 5001))
+      expect(comment).not_to be_valid
+      expect(comment.errors[:body]).to include("is too long (maximum is 5000 characters)")
+    end
+  end
+
+  describe "normalizations" do
+    it "downcases and strips email" do
+      comment = Comment.create!(valid_attributes.merge(email: "  Jane@Example.COM  "))
+      expect(comment.email).to eq("jane@example.com")
+    end
   end
 
   describe "status enum" do
