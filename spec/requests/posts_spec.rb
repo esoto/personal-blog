@@ -100,7 +100,12 @@ RSpec.describe "Posts", type: :request do
 
       it "includes the highlight Stimulus controller" do
         get post_show_path(slug: post.slug)
-        expect(response.body).to include('data-controller="highlight"')
+        expect(response.body).to include('data-controller="highlight')
+      end
+
+      it "includes the clipboard Stimulus controller on the post body" do
+        get post_show_path(slug: post.slug)
+        expect(response.body).to include('data-controller="highlight clipboard"')
       end
     end
 
