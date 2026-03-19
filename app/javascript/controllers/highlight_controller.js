@@ -5,6 +5,7 @@ import { Controller } from "@hotwired/stimulus"
 // Adds language labels and handles Turbo navigations via connect/disconnect.
 export default class extends Controller {
   connect() {
+    this.originalContents = new Map()
     this.highlightCodeBlocks()
   }
 
@@ -13,18 +14,18 @@ export default class extends Controller {
   }
 
   highlightCodeBlocks() {
+    if (typeof hljs === "undefined") {
+      this.retryTimeout = setTimeout(() => this.highlightCodeBlocks(), 100)
+      return
+    }
+
     const codeBlocks = this.element.querySelectorAll("pre code")
 
     codeBlocks.forEach((block) => {
-      // Skip if already highlighted
       if (block.dataset.highlighted === "yes") return
 
-      // Highlight the block
-      if (typeof hljs !== "undefined") {
-        hljs.highlightElement(block)
-      }
-
-      // Add language label
+      this.originalContents.set(block, block.innerHTML)
+      hljs.highlightElement(block)
       this.addLanguageLabel(block)
     })
   }
@@ -33,7 +34,6 @@ export default class extends Controller {
     const pre = block.closest("pre")
     if (!pre || pre.querySelector(".code-language-label")) return
 
-    // Determine the language from the class (hljs adds "language-xxx" class)
     const langClass = Array.from(block.classList).find((c) => c.startsWith("language-"))
     const language = langClass ? langClass.replace("language-", "") : null
 
@@ -41,19 +41,23 @@ export default class extends Controller {
       const label = document.createElement("span")
       label.className = "code-language-label"
       label.textContent = language
-      pre.style.position = "relative"
       pre.appendChild(label)
     }
   }
 
   cleanup() {
-    // Remove highlighted state so blocks can be re-highlighted on next connect
+    if (this.retryTimeout) clearTimeout(this.retryTimeout)
+
     const codeBlocks = this.element.querySelectorAll("pre code")
     codeBlocks.forEach((block) => {
+      if (this.originalContents?.has(block)) {
+        block.innerHTML = this.originalContents.get(block)
+      }
       delete block.dataset.highlighted
+      block.classList.remove("hljs")
     })
+    this.originalContents?.clear()
 
-    // Remove language labels
     const labels = this.element.querySelectorAll(".code-language-label")
     labels.forEach((label) => label.remove())
   }
