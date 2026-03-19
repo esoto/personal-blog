@@ -19,8 +19,8 @@ RSpec.describe "Admin::Comments", type: :request do
     end
 
     it "defaults to showing pending comments" do
-      pending_comment = Comment.create!(valid_comment_attrs.merge(author_name: "Pending User"))
-      approved_comment = Comment.create!(valid_comment_attrs.merge(author_name: "Approved User", status: :approved))
+      Comment.create!(valid_comment_attrs.merge(author_name: "Pending User"))
+      Comment.create!(valid_comment_attrs.merge(author_name: "Approved User", status: :approved))
 
       get admin_comments_path
       expect(response.body).to include("Pending User")
@@ -28,8 +28,8 @@ RSpec.describe "Admin::Comments", type: :request do
     end
 
     it "filters by pending status" do
-      pending_comment = Comment.create!(valid_comment_attrs.merge(author_name: "Pending User"))
-      approved_comment = Comment.create!(valid_comment_attrs.merge(author_name: "Approved User", status: :approved))
+      Comment.create!(valid_comment_attrs.merge(author_name: "Pending User"))
+      Comment.create!(valid_comment_attrs.merge(author_name: "Approved User", status: :approved))
 
       get admin_comments_path(status: "pending")
       expect(response.body).to include("Pending User")
@@ -37,8 +37,8 @@ RSpec.describe "Admin::Comments", type: :request do
     end
 
     it "filters by approved status" do
-      pending_comment = Comment.create!(valid_comment_attrs.merge(author_name: "Pending User"))
-      approved_comment = Comment.create!(valid_comment_attrs.merge(author_name: "Approved User", status: :approved))
+      Comment.create!(valid_comment_attrs.merge(author_name: "Pending User"))
+      Comment.create!(valid_comment_attrs.merge(author_name: "Approved User", status: :approved))
 
       get admin_comments_path(status: "approved")
       expect(response.body).to include("Approved User")
@@ -46,8 +46,8 @@ RSpec.describe "Admin::Comments", type: :request do
     end
 
     it "filters by spam status" do
-      pending_comment = Comment.create!(valid_comment_attrs.merge(author_name: "Pending User"))
-      spam_comment = Comment.create!(valid_comment_attrs.merge(author_name: "Spam User", status: :spam))
+      Comment.create!(valid_comment_attrs.merge(author_name: "Pending User"))
+      Comment.create!(valid_comment_attrs.merge(author_name: "Spam User", status: :spam))
 
       get admin_comments_path(status: "spam")
       expect(response.body).to include("Spam User")
@@ -55,7 +55,7 @@ RSpec.describe "Admin::Comments", type: :request do
     end
 
     it "falls back to pending for invalid status parameter" do
-      pending_comment = Comment.create!(valid_comment_attrs.merge(author_name: "Pending User"))
+      Comment.create!(valid_comment_attrs.merge(author_name: "Pending User"))
 
       get admin_comments_path(status: "invalid")
       expect(response.body).to include("Pending User")

@@ -8,7 +8,7 @@
 <!-- Status Filter Tabs -->
 <div class="flex gap-2 mb-8">
   <% Comment.statuses.each_key do |status| %>
-    <% count = Comment.where(status: status).count %>
+    <% count = @status_counts.fetch(status, 0) %>
     <%= link_to admin_comments_path(status: status),
         class: "px-4 py-2 rounded-lg font-medium text-sm transition-fast #{@status == status ? 'bg-accent-blue text-bg-primary' : 'bg-bg-surface border border-border text-text-secondary hover:text-text-primary hover:border-accent-blue'}" do %>
       <%= status.capitalize %> (<%= count %>)
@@ -37,7 +37,7 @@
                 <div class="text-text-secondary text-sm"><%= comment.email %></div>
               </td>
               <td class="px-6 py-4 text-text-primary text-sm max-w-xs">
-                <span title="<%= comment.body %>"><%= truncate(comment.body, length: 100) %></span>
+                <%= tag.span truncate(comment.body, length: 100), title: comment.body %>
               </td>
               <td class="px-6 py-4 text-text-secondary text-sm">
                 <%= comment.post.title %>

@@ -5,6 +5,7 @@ module Admin
     def index
       @status = params[:status].presence_in(Comment.statuses.keys) || "pending"
       @comments = Comment.where(status: @status).includes(:post).recent
+      @status_counts = Comment.group(:status).count
     end
 
     def approve
@@ -18,7 +19,7 @@ module Admin
     end
 
     def destroy
-      @comment.destroy
+      @comment.destroy!
       redirect_back fallback_location: admin_comments_path, notice: "Comment deleted."
     end
 
