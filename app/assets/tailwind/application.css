@@ -103,13 +103,16 @@
 }
 
 .prose-dark pre {
-  background-color: var(--color-bg-surface);
+  background-color: var(--color-bg-surface-hover);
   border: 1px solid var(--color-border);
   border-radius: 0.5rem;
-  padding: 1em;
+  padding: 1.25em;
   overflow-x: auto;
   margin-top: 1.5em;
   margin-bottom: 1.5em;
+  position: relative;
+  width: 100%;
+  max-width: none;
 }
 
 .prose-dark pre code {
@@ -117,6 +120,29 @@
   padding: 0;
   color: var(--color-text-primary);
   font-size: 0.875em;
+}
+
+/* Override highlight.js background to match our theme */
+.prose-dark pre code.hljs {
+  background: transparent;
+  padding: 0;
+}
+
+/* Language label on code blocks */
+.code-language-label {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: var(--color-border);
+  color: var(--color-text-secondary);
+  font-size: 0.7rem;
+  font-family: 'Inter', system-ui, sans-serif;
+  padding: 0.2em 0.6em;
+  border-radius: 0 0.5rem 0 0.375rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  line-height: 1.5;
+  user-select: none;
 }
 
 .prose-dark img {
