@@ -1,0 +1,13 @@
+<%= turbo_stream.replace "comment_form" do %>
+  <div id="comment_form" class="bg-bg-surface border border-accent-green rounded-lg p-6 md:p-8">
+    <div class="flex items-center gap-3">
+      <svg class="w-6 h-6 text-accent-green flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      <div>
+        <p class="text-accent-green font-medium">Thank you for your comment!</p>
+        <p class="text-text-secondary text-sm mt-1">Your comment has been submitted and is awaiting moderation.</p>
+      </div>
+    </div>
+  </div>
+<% end %>

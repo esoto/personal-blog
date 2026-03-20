@@ -9,5 +9,7 @@ class PostsController < ApplicationController
 
   def show
     @post = Post.published.find_by!(slug: params[:slug])
+    @comments = @post.comments.approved.recent.load
+    @comment = @post.comments.build
   end
 end

@@ -1,0 +1,45 @@
+<%= turbo_frame_tag "comment_form" do %>
+  <div class="bg-bg-surface border border-border rounded-lg p-6 md:p-8">
+    <h3 class="text-xl font-bold text-text-primary mb-6">Leave a Comment</h3>
+
+    <%= form_with(model: comment, url: post_comments_path(slug: post.slug), class: "space-y-5") do |f| %>
+      <% if comment.errors.any? %>
+        <div class="bg-bg-surface-hover border border-accent-orange rounded-lg p-4">
+          <p class="text-accent-orange text-sm font-medium mb-2">Please fix the following errors:</p>
+          <ul class="list-disc list-inside text-accent-orange text-sm space-y-1">
+            <% comment.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div>
+          <%= f.label :author_name, "Name", class: "block text-text-secondary text-sm font-medium mb-2" %>
+          <%= f.text_field :author_name, class: "w-full bg-bg-primary border border-border rounded-lg px-4 py-2.5 text-text-primary placeholder-text-muted focus:border-accent-blue focus:ring-1 focus:ring-accent-blue outline-none transition-fast", placeholder: "Your name" %>
+        </div>
+
+        <div>
+          <%= f.label :email, "Email", class: "block text-text-secondary text-sm font-medium mb-2" %>
+          <%= f.text_field :email, class: "w-full bg-bg-primary border border-border rounded-lg px-4 py-2.5 text-text-primary placeholder-text-muted focus:border-accent-blue focus:ring-1 focus:ring-accent-blue outline-none transition-fast", placeholder: "your@email.com" %>
+          <p class="text-text-muted text-xs mt-1">Your email will not be published.</p>
+        </div>
+      </div>
+
+      <div>
+        <%= f.label :body, "Comment", class: "block text-text-secondary text-sm font-medium mb-2" %>
+        <%= f.text_area :body, rows: 4, class: "w-full bg-bg-primary border border-border rounded-lg px-4 py-2.5 text-text-primary placeholder-text-muted focus:border-accent-blue focus:ring-1 focus:ring-accent-blue outline-none transition-fast resize-y", placeholder: "Share your thoughts..." %>
+      </div>
+
+      <%# Honeypot field - hidden from humans, bots fill it %>
+      <div class="hidden" aria-hidden="true">
+        <%= text_field_tag :website, nil, tabindex: "-1", autocomplete: "off" %>
+      </div>
+
+      <div>
+        <%= f.submit "Submit Comment", class: "px-6 py-2.5 bg-accent-blue text-bg-primary font-medium rounded-lg hover:bg-accent-blue/90 transition-fast cursor-pointer" %>
+      </div>
+    <% end %>
+  </div>
+<% end %>
