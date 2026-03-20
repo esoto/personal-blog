@@ -15,7 +15,7 @@ RSpec.describe "db/seeds.rb" do
 
       user = User.find_by(email: "admin@example.com")
       expect(user).to be_present
-      expect(user.authenticate("password123")).to be_truthy
+      expect(user.authenticate("password12345")).to be_truthy
     end
 
     it "is idempotent — does not create duplicates on re-run" do
@@ -48,7 +48,7 @@ RSpec.describe "db/seeds.rb" do
       expect { load seed_file }.to change(User, :count).by(1)
 
       user = User.find_by(email: "custom@example.com")
-      expect(user.authenticate("password123")).to be_truthy
+      expect(user.authenticate("password12345")).to be_truthy
     end
   end
 end

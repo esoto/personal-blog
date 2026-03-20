@@ -1,10 +1,10 @@
 require "rails_helper"
 
 RSpec.describe "Admin::Posts", type: :request do
-  let!(:user) { User.create!(email: "admin@example.com", password: "password123", password_confirmation: "password123") }
+  let!(:user) { User.create!(email: "admin@example.com", password: "password12345", password_confirmation: "password12345") }
 
   before do
-    post login_path, params: { email: "admin@example.com", password: "password123" }
+    post login_path, params: { email: "admin@example.com", password: "password12345" }
   end
 
   describe "GET /admin/posts" do

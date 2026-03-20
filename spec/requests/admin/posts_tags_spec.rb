@@ -1,13 +1,13 @@
 require "rails_helper"
 
 RSpec.describe "Admin::Posts with Tags", type: :request do
-  let!(:user) { User.create!(email: "admin@example.com", password: "password123", password_confirmation: "password123") }
+  let!(:user) { User.create!(email: "admin@example.com", password: "password12345", password_confirmation: "password12345") }
   let!(:ruby_tag) { Tag.create!(name: "Ruby") }
   let!(:rails_tag) { Tag.create!(name: "Rails") }
   let!(:web_tag) { Tag.create!(name: "Web Development") }
 
   before do
-    post login_path, params: { email: "admin@example.com", password: "password123" }
+    post login_path, params: { email: "admin@example.com", password: "password12345" }
   end
 
   describe "POST /admin/posts with tags" do
