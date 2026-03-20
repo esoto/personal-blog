@@ -37,6 +37,10 @@ end
 RSpec.configure do |config|
   config.include ActiveSupport::Testing::TimeHelpers
 
+  config.before(:each) do
+    SessionsController::RATE_LIMIT_STORE.clear
+  end
+
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_paths = [
     Rails.root.join('spec/fixtures')
