@@ -27,6 +27,9 @@ Rails.application.routes.draw do
     end
   end
 
+  # RSS Feed
+  get "feed", to: "feeds#index", defaults: { format: :rss }
+
   # Public posts
   resources :posts, only: [ :index ], param: :slug
   get "posts/:slug", to: "posts#show", as: :post_show
