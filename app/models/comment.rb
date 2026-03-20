@@ -4,6 +4,7 @@ class Comment < ApplicationRecord
   enum :status, { pending: 0, approved: 1, spam: 2 }
 
   normalizes :email, with: ->(email) { email.strip.downcase }
+  normalizes :author_name, with: ->(name) { name.strip }
 
   validates :author_name, presence: true, length: { maximum: 100 }
   validates :email, presence: true, length: { maximum: 254 }, format: { with: URI::MailTo::EMAIL_REGEXP }

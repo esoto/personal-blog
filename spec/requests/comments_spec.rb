@@ -87,7 +87,7 @@ RSpec.describe "Comments", type: :request do
              params: invalid_params,
              headers: { "Accept" => "text/vnd.turbo-stream.html" }
 
-        expect(response).to have_http_status(:ok)
+        expect(response).to have_http_status(:unprocessable_entity)
         expect(response.body).to include("can&#39;t be blank")
       end
 

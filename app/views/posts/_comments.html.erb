@@ -9,7 +9,7 @@
         <div class="bg-bg-surface border border-border rounded-lg p-6">
           <div class="flex items-center gap-3 mb-3">
             <div class="w-8 h-8 bg-accent-blue/20 rounded-full flex items-center justify-center">
-              <span class="text-accent-blue text-sm font-bold"><%= comment.author_name[0].upcase %></span>
+              <span class="text-accent-blue text-sm font-bold"><%= comment.author_name&.first&.upcase %></span>
             </div>
             <div>
               <span class="text-text-primary font-medium text-sm"><%= comment.author_name %></span>
