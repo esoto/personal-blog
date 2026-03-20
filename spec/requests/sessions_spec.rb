@@ -28,6 +28,17 @@ RSpec.describe "Sessions", type: :request do
     end
   end
 
+  describe "POST /login rate limiting" do
+    before { SessionsController::RATE_LIMIT_STORE.clear }
+
+    it "returns 429 after exceeding rate limit" do
+      6.times do
+        post login_path, params: { email: "admin@example.com", password: "wrongpassword" }
+      end
+      expect(response).to have_http_status(:too_many_requests)
+    end
+  end
+
   describe "DELETE /logout" do
     it "logs out and redirects to root" do
       post login_path, params: { email: "admin@example.com", password: "password12345" }
