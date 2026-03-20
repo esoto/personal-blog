@@ -110,7 +110,7 @@ RSpec.describe "Tags", type: :request do
           published_at: 1.day.ago,
           excerpt: "A guide to Rails"
         )
-        post.tags << [tag, other_tag]
+        post.tags << [ tag, other_tag ]
         post
       end
 
