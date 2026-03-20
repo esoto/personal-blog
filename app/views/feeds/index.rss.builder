@@ -12,8 +12,8 @@ xml.rss version: "2.0", "xmlns:atom" => "http://www.w3.org/2005/Atom" do
     @posts.each do |post|
       xml.item do
         xml.title post.title
-        xml.description post.excerpt
-        xml.pubDate post.published_at.rfc2822
+        xml.description post.excerpt.presence || post.title
+        xml.pubDate post.published_at&.rfc2822
         xml.link post_show_url(slug: post.slug)
         xml.guid post_show_url(slug: post.slug), isPermaLink: "true"
       end
