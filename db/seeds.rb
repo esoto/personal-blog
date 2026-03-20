@@ -1,3 +1,4 @@
+admin_email = ENV.fetch("ADMIN_EMAIL", "admin@example.com")
 admin_password = ENV["ADMIN_PASSWORD"]
 
 if Rails.env.production? && admin_password.to_s.empty?
@@ -6,7 +7,7 @@ end
 
 admin_password ||= "password123"
 
-User.find_or_create_by!(email: "admin@example.com") do |user|
+User.find_or_create_by!(email: admin_email) do |user|
   user.password = admin_password
   user.password_confirmation = admin_password
 end
