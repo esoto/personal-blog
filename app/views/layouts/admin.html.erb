@@ -50,10 +50,10 @@
 
     <!-- Flash Messages -->
     <% if notice.present? %>
-      <div class="mx-auto max-w-7xl w-full px-4 sm:px-6 lg:px-8 mt-4">
+      <div class="mx-auto max-w-7xl w-full px-4 sm:px-6 lg:px-8 mt-4" data-controller="toast">
         <div class="bg-bg-surface border border-accent-green rounded-lg px-4 py-3 text-accent-green flex items-center justify-between gap-4 animate-in fade-in slide-in-from-top duration-300">
           <span><%= notice %></span>
-          <button type="button" data-dismiss-toast class="text-accent-green hover:text-accent-green/80 transition-fast">
+          <button type="button" data-action="click->toast#dismiss" class="text-accent-green hover:text-accent-green/80 transition-fast">
             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
           </button>
         </div>
@@ -61,10 +61,10 @@
     <% end %>
 
     <% if alert.present? %>
-      <div class="mx-auto max-w-7xl w-full px-4 sm:px-6 lg:px-8 mt-4">
+      <div class="mx-auto max-w-7xl w-full px-4 sm:px-6 lg:px-8 mt-4" data-controller="toast">
         <div class="bg-bg-surface border border-accent-orange rounded-lg px-4 py-3 text-accent-orange flex items-center justify-between gap-4 animate-in fade-in slide-in-from-top duration-300">
           <span><%= alert %></span>
-          <button type="button" data-dismiss-toast class="text-accent-orange hover:text-accent-orange/80 transition-fast">
+          <button type="button" data-action="click->toast#dismiss" class="text-accent-orange hover:text-accent-orange/80 transition-fast">
             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
           </button>
         </div>
@@ -85,10 +85,5 @@
       </div>
     </footer>
 
-    <script>
-      document.querySelectorAll('[data-dismiss-toast]').forEach(btn => {
-        btn.addEventListener('click', () => btn.closest('[class*="bg-bg-surface"]').remove());
-      });
-    </script>
   </body>
 </html>
