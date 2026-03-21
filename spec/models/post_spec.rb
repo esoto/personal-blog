@@ -189,25 +189,25 @@ RSpec.describe Post, type: :model do
 
     it "returns 1 for exactly 200 words" do
       post.save!
-      post.update!(body: (["word"] * 200).join(" "))
+      post.update!(body: ([ "word" ] * 200).join(" "))
       expect(post.reading_time).to eq(1)
     end
 
     it "returns 2 for 201 words" do
       post.save!
-      post.update!(body: (["word"] * 201).join(" "))
+      post.update!(body: ([ "word" ] * 201).join(" "))
       expect(post.reading_time).to eq(2)
     end
 
     it "returns 3 for 500 words" do
       post.save!
-      post.update!(body: (["word"] * 500).join(" "))
+      post.update!(body: ([ "word" ] * 500).join(" "))
       expect(post.reading_time).to eq(3)
     end
 
     it "returns 5 for 1000 words" do
       post.save!
-      post.update!(body: (["word"] * 1000).join(" "))
+      post.update!(body: ([ "word" ] * 1000).join(" "))
       expect(post.reading_time).to eq(5)
     end
 

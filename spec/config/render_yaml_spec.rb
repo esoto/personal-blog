@@ -8,21 +8,6 @@ RSpec.describe "render.yaml" do
     expect(config).to be_a(Hash)
   end
 
-  describe "databases" do
-    let(:databases) { config["databases"] }
-
-    it "defines a PostgreSQL database" do
-      expect(databases).to be_present
-      expect(databases.length).to eq(1)
-    end
-
-    it "has the expected database name" do
-      db = databases.first
-      expect(db["name"]).to eq("personal-blog-db")
-      expect(db["databaseName"]).to eq("personal_blog_production")
-    end
-  end
-
   describe "services" do
     let(:services) { config["services"] }
     let(:web_service) { services.first }
@@ -41,11 +26,10 @@ RSpec.describe "render.yaml" do
       expect(web_service["healthCheckPath"]).to eq("/up")
     end
 
-    it "sets DATABASE_URL from the database" do
+    it "sets DATABASE_URL as a sync false secret" do
       db_url_var = web_service["envVars"].find { |v| v["key"] == "DATABASE_URL" }
       expect(db_url_var).to be_present
-      expect(db_url_var["fromDatabase"]["name"]).to eq("personal-blog-db")
-      expect(db_url_var["fromDatabase"]["property"]).to eq("connectionString")
+      expect(db_url_var["sync"]).to eq(false)
     end
 
     it "sets RAILS_MASTER_KEY as a sync false secret" do
@@ -82,11 +66,11 @@ RSpec.describe "render.yaml" do
       expect(admin_password_var["sync"]).to eq(false)
     end
 
-    it "configures Solid database URLs from the same database" do
+    it "configures Solid database URLs as sync false secrets" do
       %w[CACHE_DATABASE_URL QUEUE_DATABASE_URL CABLE_DATABASE_URL].each do |key|
         var = web_service["envVars"].find { |v| v["key"] == key }
         expect(var).to be_present, "Expected #{key} to be configured"
-        expect(var["fromDatabase"]["name"]).to eq("personal-blog-db")
+        expect(var["sync"]).to eq(false)
       end
     end
   end

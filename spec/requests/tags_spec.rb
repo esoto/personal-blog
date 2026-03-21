@@ -38,10 +38,10 @@ RSpec.describe "Tags", type: :request do
 
       it "displays tags in alphabetical order" do
         get tags_path
-        body = response.body
-        js_pos = body.index("JavaScript")
-        rails_pos = body.index("Rails")
-        ruby_pos = body.index("Ruby")
+        tag_section = response.body[response.body.index("Browse posts by topic")..]
+        js_pos = tag_section.index("JavaScript")
+        rails_pos = tag_section.index("Rails")
+        ruby_pos = tag_section.index("Ruby")
         expect(js_pos).to be < rails_pos
         expect(rails_pos).to be < ruby_pos
       end

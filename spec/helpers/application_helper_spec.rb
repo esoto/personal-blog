@@ -56,7 +56,7 @@ RSpec.describe ApplicationHelper, type: :helper do
       it "does not match partial path prefixes" do
         allow(helper.request).to receive(:path).and_return("/tagsomething")
 
-        expect(helper.nav_link_class("/tags", prefix_match: true)).to eq(active_classes)
+        expect(helper.nav_link_class("/tags", prefix_match: true)).to eq(inactive_classes)
       end
     end
 
