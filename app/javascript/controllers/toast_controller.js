@@ -7,6 +7,7 @@ export default class extends Controller {
 
   disconnect() {
     if (this.dismissTimeout) clearTimeout(this.dismissTimeout)
+    if (this.fadeTimeout) clearTimeout(this.fadeTimeout)
   }
 
   dismiss() {
@@ -15,8 +16,10 @@ export default class extends Controller {
   }
 
   fadeAndRemove() {
+    if (this.fading) return
+    this.fading = true
     this.element.style.transition = "opacity 300ms ease-out"
     this.element.style.opacity = "0"
-    setTimeout(() => this.element.remove(), 300)
+    this.fadeTimeout = setTimeout(() => this.element.remove(), 300)
   }
 }
