@@ -5,7 +5,9 @@ module Admin
     def index
       @status = params[:status].presence_in(Comment.statuses.keys) || "pending"
       @comments = Comment.where(status: @status).includes(:post).recent
-      @status_counts = Comment.statuses.keys.index_with { |s| Comment.where(status: s).count }
+      @status_counts = Comment.statuses.keys.index_with(0).merge(
+        Comment.group(:status).count
+      )
     end
 
     def approve
