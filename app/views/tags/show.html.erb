@@ -1,4 +1,6 @@
 <% content_for(:title) { "Posts tagged with #{@tag.name}" } %>
+<% content_for(:og_title) { "Posts tagged with #{@tag.name} — Personal Blog" } %>
+<% content_for(:og_description) { "Browse all posts tagged with #{@tag.name}." } %>
 
 <div>
   <!-- Header -->

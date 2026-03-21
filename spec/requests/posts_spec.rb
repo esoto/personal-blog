@@ -30,6 +30,26 @@ RSpec.describe "Posts", type: :request do
         expect(response.body).to include("Published Post")
       end
 
+      it "includes OG meta tags" do
+        get posts_path
+        expect(response.body).to include('property="og:title" content="Posts')
+        expect(response.body).to include('property="og:description"')
+        expect(response.body).to include('property="og:type" content="website"')
+        expect(response.body).to include('property="og:url"')
+      end
+
+      it "includes Twitter Card meta tags" do
+        get posts_path
+        expect(response.body).to include('name="twitter:card" content="summary"')
+        expect(response.body).to include('name="twitter:title" content="Posts')
+        expect(response.body).to include('name="twitter:description"')
+      end
+
+      it "includes a canonical URL" do
+        get posts_path
+        expect(response.body).to include('rel="canonical"')
+      end
+
       it "does not show draft posts" do
         get posts_path
         expect(response.body).not_to include("Draft Post")
@@ -126,9 +146,46 @@ RSpec.describe "Posts", type: :request do
         expect(response.body).to include('data-controller="highlight clipboard"')
       end
 
+      it "includes OG meta tags with post title" do
+        get post_show_path(slug: post.slug)
+        expect(response.body).to include('property="og:title" content="Test Post"')
+        expect(response.body).to include('property="og:description" content="Test excerpt"')
+        expect(response.body).to include('property="og:type" content="article"')
+        expect(response.body).to include('property="og:url"')
+      end
+
+      it "includes Twitter Card meta tags with post title" do
+        get post_show_path(slug: post.slug)
+        expect(response.body).to include('name="twitter:card" content="summary"')
+        expect(response.body).to include('name="twitter:title" content="Test Post"')
+        expect(response.body).to include('name="twitter:description" content="Test excerpt"')
+      end
+
+      it "includes a canonical URL" do
+        get post_show_path(slug: post.slug)
+        expect(response.body).to include('rel="canonical"')
+      end
+
       it "displays reading time" do
         get post_show_path(slug: post.slug)
         expect(response.body).to include("min read")
+      end
+    end
+
+    context "with a published post without excerpt" do
+      let!(:post_no_excerpt) do
+        Post.create!(
+          title: "No Excerpt Post",
+          status: :published,
+          published_at: 1.day.ago,
+          excerpt: nil
+        )
+      end
+
+      it "falls back to truncated body for OG description" do
+        get post_show_path(slug: post_no_excerpt.slug)
+        expect(response.body).to include('property="og:description"')
+        expect(response.body).to include('name="twitter:description"')
       end
     end
 
