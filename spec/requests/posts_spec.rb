@@ -63,6 +63,24 @@ RSpec.describe "Posts", type: :request do
         expect(response.body).to include("Article-01")
         expect(response.body).not_to include("Article-12")
       end
+
+      it "clamps page=0 to page 1" do
+        get posts_path(page: 0)
+        expect(response).to have_http_status(:ok)
+        expect(response.body).to include("Article-12")
+      end
+
+      it "clamps negative page to page 1" do
+        get posts_path(page: -5)
+        expect(response).to have_http_status(:ok)
+        expect(response.body).to include("Article-12")
+      end
+
+      it "treats non-numeric page as page 1" do
+        get posts_path(page: "abc")
+        expect(response).to have_http_status(:ok)
+        expect(response.body).to include("Article-12")
+      end
     end
   end
 

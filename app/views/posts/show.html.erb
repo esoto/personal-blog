@@ -24,9 +24,9 @@
         <% if @post.tags.any? %>
           <div class="flex flex-wrap gap-2">
             <% @post.tags.each do |tag| %>
-              <span class="inline-block bg-bg-primary border border-border text-text-secondary text-xs font-medium px-3 py-1 rounded-full">
+              <%= link_to tag_path(slug: tag.slug), class: "inline-block bg-bg-primary border border-border text-text-secondary hover:text-accent-blue hover:border-accent-blue/50 text-xs font-medium px-3 py-1 rounded-full transition-fast" do %>
                 <%= tag.name %>
-              </span>
+              <% end %>
             <% end %>
           </div>
         <% end %>
@@ -51,7 +51,7 @@
       <div class="flex gap-2 text-xs text-text-secondary">
         <span class="font-medium">Tagged:</span>
         <% @post.tags.first(2).each do |tag| %>
-          <span><%= tag.name %></span>
+          <%= link_to tag.name, tag_path(slug: tag.slug), class: "hover:text-accent-blue transition-fast" %>
         <% end %>
       </div>
     <% end %>
