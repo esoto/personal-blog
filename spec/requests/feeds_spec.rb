@@ -46,8 +46,8 @@ RSpec.describe "Feeds", type: :request do
       xml = Nokogiri::XML(response.body)
 
       expect(xml.at("rss")["version"]).to eq("2.0")
-      expect(xml.at("channel title").text).to eq("Personal Blog")
-      expect(xml.at("channel description").text).to eq("Latest posts from Personal Blog")
+      expect(xml.at("channel title").text).to eq("Esteban Soto")
+      expect(xml.at("channel description").text).to eq("Latest posts from Esteban Soto")
       expect(xml.at("channel link").text).to be_present
       expect(xml.at("channel language").text).to eq("en")
     end
@@ -122,7 +122,7 @@ RSpec.describe "Feeds", type: :request do
         xml = Nokogiri::XML(response.body)
 
         expect(xml.css("item")).to be_empty
-        expect(xml.at("channel title").text).to eq("Personal Blog")
+        expect(xml.at("channel title").text).to eq("Esteban Soto")
       end
     end
   end
@@ -131,7 +131,7 @@ RSpec.describe "Feeds", type: :request do
     it "includes RSS auto-discovery link tag in the HTML head" do
       get root_path
       expect(response.body).to include('application/rss+xml')
-      expect(response.body).to include('Personal Blog RSS Feed')
+      expect(response.body).to include('Esteban Soto RSS Feed')
     end
   end
 end

@@ -10,15 +10,15 @@
     <%= csp_meta_tag %>
 
     <%# Meta tags %>
-    <% meta_title = content_for?(:og_title) ? yield(:og_title) : 'Personal Blog' %>
-    <% meta_description = content_for?(:og_description) ? yield(:og_description) : 'A developer blog about Ruby, JavaScript, and software engineering' %>
+    <% meta_title = content_for?(:og_title) ? yield(:og_title) : 'Esteban Soto' %>
+    <% meta_description = content_for?(:og_description) ? yield(:og_description) : 'Full-stack developer writing about Ruby, JavaScript, and software engineering.' %>
     <% canonical_url = request.base_url + request.path %>
     <meta name="description" content="<%= meta_description %>">
     <meta property="og:title" content="<%= meta_title %>">
     <meta property="og:description" content="<%= meta_description %>">
     <meta property="og:type" content="<%= content_for?(:og_type) ? yield(:og_type) : 'website' %>">
     <meta property="og:url" content="<%= canonical_url %>">
-    <meta property="og:site_name" content="Personal Blog">
+    <meta property="og:site_name" content="Esteban Soto">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="<%= meta_title %>">
     <meta name="twitter:description" content="<%= meta_description %>">
@@ -27,7 +27,7 @@
     <%= yield :head %>
 
     <%# RSS Feed auto-discovery %>
-    <%= auto_discovery_link_tag :rss, feed_url(format: :rss), title: "Personal Blog RSS Feed" %>
+    <%= auto_discovery_link_tag :rss, feed_url(format: :rss), title: "Esteban Soto RSS Feed" %>
 
     <%# Google Fonts %>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -62,13 +62,14 @@
         <div class="flex justify-between items-center h-16">
           <!-- Site Logo/Name -->
           <div class="flex items-center">
-            <%= link_to "Personal Blog", root_path, class: "text-xl font-bold text-accent-blue hover:text-accent-green transition-fast" %>
+            <%= link_to "Esteban Soto", root_path, class: "text-xl font-bold text-accent-blue hover:text-accent-green transition-fast" %>
           </div>
 
           <!-- Navigation Links -->
           <div class="flex items-center gap-6">
             <%= link_to "Posts", posts_path, class: nav_link_class("/posts", prefix_match: true) %>
             <%= link_to "Tags", tags_path, class: nav_link_class("/tags", prefix_match: true) %>
+            <%= link_to "About", about_path, class: nav_link_class("/about") %>
             <% if logged_in? %>
               <%= link_to "Admin", admin_root_path, class: "px-4 py-2 bg-bg-surface-hover border border-border hover:border-accent-blue text-text-primary rounded transition-fast" %>
             <% end %>
@@ -110,12 +111,12 @@
       <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div class="flex flex-col md:flex-row justify-between items-center gap-8">
           <div class="text-text-secondary text-sm">
-            <p>&copy; <%= Time.current.year %> Personal Blog. All rights reserved.</p>
+            <p>&copy; <%= Time.current.year %> Esteban Soto. All rights reserved.</p>
           </div>
           <div class="flex gap-6 text-text-secondary">
-            <a href="#" class="hover:text-accent-blue transition-fast">GitHub</a>
-            <a href="#" class="hover:text-accent-blue transition-fast">Twitter</a>
-            <a href="#" class="hover:text-accent-blue transition-fast">LinkedIn</a>
+            <a href="https://github.com/esoto" target="_blank" rel="noopener noreferrer" class="hover:text-accent-blue transition-fast">GitHub</a>
+            <a href="https://www.linkedin.com/in/soto-esteban/" target="_blank" rel="noopener noreferrer" class="hover:text-accent-blue transition-fast">LinkedIn</a>
+            <%= link_to feed_path(format: :rss), class: "hover:text-accent-orange transition-fast", title: "RSS Feed" do %><svg class="w-4 h-4 inline" fill="currentColor" viewBox="0 0 24 24"><path d="M6.503 20.752c0 1.794-1.456 3.248-3.251 3.248-1.796 0-3.252-1.454-3.252-3.248 0-1.794 1.456-3.248 3.252-3.248 1.795 0 3.251 1.454 3.251 3.248zm-6.503-12.572v4.811c6.05.062 10.96 4.966 11.022 11.009h4.817c-.062-8.742-7.098-15.771-15.839-15.82zm0-8.18v4.819c12.951.115 23.413 10.696 23.413 23.625h.087v.576h4.5v-.576c0-15.762-12.802-28.543-28-28.444z"/></svg> RSS<% end %>
           </div>
         </div>
       </div>

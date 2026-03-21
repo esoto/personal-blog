@@ -9,7 +9,8 @@ RSpec.describe "Pages", type: :request do
 
     it "displays the hero section" do
       get root_path
-      expect(response.body).to include("Software Engineer")
+      expect(response.body).to include("Esteban Soto")
+      expect(response.body).to include("Full-Stack Developer")
       expect(response.body).to include("Ruby")
       expect(response.body).to include("JavaScript")
     end
@@ -17,7 +18,7 @@ RSpec.describe "Pages", type: :request do
     it "includes OG meta tags" do
       get root_path
       expect(response.body).to include('property="og:title"')
-      expect(response.body).to include("Personal Blog")
+      expect(response.body).to include("Esteban Soto")
       expect(response.body).to include('property="og:description"')
       expect(response.body).to include('property="og:type"')
       expect(response.body).to include('property="og:url"')
