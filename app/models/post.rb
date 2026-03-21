@@ -15,6 +15,14 @@ class Post < ApplicationRecord
   scope :drafts, -> { where(status: :draft) }
   scope :recent, -> { order("published_at DESC NULLS LAST") }
 
+  def rendered_body
+    MarkdownRenderer.render(body_markdown)
+  end
+
+  def rendered_body_highlighted
+    MarkdownRenderer.render_with_highlighting(body_markdown)
+  end
+
   def reading_time
     return 1 unless body_markdown.present?
 

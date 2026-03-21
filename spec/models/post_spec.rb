@@ -221,6 +221,28 @@ RSpec.describe Post, type: :model do
     end
   end
 
+  describe "#rendered_body" do
+    it "returns rendered HTML from body_markdown" do
+      blog_post = described_class.create!(title: "Render Test", body_markdown: "# Hello\n\n**world**", status: :draft)
+      result = blog_post.rendered_body
+      expect(result).to include("<h1>Hello</h1>")
+      expect(result).to include("<strong>world</strong>")
+    end
+
+    it "returns empty string when body_markdown is blank" do
+      blog_post = described_class.new(title: "Empty", body_markdown: nil)
+      expect(blog_post.rendered_body).to eq("")
+    end
+  end
+
+  describe "#rendered_body_highlighted" do
+    it "returns syntax-highlighted HTML" do
+      blog_post = described_class.create!(title: "Highlight Test", body_markdown: "```ruby\nputs 'hi'\n```", status: :draft)
+      result = blog_post.rendered_body_highlighted
+      expect(result).to include("highlight")
+    end
+  end
+
   describe "body_markdown" do
     it "stores markdown content" do
       blog_post = described_class.create!(title: "Markdown Post", body_markdown: "# Hello\n\nThis is **bold**")
