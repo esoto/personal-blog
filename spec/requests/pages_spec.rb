@@ -14,6 +14,27 @@ RSpec.describe "Pages", type: :request do
       expect(response.body).to include("JavaScript")
     end
 
+    it "includes OG meta tags" do
+      get root_path
+      expect(response.body).to include('property="og:title"')
+      expect(response.body).to include("Personal Blog")
+      expect(response.body).to include('property="og:description"')
+      expect(response.body).to include('property="og:type"')
+      expect(response.body).to include('property="og:url"')
+    end
+
+    it "includes Twitter Card meta tags" do
+      get root_path
+      expect(response.body).to include('name="twitter:card" content="summary"')
+      expect(response.body).to include('name="twitter:title"')
+      expect(response.body).to include('name="twitter:description"')
+    end
+
+    it "includes a canonical URL" do
+      get root_path
+      expect(response.body).to include('rel="canonical"')
+    end
+
     context "with published posts" do
       let!(:post1) do
         Post.create!(

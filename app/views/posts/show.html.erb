@@ -1,4 +1,7 @@
 <% content_for(:title) { @post.title } %>
+<% content_for(:og_title) { @post.title } %>
+<% content_for(:og_description) { @post.excerpt.presence || truncate(strip_tags(@post.body.to_s), length: 160) } %>
+<% content_for(:og_type) { "article" } %>
 
 <div>
   <!-- Back link -->

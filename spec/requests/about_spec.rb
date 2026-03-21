@@ -24,8 +24,22 @@ RSpec.describe "About Page", type: :request do
 
     it "includes Open Graph meta tags" do
       get about_path
-      expect(response.body).to include('property="og:title"')
-      expect(response.body).to include('property="og:description"')
+      expect(response.body).to include('property="og:title" content="About')
+      expect(response.body).to include('property="og:description" content="Software engineer passionate about building great products."')
+      expect(response.body).to include('property="og:type" content="website"')
+      expect(response.body).to include('property="og:url"')
+    end
+
+    it "includes Twitter Card meta tags" do
+      get about_path
+      expect(response.body).to include('name="twitter:card" content="summary"')
+      expect(response.body).to include('name="twitter:title" content="About')
+      expect(response.body).to include('name="twitter:description" content="Software engineer passionate about building great products."')
+    end
+
+    it "includes a canonical URL" do
+      get about_path
+      expect(response.body).to include('rel="canonical"')
     end
 
     it "includes a link back to the homepage" do

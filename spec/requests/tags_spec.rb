@@ -49,6 +49,26 @@ RSpec.describe "Tags", type: :request do
         get tag_path(slug: tag.slug)
         expect(response.body).to include("Posts tagged with Ruby")
       end
+
+      it "includes OG meta tags with tag name" do
+        get tag_path(slug: tag.slug)
+        expect(response.body).to include('property="og:title" content="Posts tagged with Ruby')
+        expect(response.body).to include('property="og:description" content="Browse all posts tagged with Ruby."')
+        expect(response.body).to include('property="og:type" content="website"')
+        expect(response.body).to include('property="og:url"')
+      end
+
+      it "includes Twitter Card meta tags with tag name" do
+        get tag_path(slug: tag.slug)
+        expect(response.body).to include('name="twitter:card" content="summary"')
+        expect(response.body).to include('name="twitter:title" content="Posts tagged with Ruby')
+        expect(response.body).to include('name="twitter:description" content="Browse all posts tagged with Ruby."')
+      end
+
+      it "includes a canonical URL" do
+        get tag_path(slug: tag.slug)
+        expect(response.body).to include('rel="canonical"')
+      end
     end
 
     context "with draft posts" do
