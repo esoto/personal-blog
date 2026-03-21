@@ -67,7 +67,7 @@
 
           <!-- Navigation Links -->
           <div class="flex items-center gap-6">
-            <%= link_to "Posts", posts_path, class: nav_link_class(posts_path) %>
+            <%= link_to "Posts", posts_path, class: nav_link_class("/posts", prefix_match: true) %>
             <%= link_to "Tags", tags_path, class: nav_link_class("/tags", prefix_match: true) %>
             <% if logged_in? %>
               <%= link_to "Admin", admin_root_path, class: "px-4 py-2 bg-bg-surface-hover border border-border hover:border-accent-blue text-text-primary rounded transition-fast" %>
