@@ -481,3 +481,7 @@ trix-toolbar .trix-button--dialog {
   background: #1f6feb;
   color: #e6edf3;
 }
+
+trix-editor {
+  min-height: 20em;
+}
