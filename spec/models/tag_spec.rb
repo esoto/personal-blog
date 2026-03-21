@@ -84,7 +84,7 @@ RSpec.describe Tag, type: :model do
 
     it "destroys associated post_tags when destroyed" do
       tag = described_class.create!(name: "Ruby")
-      post = Post.create!(title: "Test Post", status: :draft)
+      post = Post.create!(title: "Test Post", body_markdown: "# Content", status: :draft)
       tag.posts << post
 
       expect { tag.destroy }.to change(PostTag, :count).by(-1)

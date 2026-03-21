@@ -6,6 +6,7 @@ RSpec.describe "Posts", type: :request do
       let!(:published_post) do
         Post.create!(
           title: "Published Post",
+          body_markdown: "# Content",
           status: :published,
           published_at: 1.day.ago,
           excerpt: "This is a published post"
@@ -15,6 +16,7 @@ RSpec.describe "Posts", type: :request do
       let!(:draft_post) do
         Post.create!(
           title: "Draft Post",
+          body_markdown: "# Content",
           status: :draft,
           excerpt: "This is a draft post"
         )
@@ -61,6 +63,7 @@ RSpec.describe "Posts", type: :request do
         12.times do |i|
           Post.create!(
             title: "Article-#{format('%02d', i + 1)}",
+            body_markdown: "# Content",
             status: :published,
             published_at: (12 - i).days.ago,
             excerpt: "Excerpt #{i + 1}"
@@ -109,6 +112,7 @@ RSpec.describe "Posts", type: :request do
       let!(:post) do
         Post.create!(
           title: "Test Post",
+          body_markdown: "# Content",
           status: :published,
           published_at: 1.day.ago,
           excerpt: "Test excerpt"
@@ -176,6 +180,7 @@ RSpec.describe "Posts", type: :request do
       let!(:post_no_excerpt) do
         Post.create!(
           title: "No Excerpt Post",
+          body_markdown: "# Content",
           status: :published,
           published_at: 1.day.ago,
           excerpt: nil
@@ -193,6 +198,7 @@ RSpec.describe "Posts", type: :request do
       let!(:draft_post) do
         Post.create!(
           title: "Draft Post",
+          body_markdown: "# Content",
           status: :draft,
           excerpt: "Draft excerpt"
         )

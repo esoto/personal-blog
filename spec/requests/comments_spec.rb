@@ -4,6 +4,7 @@ RSpec.describe "Comments", type: :request do
   let!(:published_post) do
     Post.create!(
       title: "Commentable Post",
+      body_markdown: "# Content",
       status: :published,
       published_at: 1.day.ago,
       excerpt: "A post for commenting"
@@ -118,6 +119,7 @@ RSpec.describe "Comments", type: :request do
       let!(:draft_post) do
         Post.create!(
           title: "Draft Post",
+          body_markdown: "# Content",
           status: :draft,
           excerpt: "Not published yet"
         )

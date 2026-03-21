@@ -2,6 +2,11 @@ module Admin
   class PostsController < BaseController
     before_action :set_post, only: %i[show edit update destroy]
 
+    def preview
+      rendered = MarkdownRenderer.render_with_highlighting(params[:markdown])
+      render html: rendered, layout: false
+    end
+
     def index
       @posts = Post.recent
     end
@@ -50,7 +55,7 @@ module Admin
     end
 
     def post_params
-      params.require(:post).permit(:title, :excerpt, :body, :status, :published_at, tag_ids: [])
+      params.require(:post).permit(:title, :excerpt, :body_markdown, :status, :published_at, tag_ids: [])
     end
 
     def set_published_at_if_needed

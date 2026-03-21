@@ -14,8 +14,8 @@ RSpec.describe "Admin::Posts", type: :request do
     end
 
     it "displays all posts" do
-      Post.create!(title: "Draft Post", status: :draft)
-      Post.create!(title: "Published Post", status: :published, published_at: 1.day.ago)
+      Post.create!(title: "Draft Post", body_markdown: "# Content", status: :draft)
+      Post.create!(title: "Published Post", body_markdown: "# Content", status: :published, published_at: 1.day.ago)
 
       get admin_posts_path
       expect(response.body).to include("Draft Post")
@@ -34,7 +34,7 @@ RSpec.describe "Admin::Posts", type: :request do
     context "with valid params" do
       it "creates a post and redirects to index" do
         expect {
-          post admin_posts_path, params: { post: { title: "New Post", excerpt: "A summary", status: "draft" } }
+          post admin_posts_path, params: { post: { title: "New Post", excerpt: "A summary", body_markdown: "# New Post", status: "draft" } }
         }.to change(Post, :count).by(1)
         expect(response).to redirect_to(admin_posts_path)
         follow_redirect!
@@ -54,7 +54,7 @@ RSpec.describe "Admin::Posts", type: :request do
     context "when publishing without published_at" do
       it "auto-sets published_at to current time" do
         freeze_time do
-          post admin_posts_path, params: { post: { title: "Auto Publish", status: "published" } }
+          post admin_posts_path, params: { post: { title: "Auto Publish", body_markdown: "# Auto", status: "published" } }
           created_post = Post.last
           expect(created_post.published_at).to eq(Time.current)
         end
@@ -64,7 +64,7 @@ RSpec.describe "Admin::Posts", type: :request do
 
   describe "GET /admin/posts/:id" do
     it "renders the post detail" do
-      blog_post = Post.create!(title: "Show Post", status: :draft)
+      blog_post = Post.create!(title: "Show Post", body_markdown: "# Content", status: :draft)
       get admin_post_path(blog_post)
       expect(response).to have_http_status(:ok)
       expect(response.body).to include("Show Post")
@@ -73,14 +73,14 @@ RSpec.describe "Admin::Posts", type: :request do
 
   describe "GET /admin/posts/:id/edit" do
     it "renders the edit form" do
-      blog_post = Post.create!(title: "Edit Me", status: :draft)
+      blog_post = Post.create!(title: "Edit Me", body_markdown: "# Content", status: :draft)
       get edit_admin_post_path(blog_post)
       expect(response).to have_http_status(:ok)
     end
   end
 
   describe "PATCH /admin/posts/:id" do
-    let!(:blog_post) { Post.create!(title: "Original Title", status: :draft) }
+    let!(:blog_post) { Post.create!(title: "Original Title", body_markdown: "# Content", status: :draft) }
 
     context "with valid params" do
       it "updates the post and redirects to index" do
@@ -110,7 +110,7 @@ RSpec.describe "Admin::Posts", type: :request do
 
   describe "DELETE /admin/posts/:id" do
     it "destroys the post and redirects to index" do
-      blog_post = Post.create!(title: "Delete Me", status: :draft)
+      blog_post = Post.create!(title: "Delete Me", body_markdown: "# Content", status: :draft)
       expect {
         delete admin_post_path(blog_post)
       }.to change(Post, :count).by(-1)

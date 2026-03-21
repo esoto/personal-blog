@@ -15,7 +15,7 @@ RSpec.describe "Admin::Tags", type: :request do
 
     it "displays all tags with post counts" do
       tag = Tag.create!(name: "Ruby")
-      blog_post = Post.create!(title: "Ruby Post", status: :draft)
+      blog_post = Post.create!(title: "Ruby Post", body_markdown: "# Content", status: :draft)
       blog_post.tags << tag
 
       get admin_tags_path

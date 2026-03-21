@@ -40,6 +40,7 @@ RSpec.describe "Pages", type: :request do
       let!(:post1) do
         Post.create!(
           title: "First Post",
+          body_markdown: "# Content",
           excerpt: "This is the first post excerpt",
           status: :published,
           published_at: 2.days.ago
@@ -49,6 +50,7 @@ RSpec.describe "Pages", type: :request do
       let!(:post2) do
         Post.create!(
           title: "Second Post",
+          body_markdown: "# Content",
           excerpt: "This is the second post excerpt",
           status: :published,
           published_at: 1.day.ago
@@ -75,6 +77,7 @@ RSpec.describe "Pages", type: :request do
         6.times do |i|
           Post.create!(
             title: "Post #{i + 3}",
+            body_markdown: "# Content",
             excerpt: "Excerpt #{i + 3}",
             status: :published,
             published_at: (10 - i).days.ago
@@ -92,6 +95,7 @@ RSpec.describe "Pages", type: :request do
       let!(:draft_post) do
         Post.create!(
           title: "Draft Post",
+          body_markdown: "# Content",
           excerpt: "This is a draft",
           status: :draft,
           published_at: 1.day.ago
@@ -108,6 +112,7 @@ RSpec.describe "Pages", type: :request do
       let!(:future_post) do
         Post.create!(
           title: "Future Post",
+          body_markdown: "# Content",
           excerpt: "This is in the future",
           status: :published,
           published_at: 1.day.from_now
@@ -134,6 +139,7 @@ RSpec.describe "Pages", type: :request do
       let!(:post_with_tags) do
         post = Post.create!(
           title: "Tagged Post",
+          body_markdown: "# Content",
           excerpt: "A post with tags",
           status: :published,
           published_at: 1.day.ago
@@ -153,6 +159,7 @@ RSpec.describe "Pages", type: :request do
       let!(:published_post) do
         Post.create!(
           title: "Published Post",
+          body_markdown: "# Content",
           excerpt: "Published excerpt",
           status: :published,
           published_at: 1.day.ago
@@ -162,6 +169,7 @@ RSpec.describe "Pages", type: :request do
       let!(:draft_post) do
         Post.create!(
           title: "Draft Post",
+          body_markdown: "# Content",
           excerpt: "Draft excerpt",
           status: :draft,
           published_at: nil
@@ -171,6 +179,7 @@ RSpec.describe "Pages", type: :request do
       let!(:future_post) do
         Post.create!(
           title: "Future Post",
+          body_markdown: "# Content",
           excerpt: "Future excerpt",
           status: :published,
           published_at: 1.day.from_now
