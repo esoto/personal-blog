@@ -38,10 +38,10 @@
 
           <!-- Admin Navigation Links -->
           <div class="flex items-center gap-6">
-            <%= link_to "Dashboard", admin_root_path, class: "text-text-primary hover:text-accent-blue transition-fast" %>
-            <%= link_to "Posts", admin_posts_path, class: "text-text-primary hover:text-accent-blue transition-fast" %>
-            <%= link_to "Tags", admin_tags_path, class: "text-text-primary hover:text-accent-blue transition-fast" %>
-            <%= link_to "Comments", admin_comments_path, class: "text-text-primary hover:text-accent-blue transition-fast" %>
+            <%= link_to "Dashboard", admin_root_path, class: nav_link_class(admin_root_path) %>
+            <%= link_to "Posts", admin_posts_path, class: nav_link_class(admin_posts_path, prefix_match: true) %>
+            <%= link_to "Tags", admin_tags_path, class: nav_link_class(admin_tags_path, prefix_match: true) %>
+            <%= link_to "Comments", admin_comments_path, class: nav_link_class(admin_comments_path, prefix_match: true) %>
             <%= button_to "Logout", logout_path, method: :delete, form: { class: "inline" }, class: "px-4 py-2 bg-bg-surface-hover border border-border hover:border-accent-orange text-text-primary rounded transition-fast" %>
           </div>
         </div>
