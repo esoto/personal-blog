@@ -2,8 +2,8 @@ xml.instruct! :xml, version: "1.0", encoding: "UTF-8"
 
 xml.rss version: "2.0", "xmlns:atom" => "http://www.w3.org/2005/Atom" do
   xml.channel do
-    xml.title "Personal Blog"
-    xml.description "Latest posts from Personal Blog"
+    xml.title "Esteban Soto"
+    xml.description "Latest posts from Esteban Soto"
     xml.link root_url
     xml.language "en"
     xml.lastBuildDate @posts.first&.published_at&.rfc2822

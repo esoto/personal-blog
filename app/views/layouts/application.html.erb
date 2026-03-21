@@ -10,15 +10,15 @@
     <%= csp_meta_tag %>
 
     <%# Meta tags %>
-    <% meta_title = content_for?(:og_title) ? yield(:og_title) : 'Personal Blog' %>
-    <% meta_description = content_for?(:og_description) ? yield(:og_description) : 'A developer blog about Ruby, JavaScript, and software engineering' %>
+    <% meta_title = content_for?(:og_title) ? yield(:og_title) : 'Esteban Soto' %>
+    <% meta_description = content_for?(:og_description) ? yield(:og_description) : 'Full-stack developer writing about Ruby, JavaScript, and software engineering.' %>
     <% canonical_url = request.base_url + request.path %>
     <meta name="description" content="<%= meta_description %>">
     <meta property="og:title" content="<%= meta_title %>">
     <meta property="og:description" content="<%= meta_description %>">
     <meta property="og:type" content="<%= content_for?(:og_type) ? yield(:og_type) : 'website' %>">
     <meta property="og:url" content="<%= canonical_url %>">
-    <meta property="og:site_name" content="Personal Blog">
+    <meta property="og:site_name" content="Esteban Soto">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="<%= meta_title %>">
     <meta name="twitter:description" content="<%= meta_description %>">
@@ -27,7 +27,7 @@
     <%= yield :head %>
 
     <%# RSS Feed auto-discovery %>
-    <%= auto_discovery_link_tag :rss, feed_url(format: :rss), title: "Personal Blog RSS Feed" %>
+    <%= auto_discovery_link_tag :rss, feed_url(format: :rss), title: "Esteban Soto RSS Feed" %>
 
     <%# Google Fonts %>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -62,7 +62,7 @@
         <div class="flex justify-between items-center h-16">
           <!-- Site Logo/Name -->
           <div class="flex items-center">
-            <%= link_to "Personal Blog", root_path, class: "text-xl font-bold text-accent-blue hover:text-accent-green transition-fast" %>
+            <%= link_to "Esteban Soto", root_path, class: "text-xl font-bold text-accent-blue hover:text-accent-green transition-fast" %>
           </div>
 
           <!-- Navigation Links -->
@@ -110,12 +110,11 @@
       <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div class="flex flex-col md:flex-row justify-between items-center gap-8">
           <div class="text-text-secondary text-sm">
-            <p>&copy; <%= Time.current.year %> Personal Blog. All rights reserved.</p>
+            <p>&copy; <%= Time.current.year %> Esteban Soto. All rights reserved.</p>
           </div>
           <div class="flex gap-6 text-text-secondary">
-            <a href="#" class="hover:text-accent-blue transition-fast">GitHub</a>
-            <a href="#" class="hover:text-accent-blue transition-fast">Twitter</a>
-            <a href="#" class="hover:text-accent-blue transition-fast">LinkedIn</a>
+            <a href="https://github.com/esoto" target="_blank" rel="noopener noreferrer" class="hover:text-accent-blue transition-fast">GitHub</a>
+            <a href="https://www.linkedin.com/in/soto-esteban/" target="_blank" rel="noopener noreferrer" class="hover:text-accent-blue transition-fast">LinkedIn</a>
           </div>
         </div>
       </div>
