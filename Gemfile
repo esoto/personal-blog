@@ -65,3 +65,7 @@ group :development do
 end
 
 gem "tailwindcss-rails", "~> 4.4"
+
+# Markdown rendering and syntax highlighting
+gem "redcarpet", "~> 3.6"
+gem "rouge", "~> 4.5"
