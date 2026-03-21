@@ -43,7 +43,7 @@
   max-width: 65ch;
 }
 
-.prose-dark h1, .prose-dark h2, .prose-dark h3, .prose-dark h4 {
+.prose-dark h1, .prose-dark h2, .prose-dark h3, .prose-dark h4, .prose-dark h5, .prose-dark h6 {
   color: var(--color-text-primary);
   font-weight: 700;
   margin-top: 2em;
@@ -54,6 +54,14 @@
 .prose-dark h1 { font-size: 2.25em; }
 .prose-dark h2 { font-size: 1.5em; }
 .prose-dark h3 { font-size: 1.25em; }
+.prose-dark h4 { font-size: 1.125em; }
+.prose-dark h5 { font-size: 1em; }
+.prose-dark h6 { font-size: 0.875em; color: var(--color-text-secondary); }
+
+.prose-dark h1, .prose-dark h2 {
+  padding-bottom: 0.3em;
+  border-bottom: 1px solid var(--color-border);
+}
 
 .prose-dark p {
   margin-top: 1.25em;
@@ -74,10 +82,23 @@
   font-weight: 600;
 }
 
+.prose-dark em {
+  color: var(--color-text-primary);
+  font-style: italic;
+}
+
 .prose-dark ul, .prose-dark ol {
   margin-top: 1.25em;
   margin-bottom: 1.25em;
   padding-left: 1.625em;
+}
+
+.prose-dark ul {
+  list-style-type: disc;
+}
+
+.prose-dark ol {
+  list-style-type: decimal;
 }
 
 .prose-dark li {
@@ -103,7 +124,7 @@
 }
 
 .prose-dark pre {
-  background-color: var(--color-bg-surface-hover);
+  background-color: var(--color-bg-surface);
   border: 1px solid var(--color-border);
   border-radius: 0.5rem;
   padding: 1.25em;
@@ -146,6 +167,7 @@
 }
 
 .prose-dark img {
+  max-width: 100%;
   border-radius: 0.5rem;
   margin-top: 2em;
   margin-bottom: 2em;
@@ -156,3 +178,27 @@
   margin-top: 2em;
   margin-bottom: 2em;
 }
+
+.prose-dark table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1.5em;
+  margin-bottom: 1.5em;
+}
+
+.prose-dark th, .prose-dark td {
+  border: 1px solid var(--color-border);
+  padding: 0.5em 0.75em;
+  text-align: left;
+}
+
+.prose-dark th {
+  background-color: var(--color-bg-surface);
+  color: var(--color-text-primary);
+  font-weight: 600;
+}
+
+.prose-dark tr:nth-child(even) {
+  background-color: var(--color-bg-surface);
+}
+
