@@ -4,7 +4,8 @@ RSpec.describe "Dockerfile" do
   let(:dockerfile_content) { File.read(Rails.root.join("Dockerfile")) }
 
   it "uses the correct Ruby version" do
-    expect(dockerfile_content).to include("RUBY_VERSION=3.4.1")
+    expected_version = File.read(Rails.root.join(".ruby-version")).strip
+    expect(dockerfile_content).to include("RUBY_VERSION=#{expected_version}")
   end
 
   it "installs postgresql-client for runtime" do
