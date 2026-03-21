@@ -1,6 +1,6 @@
 <% content_for(:title) { @post.title } %>
 <% content_for(:og_title) { @post.title } %>
-<% content_for(:og_description) { @post.excerpt.presence || truncate(@post.body.to_plain_text, length: 160) } %>
+<% content_for(:og_description) { @post.excerpt.presence || truncate(@post.body_markdown.to_s, length: 160) } %>
 <% content_for(:og_type) { "article" } %>
 
 <div>
@@ -40,7 +40,7 @@
 
     <!-- Post body -->
     <div class="prose-dark mt-8" data-controller="highlight clipboard">
-      <%= @post.body %>
+      <%= @post.body_markdown %>
     </div>
   </article>
 

@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe Post, type: :model do
-  subject(:post) { described_class.new(title: "My First Post", status: :draft) }
+  subject(:post) { described_class.new(title: "My First Post", body_markdown: "# Content", status: :draft) }
 
   describe "validations" do
     it "is valid with valid attributes" do
@@ -14,6 +14,12 @@ RSpec.describe Post, type: :model do
       expect(post.errors[:title]).to include("can't be blank")
     end
 
+    it "is invalid without body_markdown" do
+      post.body_markdown = nil
+      expect(post).not_to be_valid
+      expect(post.errors[:body_markdown]).to include("can't be blank")
+    end
+
     it "is invalid without a slug when auto-generation fails" do
       post.title = nil
       post.slug = nil
@@ -22,8 +28,8 @@ RSpec.describe Post, type: :model do
     end
 
     it "is invalid with a duplicate slug" do
-      described_class.create!(title: "My First Post", status: :draft)
-      duplicate = described_class.new(title: "My First Post", status: :draft)
+      described_class.create!(title: "My First Post", body_markdown: "# Content", status: :draft)
+      duplicate = described_class.new(title: "My First Post", body_markdown: "# Content", status: :draft)
       # The second post should get a unique slug via suffix, so let's force the same slug
       duplicate.slug = "my-first-post"
       expect(duplicate).not_to be_valid
@@ -73,7 +79,7 @@ RSpec.describe Post, type: :model do
     end
 
     it "does not regenerate slug on update if title changes" do
-      post = described_class.create!(title: "Original Title", status: :draft)
+      post = described_class.create!(title: "Original Title", body_markdown: "# Content", status: :draft)
       original_slug = post.slug
       post.update!(title: "Updated Title")
       expect(post.slug).to eq(original_slug)
@@ -82,15 +88,15 @@ RSpec.describe Post, type: :model do
 
   describe "slug uniqueness with suffix" do
     it "appends a hex suffix when slug already exists" do
-      described_class.create!(title: "Duplicate Title", status: :draft)
-      second_post = described_class.create!(title: "Duplicate Title", status: :draft)
+      described_class.create!(title: "Duplicate Title", body_markdown: "# Content", status: :draft)
+      second_post = described_class.create!(title: "Duplicate Title", body_markdown: "# Content", status: :draft)
       expect(second_post.slug).to match(/\Aduplicate-title-\h+\z/)
     end
 
     it "generates unique slugs for multiple posts with the same title" do
-      first = described_class.create!(title: "Same Title", status: :draft)
-      second = described_class.create!(title: "Same Title", status: :draft)
-      third = described_class.create!(title: "Same Title", status: :draft)
+      first = described_class.create!(title: "Same Title", body_markdown: "# Content", status: :draft)
+      second = described_class.create!(title: "Same Title", body_markdown: "# Content", status: :draft)
+      third = described_class.create!(title: "Same Title", body_markdown: "# Content", status: :draft)
 
       slugs = [ first.slug, second.slug, third.slug ]
       expect(slugs.uniq.length).to eq(3)
@@ -101,6 +107,7 @@ RSpec.describe Post, type: :model do
     let!(:published_post) do
       described_class.create!(
         title: "Published Post",
+        body_markdown: "# Published",
         status: :published,
         published_at: 1.day.ago
       )
@@ -109,6 +116,7 @@ RSpec.describe Post, type: :model do
     let!(:future_published_post) do
       described_class.create!(
         title: "Future Published Post",
+        body_markdown: "# Future",
         status: :published,
         published_at: 1.day.from_now
       )
@@ -117,6 +125,7 @@ RSpec.describe Post, type: :model do
     let!(:draft_post) do
       described_class.create!(
         title: "Draft Post",
+        body_markdown: "# Draft",
         status: :draft
       )
     end
@@ -176,63 +185,46 @@ RSpec.describe Post, type: :model do
   end
 
   describe "#reading_time" do
-    it "returns 1 for a post with no body" do
-      post.save!
-      expect(post.reading_time).to eq(1)
+    it "returns 1 for a post with no body_markdown" do
+      blog_post = described_class.new(title: "Empty", body_markdown: nil)
+      expect(blog_post.reading_time).to eq(1)
     end
 
     it "returns 1 for a short post" do
-      post.save!
-      post.update!(body: "Hello world")
+      post.body_markdown = "Hello world"
       expect(post.reading_time).to eq(1)
     end
 
     it "returns 1 for exactly 200 words" do
-      post.save!
-      post.update!(body: ([ "word" ] * 200).join(" "))
+      post.body_markdown = ([ "word" ] * 200).join(" ")
       expect(post.reading_time).to eq(1)
     end
 
     it "returns 2 for 201 words" do
-      post.save!
-      post.update!(body: ([ "word" ] * 201).join(" "))
+      post.body_markdown = ([ "word" ] * 201).join(" ")
       expect(post.reading_time).to eq(2)
     end
 
     it "returns 3 for 500 words" do
-      post.save!
-      post.update!(body: ([ "word" ] * 500).join(" "))
+      post.body_markdown = ([ "word" ] * 500).join(" ")
       expect(post.reading_time).to eq(3)
     end
 
     it "returns 5 for 1000 words" do
-      post.save!
-      post.update!(body: ([ "word" ] * 1000).join(" "))
+      post.body_markdown = ([ "word" ] * 1000).join(" ")
       expect(post.reading_time).to eq(5)
     end
 
-    it "strips HTML tags when counting words" do
-      post.save!
-      post.update!(body: "<p>Hello</p> <strong>world</strong>")
+    it "counts markdown syntax as words" do
+      post.body_markdown = "# Hello **world**"
       expect(post.reading_time).to eq(1)
     end
   end
 
-  describe "has_rich_text :body" do
-    it "responds to body" do
-      expect(post).to respond_to(:body)
-    end
-
-    it "responds to body=" do
-      expect(post).to respond_to(:body=)
-    end
-
-    it "can set and retrieve rich text body" do
-      post.save!
-      post.body = "<h1>Rich text content</h1>"
-      post.save!
-      post.reload
-      expect(post.body.to_plain_text).to include("Rich text content")
+  describe "body_markdown" do
+    it "stores markdown content" do
+      blog_post = described_class.create!(title: "Markdown Post", body_markdown: "# Hello\n\nThis is **bold**")
+      expect(blog_post.reload.body_markdown).to eq("# Hello\n\nThis is **bold**")
     end
   end
 end

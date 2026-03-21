@@ -18,6 +18,7 @@ RSpec.describe "Admin::Posts with Tags", type: :request do
             post: {
               title: "Ruby on Rails Guide",
               excerpt: "A comprehensive guide",
+              body_markdown: "# Content",
               status: "draft",
               tag_ids: [ ruby_tag.id, rails_tag.id ]
             }
@@ -34,6 +35,7 @@ RSpec.describe "Admin::Posts with Tags", type: :request do
             post: {
               title: "Post with no tags",
               excerpt: "A summary",
+              body_markdown: "# Content",
               status: "draft",
               tag_ids: []
             }
@@ -50,6 +52,7 @@ RSpec.describe "Admin::Posts with Tags", type: :request do
             post: {
               title: "Web Development Tips",
               excerpt: "Some tips",
+              body_markdown: "# Content",
               status: "draft",
               tag_ids: [ web_tag.id ]
             }
@@ -63,7 +66,7 @@ RSpec.describe "Admin::Posts with Tags", type: :request do
   end
 
   describe "PATCH /admin/posts/:id with tags" do
-    let!(:blog_post) { Post.create!(title: "Original Post", status: :draft) }
+    let!(:blog_post) { Post.create!(title: "Original Post", body_markdown: "# Content", status: :draft) }
 
     context "updating a post's tags" do
       it "adds tags to a post that has none" do
@@ -122,7 +125,7 @@ RSpec.describe "Admin::Posts with Tags", type: :request do
   describe "GET /admin/posts/:id/edit with tags" do
     context "edit form shows selected tags" do
       it "displays pre-selected tags in the edit form" do
-        blog_post = Post.create!(title: "Tagged Post", status: :draft)
+        blog_post = Post.create!(title: "Tagged Post", body_markdown: "# Content", status: :draft)
         blog_post.tags << ruby_tag
         blog_post.tags << rails_tag
 
@@ -136,7 +139,7 @@ RSpec.describe "Admin::Posts with Tags", type: :request do
       end
 
       it "displays all available tags in the edit form" do
-        blog_post = Post.create!(title: "Post", status: :draft)
+        blog_post = Post.create!(title: "Post", body_markdown: "# Content", status: :draft)
 
         get edit_admin_post_path(blog_post)
         expect(response).to have_http_status(:ok)
@@ -156,6 +159,7 @@ RSpec.describe "Admin::Posts with Tags", type: :request do
           post: {
             title: "Published Post with Tags",
             excerpt: "A published post",
+            body_markdown: "# Content",
             status: "published",
             tag_ids: [ ruby_tag.id, rails_tag.id ]
           }
@@ -168,7 +172,7 @@ RSpec.describe "Admin::Posts with Tags", type: :request do
     end
 
     it "maintains tag associations across multiple updates" do
-      blog_post = Post.create!(title: "Multi-update Post", status: :draft)
+      blog_post = Post.create!(title: "Multi-update Post", body_markdown: "# Content", status: :draft)
 
       # First update: add tags
       patch admin_post_path(blog_post), params: {

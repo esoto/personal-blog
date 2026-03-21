@@ -4,6 +4,7 @@ RSpec.describe Comment, type: :model do
   let(:post) do
     Post.create!(
       title: "Test Post",
+      body_markdown: "# Test content",
       status: :published,
       published_at: 1.day.ago,
       excerpt: "Test excerpt"

@@ -5,6 +5,7 @@ RSpec.describe "Feeds", type: :request do
     let!(:published_post) do
       Post.create!(
         title: "Published Post",
+        body_markdown: "# Content",
         status: :published,
         published_at: 1.day.ago,
         excerpt: "This is a published excerpt"
@@ -14,6 +15,7 @@ RSpec.describe "Feeds", type: :request do
     let!(:older_published_post) do
       Post.create!(
         title: "Older Published Post",
+        body_markdown: "# Content",
         status: :published,
         published_at: 3.days.ago,
         excerpt: "This is an older excerpt"
@@ -23,6 +25,7 @@ RSpec.describe "Feeds", type: :request do
     let!(:draft_post) do
       Post.create!(
         title: "Draft Post",
+        body_markdown: "# Content",
         status: :draft,
         excerpt: "This is a draft excerpt"
       )

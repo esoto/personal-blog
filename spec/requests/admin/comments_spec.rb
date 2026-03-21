@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe "Admin::Comments", type: :request do
   let!(:user) { User.create!(email: "admin@example.com", password: "password12345", password_confirmation: "password12345") }
-  let!(:blog_post) { Post.create!(title: "Test Post", status: :published, published_at: 1.day.ago) }
+  let!(:blog_post) { Post.create!(title: "Test Post", body_markdown: "# Content", status: :published, published_at: 1.day.ago) }
 
   let(:valid_comment_attrs) do
     { author_name: "Jane Doe", email: "jane@example.com", body: "Great post!", post: blog_post }

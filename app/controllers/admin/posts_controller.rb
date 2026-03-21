@@ -50,7 +50,7 @@ module Admin
     end
 
     def post_params
-      params.require(:post).permit(:title, :excerpt, :body, :status, :published_at, tag_ids: [])
+      params.require(:post).permit(:title, :excerpt, :body_markdown, :status, :published_at, tag_ids: [])
     end
 
     def set_published_at_if_needed

@@ -55,6 +55,7 @@ RSpec.describe "Tags", type: :request do
       it "displays post counts" do
         post = Post.create!(
           title: "Ruby Post",
+          body_markdown: "# Content",
           status: :published,
           published_at: 1.day.ago,
           excerpt: "A Ruby post"
@@ -69,6 +70,7 @@ RSpec.describe "Tags", type: :request do
         2.times do |i|
           post = Post.create!(
             title: "Post #{i}",
+            body_markdown: "# Content",
             status: :published,
             published_at: 1.day.ago,
             excerpt: "Excerpt #{i}"
@@ -124,6 +126,7 @@ RSpec.describe "Tags", type: :request do
       let!(:published_post) do
         post = Post.create!(
           title: "Ruby Basics",
+          body_markdown: "# Content",
           status: :published,
           published_at: 1.day.ago,
           excerpt: "Learn Ruby fundamentals"
@@ -135,6 +138,7 @@ RSpec.describe "Tags", type: :request do
       let!(:untagged_post) do
         Post.create!(
           title: "Untagged Post",
+          body_markdown: "# Content",
           status: :published,
           published_at: 1.day.ago,
           excerpt: "This post has no tags"
@@ -191,6 +195,7 @@ RSpec.describe "Tags", type: :request do
       let!(:draft_post) do
         post = Post.create!(
           title: "Draft Ruby Post",
+          body_markdown: "# Content",
           status: :draft,
           excerpt: "This is a draft"
         )
@@ -208,6 +213,7 @@ RSpec.describe "Tags", type: :request do
       let!(:future_post) do
         post = Post.create!(
           title: "Future Ruby Post",
+          body_markdown: "# Content",
           status: :published,
           published_at: 1.day.from_now,
           excerpt: "Coming soon"
@@ -242,6 +248,7 @@ RSpec.describe "Tags", type: :request do
       let!(:multi_tag_post) do
         post = Post.create!(
           title: "Ruby on Rails Guide",
+          body_markdown: "# Content",
           status: :published,
           published_at: 1.day.ago,
           excerpt: "A guide to Rails"

@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe PostTag, type: :model do
-  let!(:post) { Post.create!(title: "Test Post", status: :draft) }
+  let!(:post) { Post.create!(title: "Test Post", body_markdown: "# Content", status: :draft) }
   let!(:tag) { Tag.create!(name: "Ruby") }
 
   describe "validations" do
