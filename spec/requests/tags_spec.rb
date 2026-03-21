@@ -1,6 +1,122 @@
 require "rails_helper"
 
 RSpec.describe "Tags", type: :request do
+  describe "GET /tags" do
+    context "with no tags" do
+      it "returns 200" do
+        get tags_path
+        expect(response).to have_http_status(:ok)
+      end
+
+      it "shows empty state message" do
+        get tags_path
+        expect(response.body).to include("No tags yet")
+      end
+
+      it "sets the page title" do
+        get tags_path
+        expect(response.body).to include("<title>Tags</title>")
+      end
+    end
+
+    context "with tags" do
+      let!(:ruby_tag) { Tag.create!(name: "Ruby") }
+      let!(:rails_tag) { Tag.create!(name: "Rails") }
+      let!(:javascript_tag) { Tag.create!(name: "JavaScript") }
+
+      it "returns 200" do
+        get tags_path
+        expect(response).to have_http_status(:ok)
+      end
+
+      it "displays all tags" do
+        get tags_path
+        expect(response.body).to include("Ruby")
+        expect(response.body).to include("Rails")
+        expect(response.body).to include("JavaScript")
+      end
+
+      it "displays tags in alphabetical order" do
+        get tags_path
+        body = response.body
+        js_pos = body.index("JavaScript")
+        rails_pos = body.index("Rails")
+        ruby_pos = body.index("Ruby")
+        expect(js_pos).to be < rails_pos
+        expect(rails_pos).to be < ruby_pos
+      end
+
+      it "links each tag to its show page" do
+        get tags_path
+        expect(response.body).to include(tag_path(slug: ruby_tag.slug))
+        expect(response.body).to include(tag_path(slug: rails_tag.slug))
+      end
+
+      it "displays post counts" do
+        post = Post.create!(
+          title: "Ruby Post",
+          status: :published,
+          published_at: 1.day.ago,
+          excerpt: "A Ruby post"
+        )
+        post.tags << ruby_tag
+
+        get tags_path
+        expect(response.body).to include("Ruby")
+      end
+
+      it "shows correct post count for a tag with posts" do
+        2.times do |i|
+          post = Post.create!(
+            title: "Post #{i}",
+            status: :published,
+            published_at: 1.day.ago,
+            excerpt: "Excerpt #{i}"
+          )
+          post.tags << ruby_tag
+        end
+
+        get tags_path
+        body = response.body
+        # The Ruby tag card should contain the count 2
+        # Extract the link block for Ruby tag using its href
+        ruby_link_match = body.match(%r{<a[^>]*href="#{tag_path(slug: ruby_tag.slug)}"[^>]*>(.+?)</a>}m)
+        expect(ruby_link_match).not_to be_nil
+        expect(ruby_link_match[1]).to include("2")
+      end
+
+      it "shows zero count for tags with no posts" do
+        get tags_path
+        body = response.body
+        # Tags with no posts should show count 0
+        ruby_link_match = body.match(%r{<a[^>]*href="#{tag_path(slug: ruby_tag.slug)}"[^>]*>(.+?)</a>}m)
+        expect(ruby_link_match).not_to be_nil
+        expect(ruby_link_match[1]).to include("0")
+      end
+    end
+
+    context "does not show empty state when tags exist" do
+      let!(:tag) { Tag.create!(name: "Ruby") }
+
+      it "does not show the empty state message" do
+        get tags_path
+        expect(response.body).not_to include("No tags yet")
+      end
+    end
+
+    context "navigation" do
+      it "has a Tags nav link pointing to the tags index" do
+        get tags_path
+        expect(response.body).to include('href="/tags"')
+        # Ensure the Tags link does NOT point to /posts
+        nav_section = response.body.match(%r{<nav.*?</nav>}m).to_s
+        tags_link = nav_section.match(%r{<a[^>]*>Tags</a>}).to_s
+        expect(tags_link).to include("/tags")
+        expect(tags_link).not_to include("/posts")
+      end
+    end
+  end
+
   describe "GET /tags/:slug" do
     let!(:tag) { Tag.create!(name: "Ruby") }
 

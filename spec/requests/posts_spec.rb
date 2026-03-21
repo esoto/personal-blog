@@ -165,6 +165,11 @@ RSpec.describe "Posts", type: :request do
         get post_show_path(slug: post.slug)
         expect(response.body).to include('rel="canonical"')
       end
+
+      it "displays reading time" do
+        get post_show_path(slug: post.slug)
+        expect(response.body).to include("min read")
+      end
     end
 
     context "with a published post without excerpt" do

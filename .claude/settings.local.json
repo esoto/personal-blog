@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ruby --version)",
+      "Bash(rbenv versions:*)",
+      "Bash(asdf list:*)",
+      "Bash(rbenv install:*)",
+      "WebFetch(domain:www.fastruby.io)",
+      "WebFetch(domain:rubyreferences.github.io)",
+      "Bash(obsidian help:*)"
+    ]
+  }
+}

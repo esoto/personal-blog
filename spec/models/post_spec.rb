@@ -175,6 +175,49 @@ RSpec.describe Post, type: :model do
     end
   end
 
+  describe "#reading_time" do
+    it "returns 1 for a post with no body" do
+      post.save!
+      expect(post.reading_time).to eq(1)
+    end
+
+    it "returns 1 for a short post" do
+      post.save!
+      post.update!(body: "Hello world")
+      expect(post.reading_time).to eq(1)
+    end
+
+    it "returns 1 for exactly 200 words" do
+      post.save!
+      post.update!(body: (["word"] * 200).join(" "))
+      expect(post.reading_time).to eq(1)
+    end
+
+    it "returns 2 for 201 words" do
+      post.save!
+      post.update!(body: (["word"] * 201).join(" "))
+      expect(post.reading_time).to eq(2)
+    end
+
+    it "returns 3 for 500 words" do
+      post.save!
+      post.update!(body: (["word"] * 500).join(" "))
+      expect(post.reading_time).to eq(3)
+    end
+
+    it "returns 5 for 1000 words" do
+      post.save!
+      post.update!(body: (["word"] * 1000).join(" "))
+      expect(post.reading_time).to eq(5)
+    end
+
+    it "strips HTML tags when counting words" do
+      post.save!
+      post.update!(body: "<p>Hello</p> <strong>world</strong>")
+      expect(post.reading_time).to eq(1)
+    end
+  end
+
   describe "has_rich_text :body" do
     it "responds to body" do
       expect(post).to respond_to(:body)

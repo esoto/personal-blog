@@ -36,6 +36,7 @@ Rails.application.routes.draw do
   post "posts/:slug/comments", to: "comments#create", as: :post_comments
 
   # Public tags
+  get "tags", to: "tags#index", as: :tags
   get "tags/:slug", to: "tags#show", as: :tag
 
   # Static pages
