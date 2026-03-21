@@ -438,3 +438,46 @@ trix-editor .attachment__metadata {
   padding: 0 !important;
   max-width: 100% !important;
 }
+
+/* Dark mode overrides for Trix toolbar */
+trix-toolbar .trix-button--icon::before {
+  filter: invert(1);
+}
+
+trix-toolbar .trix-button--icon.trix-active::before {
+  filter: invert(0);
+}
+
+trix-toolbar .trix-button {
+  border-bottom-color: #30363d;
+}
+
+trix-toolbar .trix-button:not(:first-child) {
+  border-left-color: #30363d;
+}
+
+trix-toolbar .trix-button.trix-active {
+  background: #1f6feb;
+  color: #e6edf3;
+}
+
+trix-toolbar .trix-button:disabled {
+  color: rgba(255, 255, 255, 0.125);
+}
+
+trix-toolbar .trix-dialog {
+  background: #161b22;
+  border-color: #30363d;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+trix-toolbar .trix-input--dialog {
+  background: #0d1117;
+  border-color: #30363d;
+  color: #e6edf3;
+}
+
+trix-toolbar .trix-button--dialog {
+  background: #1f6feb;
+  color: #e6edf3;
+}
