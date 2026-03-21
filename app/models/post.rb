@@ -15,6 +15,13 @@ class Post < ApplicationRecord
   scope :drafts, -> { where(status: :draft) }
   scope :recent, -> { order("published_at DESC NULLS LAST") }
 
+  def reading_time
+    return 1 unless body.present?
+
+    words = body.to_plain_text.split.size
+    [ (words / 200.0).ceil, 1 ].max
+  end
+
   private
 
   def generate_slug

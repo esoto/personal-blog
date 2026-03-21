@@ -1,6 +1,6 @@
 class PostsController < ApplicationController
   def index
-    @posts = Post.published.recent.includes(:tags)
+    @posts = Post.published.recent.includes(:tags).with_rich_text_body
     @page = [ (params[:page] || 1).to_i, 1 ].max
     @per_page = 10
     @total_posts = @posts.count
