@@ -17,6 +17,7 @@ Rails.application.routes.draw do
   # Admin
   namespace :admin do
     root "dashboard#index"
+    post "posts/preview", to: "posts#preview", as: :posts_preview
     resources :posts
     resources :tags, except: :show
     resources :comments, only: [ :index, :destroy ] do
