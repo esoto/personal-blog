@@ -6,7 +6,20 @@ export default class extends Controller {
 
   connect() {
     this.debounceTimer = null
+    this.savedSelection = { start: 0, end: 0 }
     this.updatePreview()
+  }
+
+  disconnect() {
+    clearTimeout(this.debounceTimer)
+  }
+
+  saveSelection() {
+    const textarea = this.inputTarget
+    this.savedSelection = {
+      start: textarea.selectionStart,
+      end: textarea.selectionEnd
+    }
   }
 
   onInput() {
@@ -51,7 +64,7 @@ export default class extends Controller {
 
   link() {
     const textarea = this.inputTarget
-    const selected = textarea.value.substring(textarea.selectionStart, textarea.selectionEnd)
+    const selected = textarea.value.substring(this.savedSelection.start, this.savedSelection.end)
     const replacement = selected ? `[${selected}](url)` : "[link text](url)"
     this.replaceSelection(replacement)
   }
@@ -62,7 +75,7 @@ export default class extends Controller {
 
   codeBlock() {
     const textarea = this.inputTarget
-    const selected = textarea.value.substring(textarea.selectionStart, textarea.selectionEnd)
+    const selected = textarea.value.substring(this.savedSelection.start, this.savedSelection.end)
     const replacement = selected ? `\n\`\`\`\n${selected}\n\`\`\`\n` : '\n```language\ncode here\n```\n'
     this.replaceSelection(replacement)
   }
@@ -74,8 +87,8 @@ export default class extends Controller {
   // Helpers
   wrapSelection(wrapper) {
     const textarea = this.inputTarget
-    const start = textarea.selectionStart
-    const end = textarea.selectionEnd
+    const start = this.savedSelection.start
+    const end = this.savedSelection.end
     const selected = textarea.value.substring(start, end)
     const replacement = `${wrapper}${selected || "text"}${wrapper}`
     textarea.setRangeText(replacement, start, end, "select")
@@ -85,8 +98,8 @@ export default class extends Controller {
 
   replaceSelection(replacement) {
     const textarea = this.inputTarget
-    const start = textarea.selectionStart
-    const end = textarea.selectionEnd
+    const start = this.savedSelection.start
+    const end = this.savedSelection.end
     textarea.setRangeText(replacement, start, end, "end")
     textarea.focus()
     this.onInput()
@@ -94,7 +107,7 @@ export default class extends Controller {
 
   insertAtLineStart(prefix) {
     const textarea = this.inputTarget
-    const start = textarea.selectionStart
+    const start = this.savedSelection.start
     const lineStart = textarea.value.lastIndexOf("\n", start - 1) + 1
     textarea.setRangeText(prefix, lineStart, lineStart, "end")
     textarea.focus()
