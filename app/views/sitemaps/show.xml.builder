@@ -1,9 +1,10 @@
 xml.instruct! :xml, version: "1.0", encoding: "UTF-8"
+latest_post = @posts.first
 xml.urlset xmlns: "http://www.sitemaps.org/schemas/sitemap/0.9" do
   # Root
   xml.url do
     xml.loc root_url
-    xml.lastmod @posts.first&.published_at&.iso8601
+    xml.lastmod latest_post&.published_at&.iso8601
   end
 
   # About
@@ -14,7 +15,7 @@ xml.urlset xmlns: "http://www.sitemaps.org/schemas/sitemap/0.9" do
   # Posts index
   xml.url do
     xml.loc posts_url
-    xml.lastmod @posts.first&.published_at&.iso8601
+    xml.lastmod latest_post&.published_at&.iso8601
   end
 
   # Tags index
