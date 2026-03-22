@@ -46,6 +46,21 @@ RSpec.describe MarkdownRenderer do
       result = described_class.render("Visit https://example.com")
       expect(result).to include('<a href="https://example.com"')
     end
+
+    it "strips javascript: URIs from markdown links" do
+      result = described_class.render("[click](javascript:alert(1))")
+      expect(result).not_to include("javascript:")
+    end
+
+    it "strips data: URIs from markdown links" do
+      result = described_class.render("[click](data:text/html,<script>alert(1)</script>)")
+      expect(result).not_to include("data:")
+    end
+
+    it "preserves legitimate https links" do
+      result = described_class.render("[click](https://example.com)")
+      expect(result).to include('href="https://example.com"')
+    end
   end
 
   describe ".render_with_highlighting" do
@@ -58,6 +73,11 @@ RSpec.describe MarkdownRenderer do
       result = described_class.render_with_highlighting("```\nplain code\n```")
       expect(result).to include("<pre")
       expect(result).to include("<code>")
+    end
+
+    it "strips javascript: URIs in highlighted renderer" do
+      result = described_class.render_with_highlighting("[click](javascript:alert(1))")
+      expect(result).not_to include("javascript:")
     end
   end
 end
