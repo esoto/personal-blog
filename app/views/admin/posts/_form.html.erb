@@ -31,20 +31,20 @@
 
     <!-- Toolbar -->
     <div class="flex flex-wrap gap-1 mb-2 p-2 bg-bg-primary border border-border rounded-t-lg">
-      <button type="button" data-action="markdown-editor#bold" class="px-2 py-1 text-text-secondary hover:text-text-primary hover:bg-bg-card rounded text-sm font-bold" title="Bold">B</button>
-      <button type="button" data-action="markdown-editor#italic" class="px-2 py-1 text-text-secondary hover:text-text-primary hover:bg-bg-card rounded text-sm italic" title="Italic">I</button>
-      <button type="button" data-action="markdown-editor#strikethrough" class="px-2 py-1 text-text-secondary hover:text-text-primary hover:bg-bg-card rounded text-sm line-through" title="Strikethrough">S</button>
+      <button type="button" data-action="mousedown->markdown-editor#saveSelection markdown-editor#bold" class="px-2 py-1 text-text-secondary hover:text-text-primary hover:bg-bg-card rounded text-sm font-bold" title="Bold">B</button>
+      <button type="button" data-action="mousedown->markdown-editor#saveSelection markdown-editor#italic" class="px-2 py-1 text-text-secondary hover:text-text-primary hover:bg-bg-card rounded text-sm italic" title="Italic">I</button>
+      <button type="button" data-action="mousedown->markdown-editor#saveSelection markdown-editor#strikethrough" class="px-2 py-1 text-text-secondary hover:text-text-primary hover:bg-bg-card rounded text-sm line-through" title="Strikethrough">S</button>
       <span class="border-l border-border mx-1"></span>
-      <button type="button" data-action="markdown-editor#heading" class="px-2 py-1 text-text-secondary hover:text-text-primary hover:bg-bg-card rounded text-sm font-bold" title="Heading">H</button>
-      <button type="button" data-action="markdown-editor#quote" class="px-2 py-1 text-text-secondary hover:text-text-primary hover:bg-bg-card rounded text-sm" title="Quote">&ldquo;</button>
-      <button type="button" data-action="markdown-editor#code" class="px-2 py-1 text-text-secondary hover:text-text-primary hover:bg-bg-card rounded text-sm font-mono" title="Inline Code">&lt;/&gt;</button>
-      <button type="button" data-action="markdown-editor#codeBlock" class="px-2 py-1 text-text-secondary hover:text-text-primary hover:bg-bg-card rounded text-sm font-mono" title="Code Block">{}</button>
+      <button type="button" data-action="mousedown->markdown-editor#saveSelection markdown-editor#heading" class="px-2 py-1 text-text-secondary hover:text-text-primary hover:bg-bg-card rounded text-sm font-bold" title="Heading">H</button>
+      <button type="button" data-action="mousedown->markdown-editor#saveSelection markdown-editor#quote" class="px-2 py-1 text-text-secondary hover:text-text-primary hover:bg-bg-card rounded text-sm" title="Quote">&ldquo;</button>
+      <button type="button" data-action="mousedown->markdown-editor#saveSelection markdown-editor#code" class="px-2 py-1 text-text-secondary hover:text-text-primary hover:bg-bg-card rounded text-sm font-mono" title="Inline Code">&lt;/&gt;</button>
+      <button type="button" data-action="mousedown->markdown-editor#saveSelection markdown-editor#codeBlock" class="px-2 py-1 text-text-secondary hover:text-text-primary hover:bg-bg-card rounded text-sm font-mono" title="Code Block">{}</button>
       <span class="border-l border-border mx-1"></span>
-      <button type="button" data-action="markdown-editor#bulletList" class="px-2 py-1 text-text-secondary hover:text-text-primary hover:bg-bg-card rounded text-sm" title="Bullet List">&#8226;</button>
-      <button type="button" data-action="markdown-editor#numberList" class="px-2 py-1 text-text-secondary hover:text-text-primary hover:bg-bg-card rounded text-sm" title="Numbered List">1.</button>
+      <button type="button" data-action="mousedown->markdown-editor#saveSelection markdown-editor#bulletList" class="px-2 py-1 text-text-secondary hover:text-text-primary hover:bg-bg-card rounded text-sm" title="Bullet List">&#8226;</button>
+      <button type="button" data-action="mousedown->markdown-editor#saveSelection markdown-editor#numberList" class="px-2 py-1 text-text-secondary hover:text-text-primary hover:bg-bg-card rounded text-sm" title="Numbered List">1.</button>
       <span class="border-l border-border mx-1"></span>
-      <button type="button" data-action="markdown-editor#link" class="px-2 py-1 text-text-secondary hover:text-text-primary hover:bg-bg-card rounded text-sm" title="Link">Link</button>
-      <button type="button" data-action="markdown-editor#image" class="px-2 py-1 text-text-secondary hover:text-text-primary hover:bg-bg-card rounded text-sm" title="Image">Img</button>
+      <button type="button" data-action="mousedown->markdown-editor#saveSelection markdown-editor#link" class="px-2 py-1 text-text-secondary hover:text-text-primary hover:bg-bg-card rounded text-sm" title="Link">Link</button>
+      <button type="button" data-action="mousedown->markdown-editor#saveSelection markdown-editor#image" class="px-2 py-1 text-text-secondary hover:text-text-primary hover:bg-bg-card rounded text-sm" title="Image">Img</button>
     </div>
 
     <!-- Split Pane -->
@@ -89,7 +89,7 @@
     <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
       <%= f.collection_check_boxes :tag_ids, Tag.all, :id, :name do |b| %>
         <label class="flex items-center gap-3 px-4 py-3 bg-bg-primary border border-border rounded-lg cursor-pointer hover:border-accent-blue transition-fast">
-          <input type="checkbox" class="w-4 h-4 accent-accent-blue">
+          <%= b.check_box class: "w-4 h-4 accent-accent-blue" %>
           <span class="text-text-primary font-medium"><%= b.object.name %></span>
         </label>
       <% end %>
