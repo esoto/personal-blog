@@ -1,18 +1,25 @@
 module Api
   module V1
     class CommentsController < Api::BaseController
+      PER_PAGE = 25
+
       before_action :set_comment, only: %i[approve spam destroy]
 
       def index
-        status = Comment.statuses.key?(params[:status]) ? params[:status] : "pending"
+        status = params[:status].presence_in(Comment.statuses.keys) || "pending"
         comments = Comment.where(status: status).includes(:post).recent
 
         if params[:post_slug].present?
           comments = comments.joins(:post).where(posts: { slug: params[:post_slug] })
         end
 
+        total_count = comments.count
+        page = [ params.fetch(:page, 1).to_i, 1 ].max
+        comments = comments.offset((page - 1) * PER_PAGE).limit(PER_PAGE)
+
         render json: {
-          comments: comments.map { |comment| comment_json(comment) }
+          comments: comments.map { |comment| comment_json(comment) },
+          meta: { total_count: total_count }
         }
       end
 

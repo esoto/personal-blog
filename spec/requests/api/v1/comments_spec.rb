@@ -52,9 +52,11 @@ RSpec.describe "API V1 Comments", type: :request do
       get "/api/v1/comments", headers: api_headers
 
       expect(response).to have_http_status(:ok)
-      comments = response.parsed_body["comments"]
+      body = response.parsed_body
+      comments = body["comments"]
       expect(comments.length).to eq(1)
       expect(comments.first["author_name"]).to eq("Alice")
+      expect(body["meta"]["total_count"]).to eq(1)
     end
 
     it "filters by status param pending" do
