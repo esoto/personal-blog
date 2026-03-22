@@ -13,6 +13,12 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       get "stats", to: "stats#index"
+      resources :posts, param: :slug, only: %i[index show create update destroy] do
+        member do
+          post :publish
+        end
+      end
+      post "preview", to: "previews#create"
     end
   end
 
