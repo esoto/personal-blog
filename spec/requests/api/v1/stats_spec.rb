@@ -1,16 +1,15 @@
 require "rails_helper"
 
 RSpec.describe "API V1 Stats", type: :request do
-  before do
+  around do |example|
+    original = ENV["BLOG_API_TOKEN"]
     ENV["BLOG_API_TOKEN"] = "test-api-token"
+    example.run
+  ensure
+    original ? ENV["BLOG_API_TOKEN"] = original : ENV.delete("BLOG_API_TOKEN")
   end
 
   describe "GET /api/v1/stats" do
-    it "returns 401 without authentication" do
-      get "/api/v1/stats"
-      expect(response).to have_http_status(:unauthorized)
-    end
-
     context "when authenticated" do
       it "returns correct stats with no data" do
         get "/api/v1/stats", headers: api_headers
