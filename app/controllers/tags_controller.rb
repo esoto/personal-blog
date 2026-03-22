@@ -1,10 +1,13 @@
 class TagsController < ApplicationController
   def index
+    published_status = Post.statuses[:published]
     @tags = Tag
-      .joins("LEFT JOIN post_tags ON post_tags.tag_id = tags.id
-              LEFT JOIN posts ON posts.id = post_tags.post_id
-                AND posts.status = #{Post.statuses[:published]}
-                AND posts.published_at <= NOW()")
+      .joins(Tag.sanitize_sql_array([
+        "LEFT JOIN post_tags ON post_tags.tag_id = tags.id
+         LEFT JOIN posts ON posts.id = post_tags.post_id
+           AND posts.status = ?
+           AND posts.published_at <= NOW()", published_status
+      ]))
       .group("tags.id")
       .select("tags.*, COUNT(posts.id) AS posts_count")
       .order(:name)
