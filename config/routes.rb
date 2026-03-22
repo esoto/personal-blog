@@ -31,6 +31,9 @@ Rails.application.routes.draw do
   # RSS Feed
   get "feed", to: "feeds#index", defaults: { format: :rss }
 
+  # Sitemap
+  get "sitemap.xml", to: "sitemaps#show", defaults: { format: :xml }
+
   # Public posts
   resources :posts, only: [ :index ], param: :slug
   get "posts/:slug", to: "posts#show", as: :post_show
