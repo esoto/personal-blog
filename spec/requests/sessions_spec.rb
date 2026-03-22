@@ -29,9 +29,13 @@ RSpec.describe "Sessions", type: :request do
   end
 
   describe "POST /login rate limiting" do
-    before { SessionsController::RATE_LIMIT_STORE.clear }
-
     it "returns 429 after exceeding rate limit" do
+      counter = 0
+      cache_store = SessionsController.cache_store
+      allow(cache_store).to receive(:increment).and_wrap_original do |_method, *args, **kwargs|
+        counter += 1
+      end
+
       6.times do
         post login_path, params: { email: "admin@example.com", password: "wrongpassword" }
       end

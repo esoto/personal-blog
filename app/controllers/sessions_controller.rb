@@ -1,6 +1,5 @@
 class SessionsController < ApplicationController
-  RATE_LIMIT_STORE = ActiveSupport::Cache::MemoryStore.new
-  rate_limit to: 5, within: 1.minute, only: :create, store: RATE_LIMIT_STORE
+  rate_limit to: 5, within: 1.minute, only: :create
 
   def new
   end
