@@ -17,6 +17,16 @@ RSpec.describe "Tags", type: :request do
         get tags_path
         expect(response.body).to include("<title>Tags</title>")
       end
+
+      it "includes og:title meta tag" do
+        get tags_path
+        expect(response.body).to include('property="og:title" content="Tags — Esteban Soto"')
+      end
+
+      it "includes og:description meta tag" do
+        get tags_path
+        expect(response.body).to include('property="og:description" content="Browse all topics and categories."')
+      end
     end
 
     context "with tags" do
