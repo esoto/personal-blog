@@ -18,6 +18,7 @@ Rails.application.routes.draw do
           post :publish
         end
       end
+      resources :tags, only: %i[index create update destroy]
       post "preview", to: "previews#create"
     end
   end
