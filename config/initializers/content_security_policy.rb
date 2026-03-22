@@ -11,7 +11,7 @@ Rails.application.configure do
     policy.img_src     :self, :data, :https
     policy.object_src  :none
     policy.script_src  :self, "https://cdn.jsdelivr.net"
-    policy.style_src   :self, "https://fonts.googleapis.com", :unsafe_inline
+    policy.style_src   :self, "https://fonts.googleapis.com", "https://cdn.jsdelivr.net", :unsafe_inline
     policy.connect_src :self
     policy.frame_src   :none
     policy.base_uri    :self
