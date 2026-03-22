@@ -96,7 +96,7 @@ class ListPosts < MCP::Tool
 
   def self.call(server_context:, **params)
     result = CLIENT.get("/api/v1/posts", params.compact)
-    MCP::Tool::Response.new([{ type: "text", text: JSON.pretty_generate(result) }])
+    MCP::Tool::Response.new([ { type: "text", text: JSON.pretty_generate(result) } ])
   end
 end
 
@@ -107,12 +107,12 @@ class GetPost < MCP::Tool
     properties: {
       slug: { type: "string", description: "Post slug" }
     },
-    required: ["slug"]
+    required: [ "slug" ]
   )
 
   def self.call(slug:, server_context:)
     result = CLIENT.get("/api/v1/posts/#{slug}")
-    MCP::Tool::Response.new([{ type: "text", text: JSON.pretty_generate(result) }])
+    MCP::Tool::Response.new([ { type: "text", text: JSON.pretty_generate(result) } ])
   end
 end
 
@@ -132,7 +132,7 @@ class CreatePost < MCP::Tool
 
   def self.call(server_context:, **params)
     result = CLIENT.post("/api/v1/posts", { post: params.compact })
-    MCP::Tool::Response.new([{ type: "text", text: JSON.pretty_generate(result) }])
+    MCP::Tool::Response.new([ { type: "text", text: JSON.pretty_generate(result) } ])
   end
 end
 
@@ -148,12 +148,12 @@ class UpdatePost < MCP::Tool
       status: { type: "string", enum: %w[draft published], description: "New status" },
       tag_ids: { type: "array", items: { type: "integer" }, description: "New tag IDs" }
     },
-    required: ["slug"]
+    required: [ "slug" ]
   )
 
   def self.call(slug:, server_context:, **params)
     result = CLIENT.patch("/api/v1/posts/#{slug}", { post: params.compact })
-    MCP::Tool::Response.new([{ type: "text", text: JSON.pretty_generate(result) }])
+    MCP::Tool::Response.new([ { type: "text", text: JSON.pretty_generate(result) } ])
   end
 end
 
@@ -164,12 +164,12 @@ class DeletePost < MCP::Tool
     properties: {
       slug: { type: "string", description: "Post slug to delete" }
     },
-    required: ["slug"]
+    required: [ "slug" ]
   )
 
   def self.call(slug:, server_context:)
     result = CLIENT.delete("/api/v1/posts/#{slug}")
-    MCP::Tool::Response.new([{ type: "text", text: JSON.pretty_generate(result) }])
+    MCP::Tool::Response.new([ { type: "text", text: JSON.pretty_generate(result) } ])
   end
 end
 
@@ -180,12 +180,12 @@ class PublishPost < MCP::Tool
     properties: {
       slug: { type: "string", description: "Post slug to publish" }
     },
-    required: ["slug"]
+    required: [ "slug" ]
   )
 
   def self.call(slug:, server_context:)
     result = CLIENT.post("/api/v1/posts/#{slug}/publish")
-    MCP::Tool::Response.new([{ type: "text", text: JSON.pretty_generate(result) }])
+    MCP::Tool::Response.new([ { type: "text", text: JSON.pretty_generate(result) } ])
   end
 end
 
@@ -196,12 +196,12 @@ class PreviewMarkdown < MCP::Tool
     properties: {
       markdown: { type: "string", description: "Markdown content to preview" }
     },
-    required: ["markdown"]
+    required: [ "markdown" ]
   )
 
   def self.call(markdown:, server_context:)
     result = CLIENT.post("/api/v1/preview", { markdown: markdown })
-    MCP::Tool::Response.new([{ type: "text", text: JSON.pretty_generate(result) }])
+    MCP::Tool::Response.new([ { type: "text", text: JSON.pretty_generate(result) } ])
   end
 end
 
@@ -220,7 +220,7 @@ class ListComments < MCP::Tool
 
   def self.call(server_context:, **params)
     result = CLIENT.get("/api/v1/comments", params.compact)
-    MCP::Tool::Response.new([{ type: "text", text: JSON.pretty_generate(result) }])
+    MCP::Tool::Response.new([ { type: "text", text: JSON.pretty_generate(result) } ])
   end
 end
 
@@ -231,12 +231,12 @@ class ApproveComment < MCP::Tool
     properties: {
       id: { type: "integer", description: "Comment ID to approve" }
     },
-    required: ["id"]
+    required: [ "id" ]
   )
 
   def self.call(id:, server_context:)
     result = CLIENT.patch("/api/v1/comments/#{id}/approve")
-    MCP::Tool::Response.new([{ type: "text", text: JSON.pretty_generate(result) }])
+    MCP::Tool::Response.new([ { type: "text", text: JSON.pretty_generate(result) } ])
   end
 end
 
@@ -247,12 +247,12 @@ class SpamComment < MCP::Tool
     properties: {
       id: { type: "integer", description: "Comment ID to mark as spam" }
     },
-    required: ["id"]
+    required: [ "id" ]
   )
 
   def self.call(id:, server_context:)
     result = CLIENT.patch("/api/v1/comments/#{id}/spam")
-    MCP::Tool::Response.new([{ type: "text", text: JSON.pretty_generate(result) }])
+    MCP::Tool::Response.new([ { type: "text", text: JSON.pretty_generate(result) } ])
   end
 end
 
@@ -263,12 +263,12 @@ class DeleteComment < MCP::Tool
     properties: {
       id: { type: "integer", description: "Comment ID to delete" }
     },
-    required: ["id"]
+    required: [ "id" ]
   )
 
   def self.call(id:, server_context:)
     result = CLIENT.delete("/api/v1/comments/#{id}")
-    MCP::Tool::Response.new([{ type: "text", text: JSON.pretty_generate(result) }])
+    MCP::Tool::Response.new([ { type: "text", text: JSON.pretty_generate(result) } ])
   end
 end
 
@@ -285,7 +285,7 @@ class ListTags < MCP::Tool
 
   def self.call(server_context:, **_params)
     result = CLIENT.get("/api/v1/tags")
-    MCP::Tool::Response.new([{ type: "text", text: JSON.pretty_generate(result) }])
+    MCP::Tool::Response.new([ { type: "text", text: JSON.pretty_generate(result) } ])
   end
 end
 
@@ -296,12 +296,12 @@ class CreateTag < MCP::Tool
     properties: {
       name: { type: "string", description: "Tag name" }
     },
-    required: ["name"]
+    required: [ "name" ]
   )
 
   def self.call(name:, server_context:)
     result = CLIENT.post("/api/v1/tags", { tag: { name: name } })
-    MCP::Tool::Response.new([{ type: "text", text: JSON.pretty_generate(result) }])
+    MCP::Tool::Response.new([ { type: "text", text: JSON.pretty_generate(result) } ])
   end
 end
 
@@ -318,7 +318,7 @@ class UpdateTag < MCP::Tool
 
   def self.call(id:, name:, server_context:)
     result = CLIENT.patch("/api/v1/tags/#{id}", { tag: { name: name } })
-    MCP::Tool::Response.new([{ type: "text", text: JSON.pretty_generate(result) }])
+    MCP::Tool::Response.new([ { type: "text", text: JSON.pretty_generate(result) } ])
   end
 end
 
@@ -329,12 +329,12 @@ class DeleteTag < MCP::Tool
     properties: {
       id: { type: "integer", description: "Tag ID to delete" }
     },
-    required: ["id"]
+    required: [ "id" ]
   )
 
   def self.call(id:, server_context:)
     result = CLIENT.delete("/api/v1/tags/#{id}")
-    MCP::Tool::Response.new([{ type: "text", text: JSON.pretty_generate(result) }])
+    MCP::Tool::Response.new([ { type: "text", text: JSON.pretty_generate(result) } ])
   end
 end
 
@@ -351,7 +351,7 @@ class SiteStats < MCP::Tool
 
   def self.call(server_context:, **_params)
     result = CLIENT.get("/api/v1/stats")
-    MCP::Tool::Response.new([{ type: "text", text: JSON.pretty_generate(result) }])
+    MCP::Tool::Response.new([ { type: "text", text: JSON.pretty_generate(result) } ])
   end
 end
 
