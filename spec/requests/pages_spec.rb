@@ -15,6 +15,16 @@ RSpec.describe "Pages", type: :request do
       expect(response.body).to include("JavaScript")
     end
 
+    it "sets a descriptive page title" do
+      get root_path
+      expect(response.body).to include("<title>Esteban Soto")
+    end
+
+    it "includes lang attribute on html tag" do
+      get root_path
+      expect(response.body).to include('<html lang="en">')
+    end
+
     it "includes OG meta tags" do
       get root_path
       expect(response.body).to include('property="og:title"')
