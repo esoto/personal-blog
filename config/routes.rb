@@ -19,6 +19,12 @@ Rails.application.routes.draw do
         end
       end
       post "preview", to: "previews#create"
+      resources :comments, only: %i[index destroy] do
+        member do
+          patch :approve
+          patch :spam
+        end
+      end
     end
   end
 
