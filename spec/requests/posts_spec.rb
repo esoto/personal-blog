@@ -170,6 +170,21 @@ RSpec.describe "Posts", type: :request do
         expect(response.body).to include('rel="canonical"')
       end
 
+      it "includes JSON-LD structured data for BlogPosting" do
+        get post_show_path(slug: post.slug)
+        expect(response.body).to include('application/ld+json')
+        expect(response.body).to include('"@type":"BlogPosting"')
+        expect(response.body).to include('"headline":"Test Post"')
+      end
+
+      it "includes JSON-LD BreadcrumbList" do
+        get post_show_path(slug: post.slug)
+        expect(response.body).to include('"@type":"BreadcrumbList"')
+        expect(response.body).to include('"name":"Home"')
+        expect(response.body).to include('"name":"Posts"')
+        expect(response.body).to include('"name":"Test Post"')
+      end
+
       it "displays reading time" do
         get post_show_path(slug: post.slug)
         expect(response.body).to include("min read")

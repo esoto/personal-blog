@@ -2,6 +2,14 @@
 <% content_for(:og_title) { @post.title } %>
 <% content_for(:og_description) { @post.excerpt.presence || truncate(@post.body_markdown.to_s, length: 160) } %>
 <% content_for(:og_type) { "article" } %>
+<% content_for(:head) do %>
+  <%= json_ld_tag(blog_posting_json_ld(@post)) %>
+  <%= json_ld_tag(breadcrumb_json_ld([
+    { name: "Home", url: root_url },
+    { name: "Posts", url: posts_url },
+    { name: @post.title, url: post_show_url(slug: @post.slug) }
+  ])) %>
+<% end %>
 
 <div>
   <!-- Back link -->

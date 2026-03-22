@@ -1,6 +1,13 @@
 <% content_for(:title) { "Posts tagged with #{@tag.name}" } %>
 <% content_for(:og_title) { "Posts tagged with #{@tag.name} — Personal Blog" } %>
 <% content_for(:og_description) { "Browse all posts tagged with #{@tag.name}." } %>
+<% content_for(:head) do %>
+  <%= json_ld_tag(breadcrumb_json_ld([
+    { name: "Home", url: root_url },
+    { name: "Tags", url: tags_url },
+    { name: @tag.name, url: tag_url(slug: @tag.slug) }
+  ])) %>
+<% end %>
 
 <div>
   <!-- Header -->

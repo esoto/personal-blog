@@ -43,6 +43,13 @@ RSpec.describe "About Page", type: :request do
       expect(response.body).to include('rel="canonical"')
     end
 
+    it "includes JSON-LD structured data for Person" do
+      get about_path
+      expect(response.body).to include('application/ld+json')
+      expect(response.body).to include('"@type":"Person"')
+      expect(response.body).to include('"name":"Esteban Soto"')
+    end
+
     it "includes a link back to the homepage" do
       get about_path
       expect(response.body).to include(root_path)

@@ -199,6 +199,15 @@ RSpec.describe "Tags", type: :request do
         get tag_path(slug: tag.slug)
         expect(response.body).to include('rel="canonical"')
       end
+
+      it "includes JSON-LD BreadcrumbList" do
+        get tag_path(slug: tag.slug)
+        expect(response.body).to include('application/ld+json')
+        expect(response.body).to include('"@type":"BreadcrumbList"')
+        expect(response.body).to include('"name":"Home"')
+        expect(response.body).to include('"name":"Tags"')
+        expect(response.body).to include('"name":"Ruby"')
+      end
     end
 
     context "with draft posts" do
