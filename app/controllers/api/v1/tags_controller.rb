@@ -50,7 +50,7 @@ module Api
           id: tag.id,
           name: tag.name,
           slug: tag.slug,
-          posts_count: tag.respond_to?(:posts_count) ? tag.posts_count : tag.posts.count,
+          posts_count: tag.has_attribute?(:posts_count) ? tag.posts_count : tag.posts.count,
           created_at: tag.created_at.iso8601(3),
           updated_at: tag.updated_at.iso8601(3)
         }
