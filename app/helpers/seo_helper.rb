@@ -1,4 +1,12 @@
 module SeoHelper
+  SITE_NAME = "Esteban Soto".freeze
+  JOB_TITLE = "Full-Stack Developer".freeze
+  SITE_DESCRIPTION = "Full-stack developer writing about Ruby, JavaScript, and software engineering.".freeze
+  SOCIAL_URLS = [
+    "https://github.com/esoto",
+    "https://www.linkedin.com/in/soto-esteban/"
+  ].freeze
+
   def json_ld_tag(data)
     tag.script(json_escape(data.to_json).html_safe, type: "application/ld+json")
   end
@@ -7,9 +15,9 @@ module SeoHelper
     {
       "@context" => "https://schema.org",
       "@type" => "WebSite",
-      "name" => "Esteban Soto",
+      "name" => SITE_NAME,
       "url" => root_url,
-      "description" => "Full-stack developer writing about Ruby, JavaScript, and software engineering."
+      "description" => SITE_DESCRIPTION
     }
   end
 
@@ -32,13 +40,10 @@ module SeoHelper
     {
       "@context" => "https://schema.org",
       "@type" => "Person",
-      "name" => "Esteban Soto",
+      "name" => SITE_NAME,
       "url" => about_url,
-      "jobTitle" => "Full-Stack Developer",
-      "sameAs" => [
-        "https://github.com/esoto",
-        "https://www.linkedin.com/in/soto-esteban/"
-      ]
+      "jobTitle" => JOB_TITLE,
+      "sameAs" => SOCIAL_URLS
     }
   end
 
@@ -62,7 +67,7 @@ module SeoHelper
   def person_reference
     {
       "@type" => "Person",
-      "name" => "Esteban Soto",
+      "name" => SITE_NAME,
       "url" => about_url
     }
   end
