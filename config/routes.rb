@@ -9,6 +9,13 @@ Rails.application.routes.draw do
   # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
+  # API
+  namespace :api do
+    namespace :v1 do
+      get "stats", to: "stats#index"
+    end
+  end
+
   # Authentication
   get "login", to: "sessions#new"
   post "login", to: "sessions#create"
