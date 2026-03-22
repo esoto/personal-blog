@@ -36,6 +36,13 @@ RSpec.describe "Pages", type: :request do
       expect(response.body).to include('rel="canonical"')
     end
 
+    it "includes JSON-LD structured data for WebSite" do
+      get root_path
+      expect(response.body).to include('application/ld+json')
+      expect(response.body).to include('"@type":"WebSite"')
+      expect(response.body).to include('"name":"Esteban Soto"')
+    end
+
     context "with published posts" do
       let!(:post1) do
         Post.create!(

@@ -1,6 +1,7 @@
 <% content_for(:title) { "About" } %>
 <% content_for(:og_title) { "About — Esteban Soto" } %>
 <% content_for(:og_description) { "Full-stack developer building with Ruby and JavaScript." } %>
+<% content_for(:head) { json_ld_tag(person_json_ld) } %>
 
 <div>
   <!-- Header -->
