@@ -1,19 +1,23 @@
 module Api
   module V1
     class PostsController < Api::BaseController
+      PER_PAGE = 10
+
       before_action :set_post, only: %i[show update destroy publish]
 
       def index
         posts = Post.all
-        posts = posts.where(status: params[:status]) if params[:status].present?
+        if params[:status].present? && Post.statuses.key?(params[:status])
+          posts = posts.where(status: params[:status])
+        end
         posts = posts.joins(:tags).where(tags: { slug: params[:tag] }) if params[:tag].present?
         if params[:search].present?
           posts = posts.where("title ILIKE ?", "%#{ActiveRecord::Base.sanitize_sql_like(params[:search])}%")
         end
 
-        total_count = posts.count
+        total_count = posts.distinct.count
         page = [ params.fetch(:page, 1).to_i, 1 ].max
-        posts = posts.recent.offset((page - 1) * 10).limit(10).includes(:tags)
+        posts = posts.distinct.recent.offset((page - 1) * PER_PAGE).limit(PER_PAGE).includes(:tags)
 
         render json: {
           posts: posts.map { |post| post_summary_json(post) },
@@ -30,6 +34,7 @@ module Api
         set_published_at_if_needed
 
         if @post.save
+          @post.reload
           render json: post_detail_json(@post), status: :created
         else
           render json: { errors: @post.errors.full_messages }, status: :unprocessable_entity
@@ -41,6 +46,7 @@ module Api
         set_published_at_if_needed
 
         if @post.save
+          @post.reload
           render json: post_detail_json(@post)
         else
           render json: { errors: @post.errors.full_messages }, status: :unprocessable_entity
@@ -58,14 +64,19 @@ module Api
           return
         end
 
-        @post.update!(status: :published, published_at: Time.current)
-        render json: post_detail_json(@post)
+        @post.assign_attributes(status: :published, published_at: Time.current)
+        if @post.save
+          @post.reload
+          render json: post_detail_json(@post)
+        else
+          render json: { errors: @post.errors.full_messages }, status: :unprocessable_entity
+        end
       end
 
       private
 
       def set_post
-        @post = Post.find_by!(slug: params[:slug])
+        @post = Post.includes(:tags, :comments).find_by!(slug: params[:slug])
       end
 
       def post_params
@@ -109,7 +120,6 @@ module Api
             {
               id: c.id,
               author_name: c.author_name,
-              email: c.email,
               body: c.body,
               status: c.status,
               created_at: c.created_at.iso8601(3)

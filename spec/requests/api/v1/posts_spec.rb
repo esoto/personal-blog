@@ -85,6 +85,12 @@ RSpec.describe "API V1 Posts", type: :request do
       expect(posts.first["title"]).to eq("Published Post")
     end
 
+    it "ignores invalid status filter" do
+      get "/api/v1/posts", params: { status: "bogus" }, headers: api_headers
+      expect(response).to have_http_status(:ok)
+      expect(response.parsed_body["posts"].length).to eq(2)
+    end
+
     it "returns empty when filtering by tag with no posts" do
       get "/api/v1/posts", params: { tag: "rails" }, headers: api_headers
       expect(response.parsed_body["posts"]).to be_empty
@@ -149,7 +155,7 @@ RSpec.describe "API V1 Posts", type: :request do
       expect(post_json["tags"].first["slug"]).to eq("ruby")
     end
 
-    it "includes approved comments" do
+    it "includes all comments for admin review" do
       published_post.comments.create!(author_name: "Alice", email: "a@test.com", body: "Great!", status: :approved)
       published_post.comments.create!(author_name: "Spam", email: "s@test.com", body: "Buy stuff", status: :spam)
 
@@ -157,6 +163,7 @@ RSpec.describe "API V1 Posts", type: :request do
       post_json = response.parsed_body
 
       expect(post_json["comments"].length).to eq(2)
+      expect(post_json["comments"].first).not_to have_key("email")
     end
 
     it "returns 404 for unknown slug" do
