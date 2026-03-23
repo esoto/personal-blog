@@ -1,0 +1,47 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git branch:*)",
+      "mcp__linear-server__list_issues",
+      "mcp__linear-server__save_issue",
+      "Bash(git worktree:*)",
+      "Bash(bin/rails tailwindcss:build)",
+      "Bash(gh pr:*)",
+      "Bash(bundle exec:*)",
+      "Bash(bin/rails server:*)",
+      "Bash(git log:*)",
+      "Bash(curl:*)",
+      "Bash(bin/rails routes:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Read(//Users/esoto/development/personal_blog/.worktrees/**)",
+      "Read(//Users/esoto/.claude/agents/**)",
+      "Read(//Users/esoto/.claude/workflows/**)",
+      "Read(//Users/esoto/development/workflow/workflows/**)",
+      "Bash(bin/rails db:*)",
+      "Bash(RAILS_ENV=test bin/rails db:*)",
+      "Bash(git checkout:*)",
+      "Bash(bin/rails runner \":*)",
+      "Bash(git pull:*)",
+      "Bash(bin/rails runner:*)"
+    ],
+    "additionalDirectories": [
+      "/tmp"
+    ]
+  },
+  "hooks": {
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cd /Users/esoto/development/personal_blog && rm -f *.png && rm -rf .playwright-mcp/",
+            "timeout": 5,
+            "statusMessage": "Cleaning up screenshots"
+          }
+        ]
+      }
+    ]
+  }
+}
