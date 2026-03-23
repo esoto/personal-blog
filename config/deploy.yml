@@ -14,8 +14,9 @@ proxy:
   ssl: true
   host: blog.estebansoto.dev
 
-# Docker Hub
+# GitHub Container Registry
 registry:
+  server: ghcr.io
   username: esoto
   password:
     - KAMAL_REGISTRY_PASSWORD
@@ -69,6 +70,10 @@ volumes:
 
 # Bridge assets between versions
 asset_path: /rails/public/assets
+
+# SSH as deploy user (root disabled)
+ssh:
+  user: deploy
 
 # Build for amd64 (Hetzner server architecture)
 builder:
