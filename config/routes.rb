@@ -46,6 +46,7 @@ Rails.application.routes.draw do
         patch :spam
       end
     end
+    resources :visits, only: :index
   end
 
   # RSS Feed

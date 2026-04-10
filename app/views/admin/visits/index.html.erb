@@ -1,0 +1,120 @@
+<% content_for(:title) { "Visits — Admin" } %>
+
+<div class="mb-12">
+  <h1 class="text-4xl font-bold text-text-primary mb-2">Visit Analytics</h1>
+  <p class="text-text-secondary">Tracking public page views</p>
+</div>
+
+<!-- Summary Stats -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+  <div class="bg-bg-surface border border-border rounded-lg p-6 hover:border-accent-blue transition-fast">
+    <p class="text-text-secondary text-sm font-medium mb-1">Total Visits</p>
+    <p class="text-3xl font-bold text-text-primary"><%= @total_visits %></p>
+  </div>
+  <div class="bg-bg-surface border border-border rounded-lg p-6 hover:border-accent-green transition-fast">
+    <p class="text-text-secondary text-sm font-medium mb-1">Today</p>
+    <p class="text-3xl font-bold text-text-primary"><%= @today_visits %></p>
+  </div>
+  <div class="bg-bg-surface border border-border rounded-lg p-6 hover:border-accent-orange transition-fast">
+    <p class="text-text-secondary text-sm font-medium mb-1">This Week</p>
+    <p class="text-3xl font-bold text-text-primary"><%= @week_visits %></p>
+  </div>
+  <div class="bg-bg-surface border border-border rounded-lg p-6 hover:border-accent-blue transition-fast">
+    <p class="text-text-secondary text-sm font-medium mb-1">This Month</p>
+    <p class="text-3xl font-bold text-text-primary"><%= @month_visits %></p>
+  </div>
+</div>
+
+<!-- Analytics Panels -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-12">
+  <!-- Top Referrers -->
+  <div class="bg-bg-surface border border-border rounded-lg p-6">
+    <h2 class="text-lg font-semibold text-text-primary mb-4">Top Referrers</h2>
+    <% if @top_referrers.any? %>
+      <ul class="space-y-3">
+        <% @top_referrers.each do |referrer, count| %>
+          <li class="flex justify-between items-center">
+            <span class="text-text-secondary text-sm truncate mr-2"><%= referrer %></span>
+            <span class="text-accent-blue font-mono text-sm font-semibold"><%= count %></span>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p class="text-text-secondary text-sm">No referrer data yet.</p>
+    <% end %>
+  </div>
+
+  <!-- Top Locations -->
+  <div class="bg-bg-surface border border-border rounded-lg p-6">
+    <h2 class="text-lg font-semibold text-text-primary mb-4">Top Locations</h2>
+    <% if @top_locations.any? %>
+      <ul class="space-y-3">
+        <% @top_locations.each do |location, count| %>
+          <li class="flex justify-between items-center">
+            <span class="text-text-secondary text-sm truncate mr-2"><%= location %></span>
+            <span class="text-accent-green font-mono text-sm font-semibold"><%= count %></span>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p class="text-text-secondary text-sm">No location data yet.</p>
+    <% end %>
+  </div>
+
+  <!-- Top Browsers -->
+  <div class="bg-bg-surface border border-border rounded-lg p-6">
+    <h2 class="text-lg font-semibold text-text-primary mb-4">Top Browsers</h2>
+    <% if @top_browsers.any? %>
+      <ul class="space-y-3">
+        <% @top_browsers.each do |browser, count| %>
+          <li class="flex justify-between items-center">
+            <span class="text-text-secondary text-sm truncate mr-2"><%= browser %></span>
+            <span class="text-accent-orange font-mono text-sm font-semibold"><%= count %></span>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p class="text-text-secondary text-sm">No browser data yet.</p>
+    <% end %>
+  </div>
+</div>
+
+<!-- Recent Visits Table -->
+<div class="bg-bg-surface border border-border rounded-lg overflow-hidden">
+  <div class="p-6 border-b border-border">
+    <h2 class="text-lg font-semibold text-text-primary">Recent Visits</h2>
+  </div>
+  <div class="overflow-x-auto">
+    <table class="w-full">
+      <thead class="bg-bg-surface-hover">
+        <tr>
+          <th class="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider">Time</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider">Path</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider">IP</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider">Location</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider">Browser</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider">Device</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider">Referrer</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-border">
+        <% @visits.each do |visit| %>
+          <tr class="hover:bg-bg-surface-hover transition-fast">
+            <td class="px-6 py-4 text-sm text-text-secondary whitespace-nowrap"><%= visit.created_at.strftime("%b %d, %I:%M %p") %></td>
+            <td class="px-6 py-4 text-sm text-accent-blue font-mono"><%= visit.path %></td>
+            <td class="px-6 py-4 text-sm text-text-secondary font-mono"><%= visit.ip_address %></td>
+            <td class="px-6 py-4 text-sm text-text-secondary"><%= [visit.city, visit.country].compact_blank.join(", ") %></td>
+            <td class="px-6 py-4 text-sm text-text-secondary"><%= visit.browser %></td>
+            <td class="px-6 py-4 text-sm text-text-secondary"><%= visit.device_type %></td>
+            <td class="px-6 py-4 text-sm text-text-secondary truncate max-w-[200px]"><%= visit.referrer %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+  <% if @visits.total_pages > 1 %>
+    <div class="p-6 border-t border-border">
+      <%= paginate @visits, theme: "tailwind" %>
+    </div>
+  <% end %>
+</div>

@@ -69,3 +69,8 @@ gem "tailwindcss-rails", "~> 4.4"
 # Markdown rendering and syntax highlighting
 gem "redcarpet", "~> 3.6"
 gem "rouge", "~> 4.5"
+
+# Visitor tracking
+gem "geocoder", "~> 1.8"
+gem "user_agent_parser", "~> 2.18"
+gem "kaminari", "~> 1.2"
