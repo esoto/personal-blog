@@ -44,6 +44,31 @@ RSpec.describe Visit, type: :model do
     end
   end
 
+  describe ".stale_pii" do
+    it "returns visits older than 90 days that are not yet anonymized" do
+      stale = Visit.create!(ip_address: "8.8.8.8", path: "/", created_at: 91.days.ago)
+      fresh = Visit.create!(ip_address: "1.1.1.1", path: "/", created_at: 30.days.ago)
+      already_anon = Visit.create!(ip_address: "0.0.0.0", path: "/", created_at: 100.days.ago)
+
+      result = Visit.stale_pii
+      expect(result).to include(stale)
+      expect(result).not_to include(fresh)
+      expect(result).not_to include(already_anon)
+    end
+  end
+
+  describe ".anonymize_stale!" do
+    it "clears ip_address and user_agent on stale visits" do
+      visit = Visit.create!(ip_address: "8.8.8.8", path: "/", user_agent: "Mozilla", created_at: 91.days.ago)
+
+      Visit.anonymize_stale!
+
+      visit.reload
+      expect(visit.ip_address).to eq("0.0.0.0")
+      expect(visit.user_agent).to be_nil
+    end
+  end
+
   describe ".top_referrers" do
     before do
       3.times { Visit.create!(ip_address: "1.1.1.1", path: "/", referrer: "https://google.com") }

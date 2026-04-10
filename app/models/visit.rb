@@ -5,9 +5,12 @@ class Visit < ApplicationRecord
   geocoded_by :ip_address
   after_create_commit :geocode_later
 
+  ANONYMIZATION_THRESHOLD = 90.days
+
   scope :today, -> { where(created_at: Time.current.beginning_of_day..) }
   scope :this_week, -> { where(created_at: 7.days.ago..) }
   scope :this_month, -> { where(created_at: 30.days.ago..) }
+  scope :stale_pii, -> { where(created_at: ...ANONYMIZATION_THRESHOLD.ago).where.not(ip_address: "0.0.0.0") }
 
   def self.top_referrers(limit = 10)
     where.not(referrer: [ nil, "" ])
@@ -34,6 +37,10 @@ class Visit < ApplicationRecord
          .limit(limit)
          .count
          .to_a
+  end
+
+  def self.anonymize_stale!
+    stale_pii.update_all(ip_address: "0.0.0.0", user_agent: nil)
   end
 
   def self.create_from_request(request)
