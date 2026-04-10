@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe GeocodeVisitJob, type: :job do
-  it "geocodes the visit and saves coordinates" do
+  it "geocodes the visit and saves coordinates and location" do
     visit = Visit.create!(ip_address: "8.8.8.8", path: "/")
 
     GeocodeVisitJob.perform_now(visit.id)
@@ -9,6 +9,8 @@ RSpec.describe GeocodeVisitJob, type: :job do
     visit.reload
     expect(visit.latitude).to be_present
     expect(visit.longitude).to be_present
+    expect(visit.city).to eq("New York")
+    expect(visit.country).to eq("US")
   end
 
   it "skips if the visit no longer exists" do

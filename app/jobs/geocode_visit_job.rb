@@ -6,7 +6,15 @@ class GeocodeVisitJob < ApplicationJob
     return unless visit
     return if visit.latitude.present?
 
-    visit.geocode
-    visit.save
+    results = Geocoder.search(visit.ip_address)
+    return if results.empty?
+
+    result = results.first
+    visit.update(
+      latitude: result.latitude,
+      longitude: result.longitude,
+      city: result.city,
+      country: result.country
+    )
   end
 end
