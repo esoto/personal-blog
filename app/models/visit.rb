@@ -3,7 +3,7 @@ class Visit < ApplicationRecord
   validates :path, presence: true
 
   geocoded_by :ip_address
-  after_validation :geocode, if: ->(v) { v.ip_address.present? && v.latitude.blank? }
+  after_create_commit :geocode_later
 
   scope :today, -> { where(created_at: Time.current.beginning_of_day..) }
   scope :this_week, -> { where(created_at: 7.days.ago..) }
@@ -20,7 +20,7 @@ class Visit < ApplicationRecord
 
   def self.top_locations(limit = 10)
     where.not(city: [ nil, "" ])
-         .group("city || ', ' || country")
+         .group("city || COALESCE(', ' || NULLIF(country, ''), '')")
          .order("count_all DESC")
          .limit(limit)
          .count
@@ -55,5 +55,11 @@ class Visit < ApplicationRecord
       device_type: device_type,
       os: ua.os.name
     )
+  end
+
+  private
+
+  def geocode_later
+    GeocodeVisitJob.perform_later(id) if latitude.blank?
   end
 end

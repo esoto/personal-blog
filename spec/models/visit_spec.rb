@@ -67,6 +67,12 @@ RSpec.describe Visit, type: :model do
       result = Visit.top_locations(5)
       expect(result).to eq([ [ "New York, US", 3 ], [ "London, UK", 2 ] ])
     end
+
+    it "handles visits with city but no country" do
+      Visit.create!(ip_address: "3.3.3.3", path: "/", city: "Tokyo", country: nil)
+      result = Visit.top_locations(10)
+      expect(result.map(&:first)).to include("Tokyo")
+    end
   end
 
   describe ".top_browsers" do
@@ -102,12 +108,39 @@ RSpec.describe Visit, type: :model do
       expect(visit.device_type).to eq("Desktop")
       expect(visit.os).to eq("Mac OS X")
     end
+
+    it "detects mobile devices" do
+      mobile_request = instance_double(
+        ActionDispatch::Request,
+        remote_ip: "8.8.8.8", path: "/", referrer: nil,
+        user_agent: "Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1"
+      )
+      visit = Visit.create_from_request(mobile_request)
+      expect(visit.device_type).to eq("Mobile")
+    end
+
+    it "detects tablet devices" do
+      tablet_request = instance_double(
+        ActionDispatch::Request,
+        remote_ip: "8.8.8.8", path: "/", referrer: nil,
+        user_agent: "Mozilla/5.0 (iPad; CPU OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Tablet Safari/604.1"
+      )
+      visit = Visit.create_from_request(tablet_request)
+      expect(visit.device_type).to eq("Tablet")
+    end
   end
 
   describe "geocoding" do
-    it "geocodes by ip_address" do
-      expect(Visit.new).to respond_to(:latitude)
-      expect(Visit.new).to respond_to(:longitude)
+    it "enqueues a geocoding job after creation" do
+      expect {
+        Visit.create!(ip_address: "8.8.8.8", path: "/")
+      }.to have_enqueued_job(GeocodeVisitJob)
+    end
+
+    it "does not enqueue geocoding when latitude is already set" do
+      expect {
+        Visit.create!(ip_address: "8.8.8.8", path: "/", latitude: 40.7, longitude: -74.0)
+      }.not_to have_enqueued_job(GeocodeVisitJob)
     end
   end
 end

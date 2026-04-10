@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_10_044517) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_10_051241) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -258,9 +258,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_10_044517) do
     t.string "referrer"
     t.datetime "updated_at", null: false
     t.text "user_agent"
+    t.index ["browser"], name: "index_visits_on_browser"
     t.index ["country"], name: "index_visits_on_country"
     t.index ["created_at"], name: "index_visits_on_created_at"
     t.index ["ip_address"], name: "index_visits_on_ip_address"
+    t.index ["path"], name: "index_visits_on_path"
+    t.index ["referrer"], name: "index_visits_on_referrer"
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"

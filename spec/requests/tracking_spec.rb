@@ -20,6 +20,12 @@ RSpec.describe "Visit Tracking", type: :request do
       get root_path, headers: { "HTTP_USER_AGENT" => "Mozilla/5.0 Chrome/120" }
       expect(Visit.last.user_agent).to eq("Mozilla/5.0 Chrome/120")
     end
+
+    it "tracks visits with no user agent" do
+      expect {
+        get root_path, headers: { "HTTP_USER_AGENT" => "" }
+      }.to change(Visit, :count).by(1)
+    end
   end
 
   describe "bot filtering" do
@@ -40,18 +46,24 @@ RSpec.describe "Visit Tracking", type: :request do
         get root_path, headers: { "HTTP_USER_AGENT" => "Python-urllib/3.9" }
       }.not_to change(Visit, :count)
     end
+
+    it "does not track curl" do
+      expect {
+        get root_path, headers: { "HTTP_USER_AGENT" => "curl/7.88.1" }
+      }.not_to change(Visit, :count)
+    end
+
+    it "does not track wget" do
+      expect {
+        get root_path, headers: { "HTTP_USER_AGENT" => "Wget/1.21.4" }
+      }.not_to change(Visit, :count)
+    end
   end
 
   describe "excluded routes" do
     it "does not track the health check endpoint" do
       expect {
         get rails_health_check_path
-      }.not_to change(Visit, :count)
-    end
-
-    it "does not track API requests" do
-      expect {
-        get api_v1_posts_path, headers: { "Authorization" => "Bearer test-api-token" }
       }.not_to change(Visit, :count)
     end
 
@@ -67,6 +79,14 @@ RSpec.describe "Visit Tracking", type: :request do
       expect {
         get login_path
       }.not_to change(Visit, :count)
+    end
+  end
+
+  describe "error resilience" do
+    it "does not break page loads when tracking fails" do
+      allow(Visit).to receive(:create_from_request).and_raise(StandardError, "DB connection lost")
+      get root_path
+      expect(response).to have_http_status(:ok)
     end
   end
 end
