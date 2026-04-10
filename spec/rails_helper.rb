@@ -37,6 +37,14 @@ end
 RSpec.configure do |config|
   config.include ActiveSupport::Testing::TimeHelpers
 
+  config.before(:each) do
+    Geocoder.configure(lookup: :test, ip_lookup: :test)
+    Geocoder::Lookup::Test.set_default_stub(
+      [{ "ip" => "0.0.0.0", "latitude" => 40.7128, "longitude" => -74.0060,
+         "city" => "New York", "country" => "US" }]
+    )
+  end
+
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_paths = [
     Rails.root.join('spec/fixtures')
