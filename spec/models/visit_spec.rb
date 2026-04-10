@@ -53,7 +53,7 @@ RSpec.describe Visit, type: :model do
 
     it "returns referrers ordered by count, excluding nil" do
       result = Visit.top_referrers(5)
-      expect(result).to eq([["https://google.com", 3], ["https://twitter.com", 1]])
+      expect(result).to eq([ [ "https://google.com", 3 ], [ "https://twitter.com", 1 ] ])
     end
   end
 
@@ -65,7 +65,7 @@ RSpec.describe Visit, type: :model do
 
     it "returns locations ordered by count" do
       result = Visit.top_locations(5)
-      expect(result).to eq([["New York, US", 3], ["London, UK", 2]])
+      expect(result).to eq([ [ "New York, US", 3 ], [ "London, UK", 2 ] ])
     end
   end
 
@@ -77,7 +77,7 @@ RSpec.describe Visit, type: :model do
 
     it "returns browsers ordered by count" do
       result = Visit.top_browsers(5)
-      expect(result).to eq([["Chrome", 3], ["Firefox", 1]])
+      expect(result).to eq([ [ "Chrome", 3 ], [ "Firefox", 1 ] ])
     end
   end
 

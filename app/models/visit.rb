@@ -10,7 +10,7 @@ class Visit < ApplicationRecord
   scope :this_month, -> { where(created_at: 30.days.ago..) }
 
   def self.top_referrers(limit = 10)
-    where.not(referrer: [nil, ""])
+    where.not(referrer: [ nil, "" ])
          .group(:referrer)
          .order("count_all DESC")
          .limit(limit)
@@ -19,7 +19,7 @@ class Visit < ApplicationRecord
   end
 
   def self.top_locations(limit = 10)
-    where.not(city: [nil, ""])
+    where.not(city: [ nil, "" ])
          .group("city || ', ' || country")
          .order("count_all DESC")
          .limit(limit)
@@ -28,7 +28,7 @@ class Visit < ApplicationRecord
   end
 
   def self.top_browsers(limit = 10)
-    where.not(browser: [nil, ""])
+    where.not(browser: [ nil, "" ])
          .group(:browser)
          .order("count_all DESC")
          .limit(limit)
@@ -40,11 +40,11 @@ class Visit < ApplicationRecord
     ua = UserAgentParser.parse(request.user_agent)
     device_type = if request.user_agent&.match?(/Mobile/i)
                     "Mobile"
-                  elsif request.user_agent&.match?(/Tablet/i)
+    elsif request.user_agent&.match?(/Tablet/i)
                     "Tablet"
-                  else
+    else
                     "Desktop"
-                  end
+    end
 
     create(
       ip_address: request.remote_ip,
