@@ -1,0 +1,7 @@
+<%# Locals: post (required), size_class: "text-xs" (optional) %>
+<% size_class ||= "text-xs" %>
+<span class="text-text-muted <%= size_class %> font-medium">
+  <%= post.published_at.strftime("%b %d, %Y") %>
+  <span>&middot;</span>
+  <span><%= post.reading_time %> min read</span>
+</span>

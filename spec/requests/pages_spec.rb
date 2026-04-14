@@ -10,9 +10,13 @@ RSpec.describe "Pages", type: :request do
     it "displays the hero section" do
       get root_path
       expect(response.body).to include("Esteban Soto")
-      expect(response.body).to include("Full-Stack Developer")
-      expect(response.body).to include("Ruby")
-      expect(response.body).to include("JavaScript")
+      expect(response.body).to include("Rails developer since 2012")
+      expect(response.body).to include("databases")
+    end
+
+    it "keeps Full-Stack Developer in the document title for SEO" do
+      get root_path
+      expect(response.body).to include("<title>Esteban Soto — Full-Stack Developer")
     end
 
     it "sets a descriptive page title" do
@@ -90,6 +94,24 @@ RSpec.describe "Pages", type: :request do
         expect(second_pos).to be < first_pos
       end
 
+      it "renders the most recent post as a featured card" do
+        get root_path
+        # Featured card uses the "★ Latest" badge and a left-border accent
+        expect(response.body).to include("★ Latest")
+        expect(response.body).to include("border-l-accent-green")
+        # The featured card should render the most recent post (Second Post)
+        featured_marker_pos = response.body.index("★ Latest")
+        expect(featured_marker_pos).not_to be_nil
+        # Second Post title should appear close to the featured marker
+        featured_section = response.body[featured_marker_pos..(featured_marker_pos + 1500)]
+        expect(featured_section).to include("Second Post")
+      end
+
+      it "shows a 'Latest' hero hint linking to the most recent post" do
+        get root_path
+        expect(response.body).to match(/Latest:.*Second Post/m)
+      end
+
       it "limits to 5 posts" do
         6.times do |i|
           Post.create!(
@@ -105,6 +127,28 @@ RSpec.describe "Pages", type: :request do
         # 8 total posts, homepage shows only 5 most recent
         # Each post card renders exactly one <h3> heading
         expect(response.body.scan(/<h3/).count).to eq(5)
+      end
+    end
+
+    context "with a single published post" do
+      let!(:only_post) do
+        Post.create!(
+          title: "Solo Post",
+          body_markdown: "# Content",
+          excerpt: "The only post",
+          status: :published,
+          published_at: 1.day.ago
+        )
+      end
+
+      it "renders the single post via the featured card and no grid" do
+        get root_path
+        # Featured card renders
+        expect(response.body).to include("Solo Post")
+        expect(response.body).to include("★ Latest")
+        # Only one post card on the page (the featured one — standard post_card
+        # grid is hidden because @posts.length > 1 is false)
+        expect(response.body.scan(/<h3/).count).to eq(1)
       end
     end
 
@@ -167,8 +211,10 @@ RSpec.describe "Pages", type: :request do
 
       it "displays tags on the post card" do
         get root_path
-        expect(response.body).to include("Ruby")
-        expect(response.body).to include("Rails")
+        # Use tag-specific route helpers so the assertion can't be satisfied
+        # by the hero tagline mentioning "Rails" in prose.
+        expect(response.body).to include(tag_path(slug: tag1.slug))
+        expect(response.body).to include(tag_path(slug: tag2.slug))
       end
     end
 
