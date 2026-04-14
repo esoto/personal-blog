@@ -63,6 +63,42 @@ RSpec.describe MarkdownRenderer do
     end
   end
 
+  describe ".render — heading anchors" do
+    it "emits an id on h2 headings derived from the text" do
+      result = described_class.render("## Getting Started")
+      expect(result).to include('<h2 id="getting-started">Getting Started</h2>')
+    end
+
+    it "emits an id on h3 headings derived from the text" do
+      result = described_class.render("### Install Dependencies")
+      expect(result).to include('<h3 id="install-dependencies">Install Dependencies</h3>')
+    end
+
+    it "does not emit an id on h1 headings" do
+      result = described_class.render("# Top Level")
+      expect(result).to include("<h1>Top Level</h1>")
+      expect(result).not_to match(/<h1[^>]*id=/)
+    end
+
+    it "does not emit an id on h4+ headings" do
+      result = described_class.render("#### Deep heading")
+      expect(result).to include("<h4>Deep heading</h4>")
+      expect(result).not_to match(/<h4[^>]*id=/)
+    end
+
+    it "disambiguates colliding slugs with a numeric suffix" do
+      md = "## Setup\n\nBody.\n\n## Setup\n\nMore body."
+      result = described_class.render(md)
+      expect(result).to include('<h2 id="setup">Setup</h2>')
+      expect(result).to include('<h2 id="setup-1">Setup</h2>')
+    end
+
+    it "falls back to 'section' when a heading parameterizes to empty" do
+      result = described_class.render("## !!!")
+      expect(result).to include('<h2 id="section">')
+    end
+  end
+
   describe ".render — enhanced code block structure" do
     it "wraps code blocks in a figure with the clipboard controller" do
       result = described_class.render("```ruby\nputs 'hi'\n```")

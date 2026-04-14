@@ -11,6 +11,8 @@ class MarkdownRenderer
   # Redcarpet renderer that wraps fenced code blocks in the shared
   # CodeBlock chrome (figure + figcaption + copy button).
   class HTMLRenderer < Redcarpet::Render::HTML
+    include HeadingAnchors
+
     def block_code(code, language)
       CodeBlock.render(language, ERB::Util.html_escape(code))
     end
@@ -20,6 +22,8 @@ class MarkdownRenderer
   # Rouge-formatted HTML inside. Used by admin editor preview and API
   # endpoints so the preview matches the published post exactly.
   class HighlightedRenderer < Redcarpet::Render::HTML
+    include HeadingAnchors
+
     def block_code(code, language)
       lexer = Rouge::Lexer.find_fancy(language) || Rouge::Lexers::PlainText.new
       formatter = Rouge::Formatters::HTMLInline.new(Rouge::Theme.find("base16.solarized"))

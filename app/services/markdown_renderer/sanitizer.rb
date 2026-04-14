@@ -19,7 +19,7 @@ class MarkdownRenderer
 
     ALLOWED_TAGS = (BASE_TAGS + CODE_BLOCK_TAGS + CALLOUT_TAGS + SVG_TAGS).freeze
 
-    BASE_ATTRIBUTES = %w[href src alt title class target rel style].freeze
+    BASE_ATTRIBUTES = %w[href src alt title class target rel style id].freeze
     STIMULUS_ATTRIBUTES = %w[data-controller data-action data-clipboard-target].freeze
     A11Y_ATTRIBUTES = %w[aria-label aria-hidden role type].freeze
     SVG_ATTRIBUTES = %w[

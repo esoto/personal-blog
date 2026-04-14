@@ -162,6 +162,43 @@ RSpec.describe "Posts", type: :request do
         expect(response.body).to include('data-clipboard-target="button"')
       end
 
+      it "does NOT render the sticky TOC on a short post" do
+        get post_show_path(slug: post.slug)
+        expect(response.body).not_to include('class="sticky-toc')
+        expect(response.body).not_to include('class="mobile-toc')
+      end
+
+      it "renders the sticky TOC and mobile TOC on a long post (reading_time >= 8)" do
+        long_body = ([ "## Heading\n\nBody paragraph with several words of content." ] * 3).join("\n") +
+                    "\n\n" + ("word " * 1700)
+        long_post = Post.create!(
+          title: "Long Post",
+          slug: "long-post",
+          body_markdown: long_body,
+          status: :published,
+          published_at: 1.day.ago
+        )
+        expect(long_post.reading_time).to be >= 8
+
+        get post_show_path(slug: long_post.slug)
+        expect(response.body).to include('data-controller="toc"')
+        expect(response.body).to include('class="sticky-toc')
+        expect(response.body).to include('class="mobile-toc')
+        expect(response.body).to include('data-toc-target="list"')
+      end
+
+      it "emits id attributes on h2 headings so the TOC can link to them" do
+        headed_post = Post.create!(
+          title: "Headed Post",
+          slug: "headed-post",
+          body_markdown: "## Getting Started\n\nContent.",
+          status: :published,
+          published_at: 1.day.ago
+        )
+        get post_show_path(slug: headed_post.slug)
+        expect(response.body).to include('<h2 id="getting-started">Getting Started</h2>')
+      end
+
       it "includes OG meta tags with post title" do
         get post_show_path(slug: post.slug)
         expect(response.body).to include('property="og:title" content="Test Post"')

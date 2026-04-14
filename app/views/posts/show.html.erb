@@ -11,46 +11,57 @@
   ])) %>
 <% end %>
 
+<% show_toc = @post.reading_time >= 8 %>
 <div>
   <!-- Back link -->
   <div class="mb-8">
     <%= link_to "← Back to posts", posts_path, class: "text-accent-green hover:text-accent-green-light transition-fast inline-block" %>
   </div>
 
-  <!-- Post header -->
-  <article class="bg-bg-surface border border-border rounded-lg p-8 md:p-12 mb-8">
-    <header>
-      <!-- Title -->
-      <h1 class="font-display text-4xl md:text-5xl font-bold text-text-primary mb-6"><%= @post.title %></h1>
+  <div class="<%= 'lg:grid lg:grid-cols-[minmax(0,1fr)_16rem] lg:gap-10 lg:items-start' if show_toc %>">
+    <!-- Post header -->
+    <article class="bg-bg-surface border border-border rounded-lg p-8 md:p-12 mb-8">
+      <header>
+        <!-- Title -->
+        <h1 class="font-display text-4xl md:text-5xl font-bold text-text-primary mb-6"><%= @post.title %></h1>
 
-      <!-- Meta Information -->
-      <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4 pb-6 border-b border-border">
-        <!-- Date -->
-        <span class="text-text-secondary text-sm font-medium">
-          <svg class="inline w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-          <%= @post.published_at.strftime("%B %d, %Y") %>
-          <span>&middot;</span>
-          <span><%= @post.reading_time %> min read</span>
-        </span>
+        <!-- Meta Information -->
+        <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4 pb-6 border-b border-border">
+          <!-- Date -->
+          <span class="text-text-secondary text-sm font-medium">
+            <svg class="inline w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+            <%= @post.published_at.strftime("%B %d, %Y") %>
+            <span>&middot;</span>
+            <span><%= @post.reading_time %> min read</span>
+          </span>
 
-        <!-- Tags -->
-        <% if @post.tags.any? %>
-          <div class="flex flex-wrap gap-2">
-            <% @post.tags.each do |tag| %>
-              <%= link_to tag_path(slug: tag.slug), class: "inline-block bg-bg-primary border border-border text-text-secondary hover:text-accent-green hover:border-accent-green/50 text-xs font-medium px-3 py-1 rounded-full transition-fast" do %>
-                <%= tag.name %>
+          <!-- Tags -->
+          <% if @post.tags.any? %>
+            <div class="flex flex-wrap gap-2">
+              <% @post.tags.each do |tag| %>
+                <%= link_to tag_path(slug: tag.slug), class: "inline-block bg-bg-primary border border-border text-text-secondary hover:text-accent-green hover:border-accent-green/50 text-xs font-medium px-3 py-1 rounded-full transition-fast" do %>
+                  <%= tag.name %>
+                <% end %>
               <% end %>
-            <% end %>
-          </div>
-        <% end %>
-      </div>
-    </header>
+            </div>
+          <% end %>
+        </div>
+      </header>
 
-    <!-- Post body -->
-    <div class="prose-dark mt-8" data-controller="highlight">
-      <%= @post.rendered_body %>
-    </div>
-  </article>
+      <% if show_toc %>
+        <%= render "shared/mobile_toc" %>
+      <% end %>
+
+      <!-- Post body -->
+      <div class="prose-dark mt-8" data-controller="highlight">
+        <%= @post.rendered_body %>
+      </div>
+    </article>
+
+    <% if show_toc %>
+      <%= render "shared/sticky_toc" %>
+    <% end %>
+  </div>
 
   <section class="mb-8 space-y-8" id="comments">
     <%= render "posts/comments", comments: @comments %>
