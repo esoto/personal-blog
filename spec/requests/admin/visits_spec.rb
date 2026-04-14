@@ -28,5 +28,16 @@ RSpec.describe "Admin::Visits", type: :request do
       get admin_visits_path
       expect(response).to redirect_to(login_path)
     end
+
+    it "renders the paginator when total visits exceed one page" do
+      # More than the per_page=25 default so @visits.total_pages > 1
+      26.times do |i|
+        Visit.create!(ip_address: "10.0.0.#{i + 1}", path: "/x/#{i}", browser: "Chrome", device_type: "Desktop")
+      end
+      get admin_visits_path
+      expect(response).to have_http_status(:ok)
+      # The custom paginator emits <nav role="navigation" aria-label="pager">
+      expect(response.body).to include('aria-label="pager"')
+    end
   end
 end

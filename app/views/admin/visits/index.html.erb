@@ -114,7 +114,7 @@
   </div>
   <% if @visits.total_pages > 1 %>
     <div class="p-6 border-t border-border">
-      <%= paginate @visits, theme: "tailwind" %>
+      <%= paginate @visits %>
     </div>
   <% end %>
 </div>
