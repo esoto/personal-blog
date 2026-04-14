@@ -13,22 +13,12 @@
       <%= post.excerpt %>
     </p>
 
-    <!-- Meta Information -->
+    <!-- Meta -->
     <div class="flex items-center justify-between mb-4">
-      <span class="text-text-muted text-xs font-medium">
-        <%= post.published_at.strftime("%b %d, %Y") %>
-        <span>&middot;</span>
-        <span><%= post.reading_time %> min read</span>
-      </span>
+      <%= render "shared/post_meta", post: post %>
     </div>
 
     <!-- Tags -->
-    <% if post.tags.any? %>
-      <div class="flex flex-wrap gap-2 pt-4 border-t border-border">
-        <% post.tags.each do |tag| %>
-          <%= link_to tag.name, tag_path(slug: tag.slug), class: "inline-block bg-bg-primary border border-border/50 text-text-secondary text-xs font-medium px-3 py-1 rounded-full hover:border-accent-blue hover:text-accent-blue transition-fast" %>
-        <% end %>
-      </div>
-    <% end %>
+    <%= render "shared/post_tag_list", post: post, wrapper_class: "pt-4 border-t border-border" %>
   </div>
 </div>
