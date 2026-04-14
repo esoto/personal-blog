@@ -65,6 +65,30 @@ RSpec.describe "Pages", type: :request do
       expect(response.body).not_to match(/text-accent-blue|bg-accent-blue|border-accent-blue|hover:text-accent-blue|hover:border-accent-blue|hover:bg-accent-blue|ring-accent-blue|from-accent-blue|to-accent-blue/)
     end
 
+    it "applies the font-display serif utility to the hero h1" do
+      # The signature expressive channel of the design system is editorial
+      # heading typography (Fraunces). This guard ensures the hero h1
+      # always carries the font-display class that triggers the serif.
+      get root_path
+      expect(response.body).to match(/<h1[^>]*class="[^"]*\bfont-display\b/)
+    end
+
+    it "applies font-display to the 'Latest Posts' section heading" do
+      get root_path
+      expect(response.body).to match(/<h2[^>]*class="[^"]*\bfont-display\b[^"]*"[^>]*>[\s\S]*?Latest[\s\S]*?Posts/)
+    end
+
+    it "loads all three design-system fonts from Google Fonts with display:swap" do
+      # A typo in the Google Fonts URL (e.g. dropping `opsz` from Fraunces)
+      # would silently break variable-axis loading. This asserts the URL
+      # contents stay intact.
+      get root_path
+      expect(response.body).to include("family=Fraunces")
+      expect(response.body).to include("family=Inter")
+      expect(response.body).to include("family=JetBrains+Mono")
+      expect(response.body).to include("display=swap")
+    end
+
     context "with published posts" do
       let!(:post1) do
         Post.create!(

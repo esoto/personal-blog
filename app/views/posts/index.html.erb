@@ -3,11 +3,7 @@
 <% content_for(:og_description) { "Explore my latest articles and thoughts on Ruby, JavaScript, and software engineering." } %>
 
 <div>
-  <!-- Header -->
-  <div class="mb-12">
-    <h1 class="text-4xl font-bold text-text-primary mb-2">Posts</h1>
-    <p class="text-text-secondary">Explore my latest articles and thoughts</p>
-  </div>
+  <%= render "shared/page_header", title: "Posts", subtitle: "Explore my latest articles and thoughts" %>
 
   <% if @posts.any? %>
     <!-- Posts Grid -->

@@ -3,11 +3,7 @@
 <% content_for(:og_description) { "Browse all topics and categories." } %>
 
 <div>
-  <!-- Header -->
-  <div class="mb-12">
-    <h1 class="text-4xl font-bold text-text-primary mb-2">Tags</h1>
-    <p class="text-text-secondary">Browse posts by topic</p>
-  </div>
+  <%= render "shared/page_header", title: "Tags", subtitle: "Browse posts by topic" %>
 
   <% if @tags.any? %>
     <!-- Tags Grid -->
