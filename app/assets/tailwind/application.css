@@ -290,7 +290,11 @@
    highlight.js (via highlight_controller.js) still applies syntax
    colors to the inner <code> element at runtime.
    ============================================================ */
-.prose-dark .code-block {
+/* Code block and callout components are unscoped so they work in any
+   context — post body, admin preview, email digest, standalone docs —
+   without requiring a .prose-dark wrapper. Keep .prose-dark for
+   typography only. */
+.code-block {
   margin-top: 1.5em;
   margin-bottom: 1.5em;
   border-radius: 0.5rem;
@@ -300,7 +304,7 @@
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
-.prose-dark .code-block-header {
+.code-block-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -313,14 +317,14 @@
   user-select: none;
 }
 
-.prose-dark .code-block-language {
+.code-block-language {
   color: var(--color-text-secondary);
   text-transform: uppercase;
   letter-spacing: 0.08em;
   font-weight: 500;
 }
 
-.prose-dark .code-block-copy {
+.code-block-copy {
   display: inline-flex;
   align-items: center;
   gap: 0.375rem;
@@ -335,27 +339,31 @@
   transition: color 200ms, border-color 200ms, background-color 200ms;
 }
 
-.prose-dark .code-block-copy:hover {
+.code-block-copy:hover {
   color: var(--color-accent-primary);
   border-color: var(--color-border);
   background-color: rgba(255, 255, 255, 0.03);
 }
 
-.prose-dark .code-block-copy:focus-visible {
+.code-block-copy:focus-visible {
   outline: 2px solid var(--color-accent-primary);
   outline-offset: 2px;
 }
 
-.prose-dark .code-block-copy.is-copied {
+.code-block-copy.is-copied {
   color: var(--color-accent-primary);
 }
 
-.prose-dark .code-block-copy-icon {
+.code-block-copy.is-failed {
+  color: #EF4444;
+}
+
+.code-block-copy-icon {
   width: 14px;
   height: 14px;
 }
 
-.prose-dark .code-block pre {
+.code-block pre {
   margin: 0;
   padding: 1rem 1.25rem;
   background-color: transparent;
@@ -366,7 +374,7 @@
   max-width: none;
 }
 
-.prose-dark .code-block code {
+.code-block code {
   background: none;
   padding: 0;
   color: var(--color-text-primary);
@@ -374,7 +382,7 @@
 }
 
 /* Override highlight.js background so code block tint stays consistent */
-.prose-dark .code-block code.hljs {
+.code-block code.hljs {
   background: transparent;
   padding: 0;
 }
@@ -382,10 +390,11 @@
 /* ============================================================
    Callouts — :::info / :::tip / :::warning / :::danger
    ============================================================
-   Rendered server-side by MarkdownRenderer#preprocess_callouts.
+   Rendered server-side by MarkdownRenderer::Callouts.preprocess.
    Pattern: low-opacity background tint + 4px left border + SVG icon.
+   Unscoped so they work in any context, not just .prose-dark.
    ============================================================ */
-.prose-dark .callout {
+.callout {
   display: flex;
   gap: 0.875rem;
   padding: 1rem 1.125rem;
@@ -397,55 +406,55 @@
   background-color: transparent;
 }
 
-.prose-dark .callout-icon {
+.callout-icon {
   flex-shrink: 0;
   width: 20px;
   height: 20px;
   margin-top: 0.15rem;
 }
 
-.prose-dark .callout-body {
+.callout-body {
   flex: 1;
   min-width: 0;
 }
 
-.prose-dark .callout-body > :first-child {
+.callout-body > :first-child {
   margin-top: 0;
 }
 
-.prose-dark .callout-body > :last-child {
+.callout-body > :last-child {
   margin-bottom: 0;
 }
 
-.prose-dark .callout-info {
+.callout-info {
   background-color: rgba(59, 130, 246, 0.08);   /* blue-500 at 8% */
   border-left-color: #3B82F6;
 }
-.prose-dark .callout-info .callout-icon {
+.callout-info .callout-icon {
   color: #3B82F6;
 }
 
-.prose-dark .callout-tip {
+.callout-tip {
   background-color: rgba(16, 185, 129, 0.08);   /* emerald-500 at 8% */
   border-left-color: var(--color-accent-primary);
 }
-.prose-dark .callout-tip .callout-icon {
+.callout-tip .callout-icon {
   color: var(--color-accent-primary);
 }
 
-.prose-dark .callout-warning {
+.callout-warning {
   background-color: rgba(245, 158, 11, 0.08);   /* amber-500 at 8% */
   border-left-color: #F59E0B;
 }
-.prose-dark .callout-warning .callout-icon {
+.callout-warning .callout-icon {
   color: #F59E0B;
 }
 
-.prose-dark .callout-danger {
+.callout-danger {
   background-color: rgba(239, 68, 68, 0.08);    /* red-500 at 8% */
   border-left-color: #EF4444;
 }
-.prose-dark .callout-danger .callout-icon {
+.callout-danger .callout-icon {
   color: #EF4444;
 }
 

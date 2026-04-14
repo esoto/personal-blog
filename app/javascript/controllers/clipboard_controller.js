@@ -9,7 +9,7 @@ import { Controller } from "@hotwired/stimulus"
 export default class extends Controller {
   static targets = ["button", "label"]
 
-  copy(event) {
+  async copy(event) {
     event.preventDefault()
 
     const pre = this.element.querySelector("pre")
@@ -19,38 +19,24 @@ export default class extends Controller {
     const button = this.hasButtonTarget ? this.buttonTarget : event.currentTarget
     const label  = this.hasLabelTarget  ? this.labelTarget  : null
 
-    const done = (ok) => {
-      if (label) label.textContent = ok ? "Copied!" : "Failed"
-      if (button) button.classList.add("is-copied")
-      clearTimeout(this.resetTimer)
-      this.resetTimer = setTimeout(() => {
-        if (label) label.textContent = "Copy"
-        if (button) button.classList.remove("is-copied")
-      }, 1800)
-    }
-
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(text).then(() => done(true)).catch(() => this.legacyCopy(text, done))
-    } else {
-      this.legacyCopy(text, done)
+    try {
+      await navigator.clipboard.writeText(text)
+      this.flash(button, label, "Copied!", "is-copied")
+    } catch {
+      // writeText rejects on insecure contexts or missing user gesture;
+      // let the user see a failure state rather than silently dying.
+      this.flash(button, label, "Failed", "is-failed")
     }
   }
 
-  legacyCopy(text, done) {
-    try {
-      const textarea = document.createElement("textarea")
-      textarea.value = text
-      textarea.setAttribute("readonly", "")
-      textarea.style.position = "absolute"
-      textarea.style.left = "-9999px"
-      document.body.appendChild(textarea)
-      textarea.select()
-      document.execCommand("copy")
-      document.body.removeChild(textarea)
-      done(true)
-    } catch (e) {
-      done(false)
-    }
+  flash(button, label, message, modifier) {
+    if (label) label.textContent = message
+    if (button) button.classList.add(modifier)
+    clearTimeout(this.resetTimer)
+    this.resetTimer = setTimeout(() => {
+      if (label) label.textContent = "Copy"
+      if (button) button.classList.remove(modifier)
+    }, 1800)
   }
 
   disconnect() {

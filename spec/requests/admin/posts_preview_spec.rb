@@ -13,11 +13,14 @@ RSpec.describe "Admin Posts Preview", type: :request do
       expect(response.body).to include("<h1>Hello</h1>")
     end
 
-    it "returns highlighted code blocks" do
+    it "returns highlighted code blocks wrapped in the shared code-block chrome" do
       post admin_posts_preview_path, params: { markdown: "```ruby\nputs 'hi'\n```" },
                                      headers: { "Accept" => "text/html" }
       expect(response).to have_http_status(:ok)
-      expect(response.body).to include("highlight")
+      expect(response.body).to include('class="code-block"')
+      expect(response.body).to include('<span class="code-block-language">ruby</span>')
+      # Rouge inline formatter emits <span style="..."> tokens
+      expect(response.body).to match(/<span style="[^"]+">/)
     end
 
     it "returns empty for blank markdown" do

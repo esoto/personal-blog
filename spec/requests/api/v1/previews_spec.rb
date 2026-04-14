@@ -21,11 +21,14 @@ RSpec.describe "API V1 Previews", type: :request do
       expect(response.parsed_body["html"]).to include("<h1>Hello World</h1>")
     end
 
-    it "renders code blocks with syntax highlighting" do
+    it "renders code blocks with the shared code-block chrome + inline Rouge styles" do
       markdown = "```ruby\nputs 'hello'\n```"
       post "/api/v1/preview", params: { markdown: markdown }, headers: api_headers
       expect(response).to have_http_status(:ok)
-      expect(response.parsed_body["html"]).to include("highlight")
+      html = response.parsed_body["html"]
+      expect(html).to include('class="code-block"')
+      expect(html).to include('<span class="code-block-language">ruby</span>')
+      expect(html).to match(/<span style="[^"]+">/)
     end
 
     it "returns 422 for blank markdown" do

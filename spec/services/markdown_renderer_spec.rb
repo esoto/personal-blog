@@ -155,23 +155,97 @@ RSpec.describe MarkdownRenderer do
       expect(result).to include("Some paragraph")
     end
 
-    it "leaves unrecognized callout types untouched (not a known type)" do
+    it "leaves unrecognized callout types as raw text (not transformed)" do
       md = ":::bogus\nContent\n:::"
       result = described_class.render(md)
       expect(result).not_to include("callout-bogus")
+      expect(result).not_to include("<aside")
+      expect(result).to include(":::bogus")
+      expect(result).to include("Content")
+    end
+
+    it "renders a fenced code block inside a callout body" do
+      md = ":::tip\nUse this snippet:\n\n```ruby\nputs 'hi'\n```\n:::"
+      result = described_class.render(md)
+      expect(result).to include("callout-tip")
+      expect(result).to include('<figure class="code-block"')
+      expect(result).to include("puts")
+    end
+
+    it "does not merge two adjacent callouts into one (non-greedy)" do
+      md = ":::info\nA\n:::\n\n:::warning\nB\n:::"
+      result = described_class.render(md)
+      expect(result.scan("<aside").length).to eq(2)
+      expect(result).to include("callout-info")
+      expect(result).to include("callout-warning")
+    end
+
+    it "leaves an unclosed callout fence as raw text (no crash, no aside)" do
+      md = ":::tip\nOrphan body with no closing fence"
+      result = described_class.render(md)
+      expect(result).not_to include("<aside")
+      expect(result).to include("Orphan body")
+    end
+
+    it "does NOT rewrite ::: inside a fenced code block" do
+      md = "```markdown\n:::tip\nNot a real callout\n:::\n```"
+      result = described_class.render(md)
+      expect(result).not_to include("<aside")
+      expect(result).not_to include("callout-tip")
+      # The literal :::tip text should appear in the code block
+      expect(result).to include(":::tip")
+    end
+  end
+
+  describe ".render — sanitizer defense (filter_html is off)" do
+    it "strips raw <script> tags in prose (inner text passes through as text node, which is safe)" do
+      # Rails::HTML5::SafeListSanitizer operates in "strip" mode — it removes
+      # disallowed tags but keeps their inner text as text nodes. The text
+      # "alert(1)" becomes a harmless string in a <p>, not executable JS.
+      result = described_class.render("Hello <script>alert(1)</script> world")
+      expect(result).not_to include("<script")
+      expect(result).not_to include("</script")
+      expect(result).to include("Hello")
+      expect(result).to include("world")
+    end
+
+    it "strips on* event attributes from allowed tags" do
+      result = described_class.render('<a href="/x" onclick="alert(1)">click</a>')
+      expect(result).to include('href="/x"')
+      expect(result).not_to include("onclick")
+    end
+
+    it "strips disallowed tags like <iframe> and <style>" do
+      result = described_class.render("<iframe src='x'></iframe><style>body{}</style>Hello")
+      expect(result).not_to include("<iframe")
+      expect(result).not_to include("<style")
+      expect(result).to include("Hello")
+    end
+
+    it "strips javascript: in href attributes even without filter_html" do
+      result = described_class.render('<a href="javascript:alert(1)">click</a>')
+      expect(result).not_to include("javascript:")
     end
   end
 
   describe ".render_with_highlighting" do
-    it "syntax highlights code blocks" do
+    it "wraps highlighted code in the shared figure chrome" do
       result = described_class.render_with_highlighting("```ruby\nputs 'hi'\n```")
-      expect(result).to include("highlight")
+      expect(result).to include('<figure class="code-block"')
+      expect(result).to include('data-controller="clipboard"')
+      expect(result).to include('<span class="code-block-language">ruby</span>')
+    end
+
+    it "syntax highlights code blocks with inline Rouge styles" do
+      result = described_class.render_with_highlighting("```ruby\nputs 'hi'\n```")
+      # Rouge HTMLInline formatter emits <span style="..."> tokens
+      expect(result).to match(/<span style="[^"]+">/)
     end
 
     it "falls back to plain code for unknown languages" do
       result = described_class.render_with_highlighting("```\nplain code\n```")
-      expect(result).to include("<pre")
-      expect(result).to include("<code>")
+      expect(result).to include('<span class="code-block-language">plaintext</span>')
+      expect(result).to include("plain code")
     end
 
     it "strips javascript: URIs in highlighted renderer" do
