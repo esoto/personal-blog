@@ -1,3 +1,3 @@
 <%= link_to_unless current_page.last?, t("views.pagination.last").html_safe, url,
-      class: "px-3 py-1.5 text-sm text-text-secondary hover:text-accent-primary border border-border rounded transition-fast",
+      class: "px-3 py-1.5 text-sm text-text-secondary hover:text-accent-primary border border-border rounded transition-fast focus-visible:outline-2 focus-visible:outline-accent-primary focus-visible:outline-offset-2",
       remote: remote %>
