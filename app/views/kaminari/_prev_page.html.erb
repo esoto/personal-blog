@@ -1,0 +1,4 @@
+<%= link_to_unless current_page.first?, t("views.pagination.previous").html_safe, url,
+      class: "px-3 py-1.5 text-sm text-text-secondary hover:text-accent-primary border border-border rounded transition-fast",
+      rel: "prev",
+      remote: remote %>

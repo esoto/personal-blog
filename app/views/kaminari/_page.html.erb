@@ -1,0 +1,8 @@
+<% if page.current? %>
+  <span class="px-3 py-1.5 text-sm font-semibold text-bg-primary bg-accent-primary border border-accent-primary rounded" aria-current="page"><%= page %></span>
+<% else %>
+  <%= link_to page, url,
+        class: "px-3 py-1.5 text-sm text-text-secondary hover:text-accent-primary border border-border rounded transition-fast",
+        rel: page.rel,
+        remote: remote %>
+<% end %>
