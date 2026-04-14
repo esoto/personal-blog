@@ -276,47 +276,177 @@
   color: var(--color-accent-orange);
 }
 
-.prose-dark pre {
-  background-color: var(--color-bg-elevated);
-  border: 1px solid var(--color-border);
-  border-radius: 0.5rem;
-  padding: 1.25em;
-  overflow-x: auto;
+/* ============================================================
+   Enhanced code block (figure wrapper)
+   ============================================================
+   Rendered server-side by MarkdownRenderer#block_code as:
+     <figure class="code-block" data-controller="clipboard">
+       <figcaption class="code-block-header">
+         <span class="code-block-language">ruby</span>
+         <button class="code-block-copy" ...>...</button>
+       </figcaption>
+       <pre><code class="language-ruby">...</code></pre>
+     </figure>
+   highlight.js (via highlight_controller.js) still applies syntax
+   colors to the inner <code> element at runtime.
+   ============================================================ */
+.prose-dark .code-block {
   margin-top: 1.5em;
   margin-bottom: 1.5em;
-  position: relative;
+  border-radius: 0.5rem;
+  border: 1px solid var(--color-border);
+  overflow: hidden;
+  background-color: #1E1E2E; /* Catppuccin Mocha base — contained env distinct from page */
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.prose-dark .code-block-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0.875rem;
+  background-color: rgba(0, 0, 0, 0.25);
+  border-bottom: 1px solid var(--color-border);
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  line-height: 1;
+  user-select: none;
+}
+
+.prose-dark .code-block-language {
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 500;
+}
+
+.prose-dark .code-block-copy {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.25rem 0.5rem;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 0.25rem;
+  color: var(--color-text-muted);
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: color 200ms, border-color 200ms, background-color 200ms;
+}
+
+.prose-dark .code-block-copy:hover {
+  color: var(--color-accent-primary);
+  border-color: var(--color-border);
+  background-color: rgba(255, 255, 255, 0.03);
+}
+
+.prose-dark .code-block-copy:focus-visible {
+  outline: 2px solid var(--color-accent-primary);
+  outline-offset: 2px;
+}
+
+.prose-dark .code-block-copy.is-copied {
+  color: var(--color-accent-primary);
+}
+
+.prose-dark .code-block-copy-icon {
+  width: 14px;
+  height: 14px;
+}
+
+.prose-dark .code-block pre {
+  margin: 0;
+  padding: 1rem 1.25rem;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+  overflow-x: auto;
   width: 100%;
   max-width: none;
 }
 
-.prose-dark pre code {
+.prose-dark .code-block code {
   background: none;
   padding: 0;
   color: var(--color-text-primary);
   font-size: 0.875em;
 }
 
-/* Override highlight.js background to match our theme */
-.prose-dark pre code.hljs {
+/* Override highlight.js background so code block tint stays consistent */
+.prose-dark .code-block code.hljs {
   background: transparent;
   padding: 0;
 }
 
-/* Language label on code blocks */
-.code-language-label {
-  position: absolute;
-  top: 0;
-  right: 0;
-  background-color: var(--color-border);
-  color: var(--color-text-secondary);
-  font-size: 0.7rem;
-  font-family: var(--font-sans);  /* Single source of truth via @theme */
-  padding: 0.2em 0.6em;
-  border-radius: 0 0.5rem 0 0.375rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  line-height: 1.5;
-  user-select: none;
+/* ============================================================
+   Callouts — :::info / :::tip / :::warning / :::danger
+   ============================================================
+   Rendered server-side by MarkdownRenderer#preprocess_callouts.
+   Pattern: low-opacity background tint + 4px left border + SVG icon.
+   ============================================================ */
+.prose-dark .callout {
+  display: flex;
+  gap: 0.875rem;
+  padding: 1rem 1.125rem;
+  margin-top: 1.5em;
+  margin-bottom: 1.5em;
+  border-radius: 0.5rem;
+  border-left-width: 4px;
+  border-left-style: solid;
+  background-color: transparent;
+}
+
+.prose-dark .callout-icon {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  margin-top: 0.15rem;
+}
+
+.prose-dark .callout-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.prose-dark .callout-body > :first-child {
+  margin-top: 0;
+}
+
+.prose-dark .callout-body > :last-child {
+  margin-bottom: 0;
+}
+
+.prose-dark .callout-info {
+  background-color: rgba(59, 130, 246, 0.08);   /* blue-500 at 8% */
+  border-left-color: #3B82F6;
+}
+.prose-dark .callout-info .callout-icon {
+  color: #3B82F6;
+}
+
+.prose-dark .callout-tip {
+  background-color: rgba(16, 185, 129, 0.08);   /* emerald-500 at 8% */
+  border-left-color: var(--color-accent-primary);
+}
+.prose-dark .callout-tip .callout-icon {
+  color: var(--color-accent-primary);
+}
+
+.prose-dark .callout-warning {
+  background-color: rgba(245, 158, 11, 0.08);   /* amber-500 at 8% */
+  border-left-color: #F59E0B;
+}
+.prose-dark .callout-warning .callout-icon {
+  color: #F59E0B;
+}
+
+.prose-dark .callout-danger {
+  background-color: rgba(239, 68, 68, 0.08);    /* red-500 at 8% */
+  border-left-color: #EF4444;
+}
+.prose-dark .callout-danger .callout-icon {
+  color: #EF4444;
 }
 
 .prose-dark img {

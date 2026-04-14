@@ -145,9 +145,21 @@ RSpec.describe "Posts", type: :request do
         expect(response.body).to include('data-controller="highlight')
       end
 
-      it "includes the clipboard Stimulus controller on the post body" do
-        get post_show_path(slug: post.slug)
-        expect(response.body).to include('data-controller="highlight clipboard"')
+      it "wires clipboard Stimulus controllers per code block (figure scope)" do
+        # Each code block figure carries its own `data-controller="clipboard"`
+        # so the copy button's target lookup is scoped to the block it lives
+        # in. The outer prose-dark wrapper no longer needs a clipboard
+        # controller — the figures handle it.
+        post_with_code = Post.create!(
+          title: "Code Post",
+          slug: "code-post",
+          body_markdown: "```ruby\nputs 'hi'\n```",
+          status: :published,
+          published_at: 1.day.ago
+        )
+        get post_show_path(slug: post_with_code.slug)
+        expect(response.body).to include('<figure class="code-block" data-controller="clipboard">')
+        expect(response.body).to include('data-clipboard-target="button"')
       end
 
       it "includes OG meta tags with post title" do
