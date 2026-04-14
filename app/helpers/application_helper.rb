@@ -6,9 +6,9 @@ module ApplicationHelper
                current_page?(path)
     end
     if active
-      "text-accent-blue font-semibold transition-fast"
+      "text-accent-green font-semibold transition-fast"
     else
-      "text-text-secondary hover:text-accent-blue transition-fast"
+      "text-text-secondary hover:text-accent-green transition-fast"
     end
   end
 end

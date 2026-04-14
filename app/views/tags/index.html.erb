@@ -14,9 +14,9 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
       <% @tags.each do |tag| %>
         <%= link_to tag_path(slug: tag.slug),
-              class: "group bg-bg-surface border border-border rounded-lg p-5 hover:border-accent-blue transition-fast" do %>
+              class: "group bg-bg-surface border border-border rounded-lg p-5 hover:border-accent-green transition-fast" do %>
           <div class="flex items-center justify-between">
-            <span class="text-lg font-medium text-accent-blue group-hover:text-accent-green transition-fast">
+            <span class="text-lg font-medium text-accent-green group-hover:text-accent-green transition-fast">
               <span class="text-text-muted">#</span><%= tag.name %>
             </span>
             <span class="text-sm text-text-muted bg-bg-surface-hover rounded-full px-3 py-1">

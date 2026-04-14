@@ -2,8 +2,8 @@ require "rails_helper"
 
 RSpec.describe ApplicationHelper, type: :helper do
   describe "#nav_link_class" do
-    let(:active_classes) { "text-accent-blue font-semibold transition-fast" }
-    let(:inactive_classes) { "text-text-secondary hover:text-accent-blue transition-fast" }
+    let(:active_classes) { "text-accent-green font-semibold transition-fast" }
+    let(:inactive_classes) { "text-text-secondary hover:text-accent-green transition-fast" }
 
     context "with exact match (default)" do
       it "returns active classes when current page matches the path" do

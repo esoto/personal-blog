@@ -25,27 +25,27 @@
 
     <!-- Main Heading -->
     <h1 class="text-4xl md:text-6xl font-bold text-text-primary mb-8">
-      <span class="text-accent-blue">Esteban Soto</span>
+      <span class="text-accent-green">Esteban Soto</span>
     </h1>
 
     <!-- Tagline -->
     <p class="text-lg md:text-xl text-text-secondary mb-10 font-light leading-relaxed">
-      Rails developer since 2012. Writing about <span class="text-accent-blue font-medium">databases</span>, <span class="text-accent-blue font-medium">Rails</span>, and what I'm learning from using <span class="text-accent-blue font-medium">AI</span> as a coding partner.
+      Rails developer since 2012. Writing about <span class="text-accent-green font-medium">databases</span>, <span class="text-accent-green font-medium">Rails</span>, and what I'm learning from using <span class="text-accent-green font-medium">AI</span> as a coding partner.
     </p>
 
     <!-- Latest Post Hint -->
     <% if @posts.any? %>
       <p class="text-sm text-text-muted mb-10">
-        Latest: <%= link_to "#{@posts.first.title} →", post_show_path(slug: @posts.first.slug), class: "text-accent-blue hover:text-accent-green font-medium transition-fast" %>
+        Latest: <%= link_to "#{@posts.first.title} →", post_show_path(slug: @posts.first.slug), class: "text-accent-green hover:text-accent-green/80 font-medium transition-fast" %>
       </p>
     <% end %>
 
     <!-- CTA -->
     <div class="flex flex-col items-center gap-5">
-      <a href="#posts" class="inline-block px-8 py-3 bg-accent-blue hover:bg-accent-blue/90 text-bg-primary font-bold rounded-lg transition-fast">
+      <a href="#posts" class="inline-block px-8 py-3 bg-accent-green hover:bg-accent-green/90 text-bg-primary font-bold rounded-lg transition-fast">
         Read Latest Posts
       </a>
-      <a href="https://github.com/esoto" target="_blank" rel="noopener noreferrer" class="text-sm text-text-muted hover:text-accent-blue transition-fast">
+      <a href="https://github.com/esoto" target="_blank" rel="noopener noreferrer" class="text-sm text-text-muted hover:text-accent-green transition-fast">
         or find me on GitHub →
       </a>
     </div>
@@ -59,7 +59,7 @@
     <h2 class="text-3xl md:text-4xl font-bold text-text-primary mb-3">
       <span class="text-accent-green">Latest</span> Posts
     </h2>
-    <div class="h-1 w-32 bg-gradient-to-r from-accent-green to-accent-blue rounded-full"></div>
+    <div class="h-1 w-32 bg-gradient-to-r from-accent-green to-emerald-300 rounded-full"></div>
   </div>
 
   <!-- Posts -->
@@ -78,7 +78,7 @@
 
     <!-- View All Posts Link -->
     <div class="mt-12 text-center">
-      <%= link_to "View All Posts →", posts_path, class: "inline-block px-6 py-3 text-accent-blue hover:text-accent-green font-semibold transition-fast" %>
+      <%= link_to "View All Posts →", posts_path, class: "inline-block px-6 py-3 text-accent-green hover:text-accent-green/80 font-semibold transition-fast" %>
     </div>
   <% else %>
     <!-- Empty State -->

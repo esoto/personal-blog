@@ -1,17 +1,74 @@
 @import "tailwindcss";
 
+/* ============================================================
+   DESIGN SYSTEM — Working Notes
+   See: .claude/writing-style.md and Obsidian/Personal Brand/Blog/Plans/Design System.md
+
+   Layer 1 (raw primitives): zinc + emerald scales exposed as CSS
+   variables on :root. Used by custom CSS (e.g. .prose-dark). Not
+   meant to be referenced directly from templates — use the
+   Tailwind utilities generated from the semantic @theme layer.
+
+   Layer 2 (semantic tokens): @theme block. Tailwind v4 auto-
+   generates utility classes from these (bg-bg-primary,
+   text-accent-green, border-border, etc). Templates reference
+   ONLY the semantic layer through utility classes.
+
+   Layer 3 (component tokens): scoped custom CSS blocks below
+   (.prose-dark, .code-language-label). They reference semantic
+   tokens via var() for consistency during future palette shifts.
+   ============================================================ */
+
+/* ------------- Layer 1: Raw primitives ---------------------- */
+:root {
+  /* Zinc scale — warm-neutral near-blacks for dark mode base */
+  --zinc-50:  #FAFAFA;
+  --zinc-100: #F4F4F5;
+  --zinc-200: #E4E4E7;
+  --zinc-300: #D4D4D8;
+  --zinc-400: #A1A1AA;
+  --zinc-500: #71717A;
+  --zinc-600: #52525B;
+  --zinc-700: #3F3F46;
+  --zinc-800: #27272A;
+  --zinc-900: #18181B;
+  --zinc-950: #0A0A0B;
+
+  /* Emerald scale — primary accent, signals growth/learning */
+  --emerald-300: #6EE7B7;
+  --emerald-400: #34D399;
+  --emerald-500: #10B981;
+  --emerald-600: #059669;
+  --emerald-700: #047857;
+
+  /* Retained secondaries — used sparingly (admin UI, semantic alerts) */
+  --blue-400:  #60A5FA;
+  --blue-500:  #58A6FF;   /* GitHub blue, legacy admin accent */
+  --amber-500: #F59E0B;
+  --red-500:   #EF4444;
+}
+
+/* ------------- Layer 2: Semantic tokens (@theme) ------------ */
 @theme {
-  --color-bg-primary: #0d1117;
-  --color-bg-surface: #161b22;
-  --color-bg-surface-hover: #1c2128;
-  --color-text-primary: #e6edf3;
-  --color-text-secondary: #8b949e;
-  --color-text-muted: #484f58;
-  --color-accent-blue: #58a6ff;
-  --color-accent-green: #39d353;
-  --color-accent-orange: #f0883e;
-  --color-border: #30363d;
-  --color-border-hover: #58a6ff;
+  /* Backgrounds */
+  --color-bg-primary:       #0A0A0B; /* zinc-950 */
+  --color-bg-surface:       #18181B; /* zinc-900 */
+  --color-bg-surface-hover: #27272A; /* zinc-800 */
+  --color-bg-elevated:      #27272A; /* zinc-800 — code blocks, modals */
+
+  /* Text */
+  --color-text-primary:   #FAFAFA; /* zinc-50  — 15.4:1 on bg, WCAG AAA */
+  --color-text-secondary: #A1A1AA; /* zinc-400 */
+  --color-text-muted:     #71717A; /* zinc-500 — metadata, captions */
+
+  /* Accents */
+  --color-accent-green:  #10B981; /* emerald-500 — PRIMARY interactive (links, CTAs, focus) */
+  --color-accent-blue:   #58A6FF; /* blue — legacy admin, secondary */
+  --color-accent-orange: #F59E0B; /* amber — warnings, empty states */
+
+  /* Borders */
+  --color-border:       #27272A; /* zinc-800 — tighter than before */
+  --color-border-hover: #10B981; /* emerald-500 — interactive hover */
 }
 
 @layer base {
@@ -32,11 +89,13 @@
   }
 
   .focus-ring {
-    @apply outline-none ring-2 ring-accent-blue ring-offset-2 ring-offset-bg-surface;
+    @apply outline-none ring-2 ring-accent-green ring-offset-2 ring-offset-bg-surface;
   }
 }
 
-/* Rich text body styling (replaces @tailwindcss/typography prose class) */
+/* ------------- Layer 3: Component tokens -------------------- */
+/* Rich text body styling (rendered markdown) — references
+   semantic tokens only, so palette shifts are automatic. */
 .prose-dark {
   color: var(--color-text-primary);
   line-height: 1.75;
@@ -69,12 +128,12 @@
 }
 
 .prose-dark a {
-  color: var(--color-accent-blue);
+  color: var(--color-accent-green);
   text-decoration: underline;
 }
 
 .prose-dark a:hover {
-  color: var(--color-accent-green);
+  color: var(--emerald-400);
 }
 
 .prose-dark strong {
@@ -107,7 +166,7 @@
 }
 
 .prose-dark blockquote {
-  border-left: 4px solid var(--color-border);
+  border-left: 4px solid var(--color-accent-green);
   padding-left: 1em;
   color: var(--color-text-secondary);
   font-style: italic;
@@ -116,7 +175,7 @@
 }
 
 .prose-dark code {
-  background-color: var(--color-bg-surface);
+  background-color: var(--color-bg-elevated);
   padding: 0.2em 0.4em;
   border-radius: 0.25rem;
   font-size: 0.875em;
@@ -124,7 +183,7 @@
 }
 
 .prose-dark pre {
-  background-color: var(--color-bg-surface);
+  background-color: var(--color-bg-elevated);
   border: 1px solid var(--color-border);
   border-radius: 0.5rem;
   padding: 1.25em;
@@ -201,4 +260,3 @@
 .prose-dark tr:nth-child(even) {
   background-color: var(--color-bg-surface);
 }
-
