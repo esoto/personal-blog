@@ -11,8 +11,8 @@ RSpec.describe "Pages", type: :request do
       get root_path
       expect(response.body).to include("Esteban Soto")
       expect(response.body).to include("Full-Stack Developer")
-      expect(response.body).to include("Ruby")
-      expect(response.body).to include("JavaScript")
+      expect(response.body).to include("Rails developer since 2012")
+      expect(response.body).to include("databases")
     end
 
     it "sets a descriptive page title" do
