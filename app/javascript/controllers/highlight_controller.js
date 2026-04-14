@@ -2,7 +2,9 @@ import { Controller } from "@hotwired/stimulus"
 
 // Connects to data-controller="highlight"
 // Initializes highlight.js on code blocks within its scope.
-// Adds language labels and handles Turbo navigations via connect/disconnect.
+// Language labels are now rendered server-side by MarkdownRenderer — this
+// controller only handles syntax coloring and respects Turbo navigations
+// via connect/disconnect.
 export default class extends Controller {
   connect() {
     this.originalContents = new Map()
@@ -26,23 +28,7 @@ export default class extends Controller {
 
       this.originalContents.set(block, block.innerHTML)
       hljs.highlightElement(block)
-      this.addLanguageLabel(block)
     })
-  }
-
-  addLanguageLabel(block) {
-    const pre = block.closest("pre")
-    if (!pre || pre.querySelector(".code-language-label")) return
-
-    const langClass = Array.from(block.classList).find((c) => c.startsWith("language-"))
-    const language = langClass ? langClass.replace("language-", "") : null
-
-    if (language) {
-      const label = document.createElement("span")
-      label.className = "code-language-label"
-      label.textContent = language
-      pre.appendChild(label)
-    }
   }
 
   cleanup() {
@@ -57,8 +43,5 @@ export default class extends Controller {
       block.classList.remove("hljs")
     })
     this.originalContents?.clear()
-
-    const labels = this.element.querySelectorAll(".code-language-label")
-    labels.forEach((label) => label.remove())
   }
 }

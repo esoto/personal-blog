@@ -236,10 +236,13 @@ RSpec.describe Post, type: :model do
   end
 
   describe "#rendered_body_highlighted" do
-    it "returns syntax-highlighted HTML" do
+    it "returns syntax-highlighted HTML wrapped in the shared code-block chrome" do
       blog_post = described_class.create!(title: "Highlight Test", body_markdown: "```ruby\nputs 'hi'\n```", status: :draft)
       result = blog_post.rendered_body_highlighted
-      expect(result).to include("highlight")
+      expect(result).to include('<figure class="code-block"')
+      expect(result).to include('<span class="code-block-language">ruby</span>')
+      # Rouge HTMLInline formatter emits <span style="..."> tokens for colors
+      expect(result).to match(/<span style="[^"]+">/)
     end
   end
 
