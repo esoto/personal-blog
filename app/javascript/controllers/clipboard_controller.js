@@ -30,11 +30,11 @@ export default class extends Controller {
         "bg-bg-primary",
         "border", "border-border",
         "rounded",
-        "hover:text-accent-blue", "hover:border-accent-blue",
+        "hover:text-accent-green", "hover:border-accent-green",
         "transition-all", "duration-200",
         "cursor-pointer",
         "opacity-0", "group-hover:opacity-100",
-        "focus:opacity-100", "focus:outline-none", "focus:ring-2", "focus:ring-accent-blue"
+        "focus:opacity-100", "focus:outline-none", "focus:ring-2", "focus:ring-accent-green"
       ].join(" ")
 
       button.innerHTML = `${this.copyIconSvg}<span data-label>Copy</span>`

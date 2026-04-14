@@ -20,18 +20,18 @@
     <!-- Pagination -->
     <div class="flex items-center justify-between pt-8 border-t border-border">
       <div class="text-text-secondary text-sm font-medium">
-        Page <span class="text-accent-blue"><%= @page %></span> of <span class="text-accent-blue"><%= (@total_posts.to_f / @per_page).ceil %></span>
+        Page <span class="text-accent-green"><%= @page %></span> of <span class="text-accent-green"><%= (@total_posts.to_f / @per_page).ceil %></span>
       </div>
 
       <div class="flex gap-4">
         <% if @page > 1 %>
-          <%= link_to "← Previous", posts_path(page: @page - 1), class: "px-4 py-2 bg-bg-surface hover:bg-bg-surface-hover border border-border hover:border-accent-blue text-text-primary font-medium rounded transition-fast" %>
+          <%= link_to "← Previous", posts_path(page: @page - 1), class: "px-4 py-2 bg-bg-surface hover:bg-bg-surface-hover border border-border hover:border-accent-green text-text-primary font-medium rounded transition-fast" %>
         <% else %>
           <button disabled class="px-4 py-2 bg-bg-surface border border-border text-text-muted rounded cursor-not-allowed opacity-50">← Previous</button>
         <% end %>
 
         <% if @page < (@total_posts.to_f / @per_page).ceil %>
-          <%= link_to "Next →", posts_path(page: @page + 1), class: "px-4 py-2 bg-bg-surface hover:bg-bg-surface-hover border border-border hover:border-accent-blue text-text-primary font-medium rounded transition-fast" %>
+          <%= link_to "Next →", posts_path(page: @page + 1), class: "px-4 py-2 bg-bg-surface hover:bg-bg-surface-hover border border-border hover:border-accent-green text-text-primary font-medium rounded transition-fast" %>
         <% else %>
           <button disabled class="px-4 py-2 bg-bg-surface border border-border text-text-muted rounded cursor-not-allowed opacity-50">Next →</button>
         <% end %>

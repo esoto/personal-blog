@@ -17,19 +17,19 @@
       <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
         <div>
           <%= f.label :author_name, "Name", class: "block text-text-secondary text-sm font-medium mb-2" %>
-          <%= f.text_field :author_name, class: "w-full bg-bg-primary border border-border rounded-lg px-4 py-2.5 text-text-primary placeholder-text-muted focus:border-accent-blue focus:ring-1 focus:ring-accent-blue outline-none transition-fast", placeholder: "Your name" %>
+          <%= f.text_field :author_name, class: "w-full bg-bg-primary border border-border rounded-lg px-4 py-2.5 text-text-primary placeholder-text-muted focus:border-accent-green focus:ring-1 focus:ring-accent-green outline-none transition-fast", placeholder: "Your name" %>
         </div>
 
         <div>
           <%= f.label :email, "Email", class: "block text-text-secondary text-sm font-medium mb-2" %>
-          <%= f.text_field :email, class: "w-full bg-bg-primary border border-border rounded-lg px-4 py-2.5 text-text-primary placeholder-text-muted focus:border-accent-blue focus:ring-1 focus:ring-accent-blue outline-none transition-fast", placeholder: "your@email.com" %>
+          <%= f.text_field :email, class: "w-full bg-bg-primary border border-border rounded-lg px-4 py-2.5 text-text-primary placeholder-text-muted focus:border-accent-green focus:ring-1 focus:ring-accent-green outline-none transition-fast", placeholder: "your@email.com" %>
           <p class="text-text-muted text-xs mt-1">Your email will not be published.</p>
         </div>
       </div>
 
       <div>
         <%= f.label :body, "Comment", class: "block text-text-secondary text-sm font-medium mb-2" %>
-        <%= f.text_area :body, rows: 4, class: "w-full bg-bg-primary border border-border rounded-lg px-4 py-2.5 text-text-primary placeholder-text-muted focus:border-accent-blue focus:ring-1 focus:ring-accent-blue outline-none transition-fast resize-y", placeholder: "Share your thoughts..." %>
+        <%= f.text_area :body, rows: 4, class: "w-full bg-bg-primary border border-border rounded-lg px-4 py-2.5 text-text-primary placeholder-text-muted focus:border-accent-green focus:ring-1 focus:ring-accent-green outline-none transition-fast resize-y", placeholder: "Share your thoughts..." %>
       </div>
 
       <%# Honeypot field - hidden from humans, bots fill it %>
@@ -38,7 +38,7 @@
       </div>
 
       <div>
-        <%= f.submit "Submit Comment", class: "px-6 py-2.5 bg-accent-blue text-bg-primary font-medium rounded-lg hover:bg-accent-blue/90 transition-fast cursor-pointer" %>
+        <%= f.submit "Submit Comment", class: "px-6 py-2.5 bg-accent-green text-bg-primary font-medium rounded-lg hover:bg-accent-green/90 transition-fast cursor-pointer" %>
       </div>
     <% end %>
   </div>
