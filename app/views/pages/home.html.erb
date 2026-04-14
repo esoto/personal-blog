@@ -36,7 +36,7 @@
     <!-- Latest Post Hint -->
     <% if @posts.any? %>
       <p class="text-sm text-text-muted mb-10">
-        Latest: <%= link_to "#{@posts.first.title} →", post_show_path(slug: @posts.first.slug), class: "text-accent-green hover:text-accent-green/80 font-medium transition-fast" %>
+        Latest: <%= link_to "#{@posts.first.title} →", post_show_path(slug: @posts.first.slug), class: "text-accent-green hover:text-accent-green-light font-medium transition-fast" %>
       </p>
     <% end %>
 
@@ -59,7 +59,7 @@
     <h2 class="text-3xl md:text-4xl font-bold text-text-primary mb-3">
       <span class="text-accent-green">Latest</span> Posts
     </h2>
-    <div class="h-1 w-32 bg-gradient-to-r from-accent-green to-emerald-300 rounded-full"></div>
+    <div class="h-1 w-32 bg-gradient-to-r from-accent-green to-accent-green-light rounded-full"></div>
   </div>
 
   <!-- Posts -->
@@ -78,7 +78,7 @@
 
     <!-- View All Posts Link -->
     <div class="mt-12 text-center">
-      <%= link_to "View All Posts →", posts_path, class: "inline-block px-6 py-3 text-accent-green hover:text-accent-green/80 font-semibold transition-fast" %>
+      <%= link_to "View All Posts →", posts_path, class: "inline-block px-6 py-3 text-accent-green hover:text-accent-green-light font-semibold transition-fast" %>
     </div>
   <% else %>
     <!-- Empty State -->

@@ -57,6 +57,14 @@ RSpec.describe "Pages", type: :request do
       expect(response.body).to include('"name":"Esteban Soto"')
     end
 
+    it "does not leak the deprecated accent-blue tokens onto the public home page" do
+      # Public templates are migrated to emerald (accent-green). The blue
+      # accent is reserved for admin UI. This guard prevents future template
+      # changes from accidentally reintroducing accent-blue on a public page.
+      get root_path
+      expect(response.body).not_to match(/text-accent-blue|bg-accent-blue|border-accent-blue|hover:text-accent-blue|hover:border-accent-blue|hover:bg-accent-blue|ring-accent-blue|from-accent-blue|to-accent-blue/)
+    end
+
     context "with published posts" do
       let!(:post1) do
         Post.create!(

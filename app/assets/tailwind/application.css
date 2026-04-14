@@ -49,26 +49,40 @@
 }
 
 /* ------------- Layer 2: Semantic tokens (@theme) ------------ */
+/* Tokens reference Layer 1 primitives via var() so the chain is real:
+   change a primitive once and every consuming utility updates.
+   Tailwind v4 supports var() inside @theme — utility generation keys
+   off the --color-* name, not the resolved value. */
 @theme {
   /* Backgrounds */
-  --color-bg-primary:       #0A0A0B; /* zinc-950 */
-  --color-bg-surface:       #18181B; /* zinc-900 */
-  --color-bg-surface-hover: #27272A; /* zinc-800 */
-  --color-bg-elevated:      #27272A; /* zinc-800 — code blocks, modals */
+  --color-bg-primary:       var(--zinc-950);
+  --color-bg-surface:       var(--zinc-900);
+  --color-bg-surface-hover: var(--zinc-800);
+  --color-bg-elevated:      var(--zinc-800); /* code blocks, modals */
 
   /* Text */
-  --color-text-primary:   #FAFAFA; /* zinc-50  — 15.4:1 on bg, WCAG AAA */
-  --color-text-secondary: #A1A1AA; /* zinc-400 */
-  --color-text-muted:     #71717A; /* zinc-500 — metadata, captions */
+  --color-text-primary:   var(--zinc-50);  /* 15.4:1 on bg, WCAG AAA */
+  --color-text-secondary: var(--zinc-400);
+  --color-text-muted:     var(--zinc-500); /* metadata, captions */
 
-  /* Accents */
-  --color-accent-green:  #10B981; /* emerald-500 — PRIMARY interactive (links, CTAs, focus) */
-  --color-accent-blue:   #58A6FF; /* blue — legacy admin, secondary */
-  --color-accent-orange: #F59E0B; /* amber — warnings, empty states */
+  /* Role-based accents (preferred — palette-shift safe) */
+  --color-accent-primary:       var(--emerald-500); /* links, CTAs, focus */
+  --color-accent-primary-hover: var(--emerald-300); /* hover affordance */
+  --color-accent-secondary:     var(--blue-500);    /* admin-only nav/CTAs */
+  --color-accent-warning:       var(--amber-500);   /* warnings, empty states */
+  --color-accent-danger:        var(--red-500);     /* destructive */
+
+  /* Color-name legacy aliases — kept so existing templates still resolve.
+     New code should prefer the role-based names above. These will be
+     removed once every template has migrated. */
+  --color-accent-green:       var(--color-accent-primary);
+  --color-accent-green-light: var(--color-accent-primary-hover);
+  --color-accent-blue:        var(--color-accent-secondary); /* DEPRECATED — admin only; do not use in public templates */
+  --color-accent-orange:      var(--color-accent-warning);
 
   /* Borders */
-  --color-border:       #27272A; /* zinc-800 — tighter than before */
-  --color-border-hover: #10B981; /* emerald-500 — interactive hover */
+  --color-border:       var(--zinc-800);
+  --color-border-hover: var(--color-accent-primary); /* interactive hover */
 }
 
 @layer base {

@@ -14,7 +14,7 @@
 <div>
   <!-- Back link -->
   <div class="mb-8">
-    <%= link_to "← Back to posts", posts_path, class: "text-accent-green hover:text-accent-green/80 transition-fast inline-block" %>
+    <%= link_to "← Back to posts", posts_path, class: "text-accent-green hover:text-accent-green-light transition-fast inline-block" %>
   </div>
 
   <!-- Post header -->
@@ -59,7 +59,7 @@
 
   <!-- Back link at bottom -->
   <div class="flex justify-between items-center pt-6 border-t border-border">
-    <%= link_to "← Back to posts", posts_path, class: "text-accent-green hover:text-accent-green/80 transition-fast" %>
+    <%= link_to "← Back to posts", posts_path, class: "text-accent-green hover:text-accent-green-light transition-fast" %>
     <% if @post.tags.any? %>
       <div class="flex gap-2 text-xs text-text-secondary">
         <span class="font-medium">Tagged:</span>

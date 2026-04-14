@@ -1,6 +1,6 @@
-<div class="group bg-bg-surface rounded-lg p-8 border border-border border-l-4 border-l-accent-green hover:border-accent-green hover:border-l-accent-green transition-fast overflow-hidden relative mb-8">
+<div class="group bg-bg-surface rounded-lg p-8 border border-border border-l-4 border-l-accent-green hover:border-accent-green transition-fast overflow-hidden relative mb-8">
   <!-- Glow effect on hover -->
-  <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gradient-to-br from-accent-green/5 to-accent-green/5 pointer-events-none"></div>
+  <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gradient-to-br from-accent-green/5 to-accent-green-light/10 pointer-events-none"></div>
 
   <div class="relative z-10">
     <!-- Featured badge -->
@@ -9,7 +9,7 @@
     </div>
 
     <!-- Title -->
-    <h3 class="text-2xl md:text-3xl font-bold text-accent-green mb-4 group-hover:text-accent-green transition-fast leading-tight">
+    <h3 class="text-2xl md:text-3xl font-bold text-accent-green mb-4 group-hover:text-accent-green-light transition-fast leading-tight">
       <%= link_to post.title, post_show_path(slug: post.slug) %>
     </h3>
 
