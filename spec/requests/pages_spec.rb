@@ -65,10 +65,29 @@ RSpec.describe "Pages", type: :request do
       expect(response.body).to include('data-theme-mode="dark"')
     end
 
-    it "includes the inline no-FOUC theme script in the head" do
+    it "wires each toggle button to its controller action" do
       get root_path
-      expect(response.body).to include("localStorage.getItem(\"theme\")")
+      expect(response.body).to include('data-action="click->theme#setLight"')
+      expect(response.body).to include('data-action="click->theme#setSystem"')
+      expect(response.body).to include('data-action="click->theme#setDark"')
+    end
+
+    it "includes the inline no-FOUC theme script in the head with a CSP nonce" do
+      get root_path
+      # Both paths the FOUC script uses to activate light mode must be present
+      expect(response.body).to include('localStorage.getItem("theme")')
+      expect(response.body).to include('matchMedia("(prefers-color-scheme: light)")')
       expect(response.body).to include('document.documentElement.classList.add("light")')
+      # CSP nonce is required — if the tag ever loses it the script silently fails in production
+      expect(response.body).to match(/<script\b[^>]*\bnonce="[^"]+"[^>]*>[\s\S]*?localStorage\.getItem\("theme"\)/)
+    end
+
+    it "ships dark as the default (no .light class on <html> in the raw response)" do
+      get root_path
+      # Server renders <html lang="en"> with no class; the FOUC script
+      # only adds .light on the client based on localStorage/prefers-color-scheme.
+      expect(response.body).to match(/<html lang="en">/)
+      expect(response.body).not_to match(/<html[^>]*class="[^"]*\blight\b/)
     end
 
     it "does not leak the deprecated accent-blue tokens onto the public home page" do

@@ -29,21 +29,38 @@ export default class extends Controller {
   }
 
   setLight() {
-    localStorage.setItem("theme", "light")
+    this.writeStored("light")
     document.documentElement.classList.add("light")
     this.updateButtonStates()
   }
 
   setDark() {
-    localStorage.setItem("theme", "dark")
+    this.writeStored("dark")
     document.documentElement.classList.remove("light")
     this.updateButtonStates()
   }
 
   setSystem() {
-    localStorage.removeItem("theme")
+    this.writeStored(null)
     this.applySystem()
     this.updateButtonStates()
+  }
+
+  writeStored(value) {
+    // Safari private mode / storage quota errors must not crash the
+    // click handler — match the inline no-FOUC script's try/catch.
+    try {
+      if (value == null) localStorage.removeItem("theme")
+      else localStorage.setItem("theme", value)
+    } catch (_) {}
+  }
+
+  readStored() {
+    try {
+      return localStorage.getItem("theme")
+    } catch (_) {
+      return null
+    }
   }
 
   applySystem() {
@@ -64,7 +81,7 @@ export default class extends Controller {
   }
 
   currentMode() {
-    const stored = localStorage.getItem("theme")
+    const stored = this.readStored()
     if (stored === "light" || stored === "dark") return stored
     return "system"
   }
