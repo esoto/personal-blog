@@ -10,17 +10,10 @@
 <% end %>
 
 <div>
-  <!-- Header -->
-  <div class="mb-12">
-    <div class="flex items-center gap-3 mb-2">
-      <h1 class="font-display text-4xl font-bold text-text-primary">
-        <span class="text-accent-green">#</span> <%= @tag.name %>
-      </h1>
-    </div>
-    <p class="text-text-secondary">
-      <%= pluralize(@posts.count, "post") %> tagged with "<%= @tag.name %>"
-    </p>
-  </div>
+  <%= render "shared/page_header",
+        title: @tag.name,
+        accent_prefix: "#",
+        subtitle: "#{pluralize(@posts.count, 'post')} tagged with \"#{@tag.name}\"" %>
 
   <% if @posts.any? %>
     <!-- Posts Grid -->

@@ -1,0 +1,15 @@
+<%# Locals:
+    - title (required)         — heading text
+    - subtitle (optional)      — muted tagline beneath the heading
+    - accent_prefix (optional) — emerald-colored prefix rendered before the title (e.g. "#" for tag pages)
+%>
+<% subtitle ||= nil %>
+<% accent_prefix ||= nil %>
+<div class="mb-12">
+  <h1 class="font-display text-4xl font-bold text-text-primary mb-2">
+    <% if accent_prefix %><span class="text-accent-green"><%= accent_prefix %></span> <% end %><%= title %>
+  </h1>
+  <% if subtitle %>
+    <p class="text-text-secondary"><%= subtitle %></p>
+  <% end %>
+</div>
