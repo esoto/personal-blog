@@ -1,0 +1,17 @@
+<%# No-FOUC theme script — must run BEFORE the stylesheet loads
+    so .light is on <html> at first paint. Reads the same key
+    the theme Stimulus controller writes: localStorage.theme
+    (absent = follow system preference). Kept inline so it
+    blocks rendering intentionally for the few bytes it costs.
+    The nonce is required by the CSP script-src policy. %>
+<%= javascript_tag nonce: true do %>
+  (function() {
+    try {
+      var t = localStorage.getItem("theme");
+      var mql = window.matchMedia && window.matchMedia("(prefers-color-scheme: light)");
+      if (t === "light" || (t == null && mql && mql.matches)) {
+        document.documentElement.classList.add("light");
+      }
+    } catch (_) {}
+  })();
+<% end %>

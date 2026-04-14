@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <%= render "shared/fouc_script" %>
     <title><%= content_for(:title) || "Personal Blog" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -70,6 +71,7 @@
             <%= link_to "Posts", posts_path, class: nav_link_class("/posts", prefix_match: true) %>
             <%= link_to "Tags", tags_path, class: nav_link_class("/tags", prefix_match: true) %>
             <%= link_to "About", about_path, class: nav_link_class("/about") %>
+            <%= render "shared/theme_toggle" %>
             <% if logged_in? %>
               <%= link_to "Admin", admin_root_path, class: "px-4 py-2 bg-bg-surface-hover border border-border hover:border-accent-green text-text-primary rounded transition-fast" %>
             <% end %>

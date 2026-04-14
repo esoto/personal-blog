@@ -44,6 +44,8 @@
   /* Retained secondaries — used sparingly (admin UI, semantic alerts) */
   --blue-400:  #60A5FA;
   --blue-500:  #58A6FF;   /* GitHub blue, legacy admin accent */
+  --blue-info: #3B82F6;   /* Tailwind blue-500, used for :::info callouts */
+  --blue-600:  #2563EB;   /* AA contrast on #FAFAFA — light-mode admin accent */
   --amber-500: #F59E0B;
   --red-500:   #EF4444;
 }
@@ -83,6 +85,16 @@
   /* Borders */
   --color-border:       var(--zinc-800);
   --color-border-hover: var(--color-accent-primary); /* interactive hover */
+
+  /* Callout accent tokens (info/tip/warning/danger). Parallel to
+     role-based accents but scoped to the component. Backgrounds
+     are computed via color-mix(token var(--callout-bg-alpha)) so
+     the whole family shifts with a single alpha override. */
+  --color-callout-info:    var(--blue-info);
+  --color-callout-tip:     var(--color-accent-primary);
+  --color-callout-warning: var(--amber-500);
+  --color-callout-danger:  var(--red-500);
+  --callout-bg-alpha:      8%;
 
   /* ----------------------------------------------------------
      Typography
@@ -154,6 +166,46 @@
   --text-6xl:                      clamp(3.5rem, 3rem + 2.5vw, 4.5rem);
   --text-6xl--line-height:         1.1;
   --text-6xl--letter-spacing:      -0.025em;
+}
+
+/* ------------- Light mode overrides ------------------------- */
+/* Dark is the default — we opt into light when the <html> element
+   carries a `.light` class. The inline no-FOUC script in
+   layouts/application.html.erb sets the class before first paint
+   based on localStorage.theme or prefers-color-scheme. The toggle
+   is driven by theme_controller.js.
+
+   Only the semantic color tokens change in light mode — type scale,
+   font families, and shadow primitives stay the same. Palette derived
+   (not inverted): softer-than-pure whites, darker-than-pure blacks,
+   and emerald-600 for better contrast on light backgrounds. */
+:root.light {
+  --color-bg-primary:       var(--zinc-50);
+  --color-bg-surface:       #FFFFFF;
+  --color-bg-surface-hover: var(--zinc-100);
+  --color-bg-elevated:      var(--zinc-100);
+
+  --color-text-primary:   #1A1A1A;   /* not pure black */
+  --color-text-secondary: var(--zinc-600);
+  --color-text-muted:     var(--zinc-500);
+
+  --color-accent-primary:       var(--emerald-600);  /* AA contrast on #FAFAFA */
+  --color-accent-primary-hover: var(--emerald-700);
+
+  --color-accent-green:       var(--color-accent-primary);
+  --color-accent-green-light: var(--color-accent-primary-hover);
+
+  /* Admin accent — keep GitHub blue's intent but swap to blue-600
+     so it clears WCAG AA on the light background. */
+  --color-accent-secondary: var(--blue-600);
+  --color-accent-blue:      var(--color-accent-secondary);
+
+  --color-border:       var(--zinc-200);
+  --color-border-hover: var(--color-accent-primary);
+
+  /* Bump the callout background alpha so rgba(*, 8%) tints that
+     disappear on #FAFAFA read as visible color. */
+  --callout-bg-alpha: 12%;
 }
 
 @layer base {
@@ -427,35 +479,35 @@
 }
 
 .callout-info {
-  background-color: rgba(59, 130, 246, 0.08);   /* blue-500 at 8% */
-  border-left-color: #3B82F6;
+  background-color: color-mix(in srgb, var(--color-callout-info) var(--callout-bg-alpha), transparent);
+  border-left-color: var(--color-callout-info);
 }
 .callout-info .callout-icon {
-  color: #3B82F6;
+  color: var(--color-callout-info);
 }
 
 .callout-tip {
-  background-color: rgba(16, 185, 129, 0.08);   /* emerald-500 at 8% */
-  border-left-color: var(--color-accent-primary);
+  background-color: color-mix(in srgb, var(--color-callout-tip) var(--callout-bg-alpha), transparent);
+  border-left-color: var(--color-callout-tip);
 }
 .callout-tip .callout-icon {
-  color: var(--color-accent-primary);
+  color: var(--color-callout-tip);
 }
 
 .callout-warning {
-  background-color: rgba(245, 158, 11, 0.08);   /* amber-500 at 8% */
-  border-left-color: #F59E0B;
+  background-color: color-mix(in srgb, var(--color-callout-warning) var(--callout-bg-alpha), transparent);
+  border-left-color: var(--color-callout-warning);
 }
 .callout-warning .callout-icon {
-  color: #F59E0B;
+  color: var(--color-callout-warning);
 }
 
 .callout-danger {
-  background-color: rgba(239, 68, 68, 0.08);    /* red-500 at 8% */
-  border-left-color: #EF4444;
+  background-color: color-mix(in srgb, var(--color-callout-danger) var(--callout-bg-alpha), transparent);
+  border-left-color: var(--color-callout-danger);
 }
 .callout-danger .callout-icon {
-  color: #EF4444;
+  color: var(--color-callout-danger);
 }
 
 .prose-dark img {
@@ -613,4 +665,51 @@ html {
   color: var(--color-accent-green);
   border-left-color: var(--color-accent-green);
   font-weight: 500;
+}
+
+/* ------------- Theme toggle -------------------------------- */
+/* Three-state segmented control: light / system / dark. Driven by
+   theme_controller.js. Icons come from Heroicons (inline SVG). */
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+  padding: 2px;
+  border-radius: 0.5rem;
+  background-color: var(--color-bg-surface-hover);
+  border: 1px solid var(--color-border);
+}
+
+.theme-toggle-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: 0.375rem;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: color 150ms ease, background-color 150ms ease;
+}
+
+.theme-toggle-button:hover {
+  color: var(--color-text-primary);
+}
+
+.theme-toggle-button:focus-visible {
+  outline: 2px solid var(--color-accent-primary);
+  outline-offset: 2px;
+}
+
+.theme-toggle-button.is-active {
+  background-color: var(--color-bg-primary);
+  color: var(--color-accent-primary);
+}
+
+.theme-toggle-icon {
+  width: 1rem;
+  height: 1rem;
 }
