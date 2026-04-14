@@ -1,6 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <%# No-FOUC theme script — must run BEFORE the stylesheet loads
+        so .light is on <html> at first paint. Reads the same key
+        the theme Stimulus controller writes: localStorage.theme
+        (absent = follow system preference). Kept inline so it
+        blocks rendering intentionally for the few bytes it costs.
+        The nonce is required by the CSP script-src policy. %>
+    <%= javascript_tag nonce: true do %>
+      (function() {
+        try {
+          var t = localStorage.getItem("theme");
+          var mql = window.matchMedia && window.matchMedia("(prefers-color-scheme: light)");
+          if (t === "light" || (t == null && mql && mql.matches)) {
+            document.documentElement.classList.add("light");
+          }
+        } catch (_) {}
+      })();
+    <% end %>
     <title><%= content_for(:title) || "Personal Blog" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -70,6 +87,7 @@
             <%= link_to "Posts", posts_path, class: nav_link_class("/posts", prefix_match: true) %>
             <%= link_to "Tags", tags_path, class: nav_link_class("/tags", prefix_match: true) %>
             <%= link_to "About", about_path, class: nav_link_class("/about") %>
+            <%= render "shared/theme_toggle" %>
             <% if logged_in? %>
               <%= link_to "Admin", admin_root_path, class: "px-4 py-2 bg-bg-surface-hover border border-border hover:border-accent-green text-text-primary rounded transition-fast" %>
             <% end %>

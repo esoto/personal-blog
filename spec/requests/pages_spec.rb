@@ -57,6 +57,20 @@ RSpec.describe "Pages", type: :request do
       expect(response.body).to include('"name":"Esteban Soto"')
     end
 
+    it "renders the theme toggle in the navigation" do
+      get root_path
+      expect(response.body).to include('data-controller="theme"')
+      expect(response.body).to include('data-theme-mode="light"')
+      expect(response.body).to include('data-theme-mode="system"')
+      expect(response.body).to include('data-theme-mode="dark"')
+    end
+
+    it "includes the inline no-FOUC theme script in the head" do
+      get root_path
+      expect(response.body).to include("localStorage.getItem(\"theme\")")
+      expect(response.body).to include('document.documentElement.classList.add("light")')
+    end
+
     it "does not leak the deprecated accent-blue tokens onto the public home page" do
       # Public templates are migrated to emerald (accent-green). The blue
       # accent is reserved for admin UI. This guard prevents future template
