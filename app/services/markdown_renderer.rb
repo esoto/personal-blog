@@ -11,6 +11,8 @@ class MarkdownRenderer
   # Redcarpet renderer that wraps fenced code blocks in the shared
   # CodeBlock chrome (figure + figcaption + copy button).
   class HTMLRenderer < Redcarpet::Render::HTML
+    include HeadingAnchors
+
     def block_code(code, language)
       CodeBlock.render(language, ERB::Util.html_escape(code))
     end
@@ -20,11 +22,24 @@ class MarkdownRenderer
   # Rouge-formatted HTML inside. Used by admin editor preview and API
   # endpoints so the preview matches the published post exactly.
   class HighlightedRenderer < Redcarpet::Render::HTML
+    include HeadingAnchors
+
     def block_code(code, language)
       lexer = Rouge::Lexer.find_fancy(language) || Rouge::Lexers::PlainText.new
       formatter = Rouge::Formatters::HTMLInline.new(Rouge::Theme.find("base16.solarized"))
       highlighted = formatter.format(lexer.lex(code))
       CodeBlock.render(language, highlighted)
+    end
+  end
+
+  # Renderer used for markdown inside callout bodies. Intentionally
+  # does NOT emit heading anchor ids — callouts are visual asides,
+  # their headings are not TOC targets, and emitting ids here would
+  # produce duplicate DOM ids when a callout repeats an outer
+  # heading slug.
+  class CalloutBodyRenderer < HTMLRenderer
+    def header(text, header_level)
+      "<h#{header_level}>#{text}</h#{header_level}>\n"
     end
   end
 
@@ -55,7 +70,7 @@ class MarkdownRenderer
   # Hoisting this out of the callout loop saves N Redcarpet
   # instantiations on posts with multiple callouts.
   def self.body_markdown_renderer
-    body_renderer = HTMLRenderer.new(hard_wrap: false, link_attributes: { target: "_blank", rel: "noopener" })
+    body_renderer = CalloutBodyRenderer.new(hard_wrap: false, link_attributes: { target: "_blank", rel: "noopener" })
     Redcarpet::Markdown.new(body_renderer, **EXTENSIONS)
   end
   private_class_method :body_markdown_renderer
