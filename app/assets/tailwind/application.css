@@ -504,6 +504,23 @@ html {
 /* Sticky right-rail TOC on desktop, collapsible details on
    mobile. Unscoped — lives outside .prose-dark and is driven by
    the toc Stimulus controller. */
+/* Grid wrapper used by posts/show.html.erb when the post has a TOC.
+   Stacks on mobile, two-column on lg+ with a 16rem sidebar for the
+   sticky TOC. Kept next to .sticky-toc so the layout lives with its
+   component. */
+.post-layout--with-toc {
+  display: block;
+}
+
+@media (min-width: 1024px) {
+  .post-layout--with-toc {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 16rem;
+    gap: 2.5rem;
+    align-items: start;
+  }
+}
+
 .sticky-toc {
   position: sticky;
   top: 6rem;

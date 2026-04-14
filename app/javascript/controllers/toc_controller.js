@@ -8,6 +8,10 @@ import { Controller } from "@hotwired/stimulus"
 // sidebar or the mobile collapsible — each has its own list target.
 export default class extends Controller {
   static targets = ["list"]
+  // `offset` is intentionally larger than `scroll-padding-top: 5rem`
+  // (80px) in application.css so the active highlight leads the
+  // scroll by ~40px — the heading is marked active slightly before
+  // it reaches the sticky nav.
   static values = {
     articleSelector: { type: String, default: "article .prose-dark" },
     offset: { type: Number, default: 120 }
@@ -23,6 +27,26 @@ export default class extends Controller {
       return
     }
 
+    // Both the sticky desktop TOC and the mobile <details> variant
+    // render their own data-controller="toc". Only the visible one
+    // needs to attach scroll listeners — skip the hidden instance
+    // and defer initialization until a resize brings it into view.
+    if (this.element.offsetParent === null) {
+      this.deferredInit = () => {
+        if (this.element.offsetParent !== null) {
+          window.removeEventListener("resize", this.deferredInit)
+          this.deferredInit = null
+          this.startTracking()
+        }
+      }
+      window.addEventListener("resize", this.deferredInit, { passive: true })
+      return
+    }
+
+    this.startTracking()
+  }
+
+  startTracking() {
     this.buildLists()
 
     this.scrollHandler = () => this.scheduleUpdate()
@@ -36,13 +60,23 @@ export default class extends Controller {
       window.removeEventListener("scroll", this.scrollHandler)
       window.removeEventListener("resize", this.scrollHandler)
     }
+    if (this.deferredInit) {
+      window.removeEventListener("resize", this.deferredInit)
+    }
     if (this.rafId) cancelAnimationFrame(this.rafId)
     if (this.clickSettleTimer) clearTimeout(this.clickSettleTimer)
   }
 
   buildLists() {
+    // h.id is server-generated via parameterize so it's currently
+    // restricted to [a-z0-9-], but the sanitizer now allows `id`
+    // on any tag so a future admin could hand-author an `id`
+    // containing quotes. Escape as defense-in-depth.
     const markup = this.headings
-      .map(h => `<li><a href="#${h.id}" class="toc-link" data-heading-id="${h.id}">${escapeHtml(h.textContent)}</a></li>`)
+      .map(h => {
+        const id = escapeHtml(h.id)
+        return `<li><a href="#${id}" class="toc-link" data-heading-id="${id}">${escapeHtml(h.textContent)}</a></li>`
+      })
       .join("")
     this.listTargets.forEach(list => { list.innerHTML = markup })
     // Anchor clicks scroll the page but the scroll event may not

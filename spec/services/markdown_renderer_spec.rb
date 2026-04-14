@@ -93,6 +93,34 @@ RSpec.describe MarkdownRenderer do
       expect(result).to include('<h2 id="setup-1">Setup</h2>')
     end
 
+    it "increments the suffix for three or more colliding headings" do
+      md = "## Setup\n\nA\n\n## Setup\n\nB\n\n## Setup\n\nC"
+      result = described_class.render(md)
+      ids = result.scan(/<h2 id="([^"]+)">/).flatten
+      expect(ids).to eq(%w[setup setup-1 setup-2])
+    end
+
+    it "avoids colliding with a natural numeric-suffix slug earlier in the document" do
+      md = "## Setup 1\n\nA\n\n## Setup\n\nB\n\n## Setup\n\nC"
+      result = described_class.render(md)
+      ids = result.scan(/<h2 id="([^"]+)">/).flatten
+      expect(ids.uniq.size).to eq(ids.size)
+    end
+
+    it "does not emit ids on headings inside callout bodies (TOC stays outer-only)" do
+      md = ":::tip\n## Not A TOC Target\n:::"
+      result = described_class.render(md)
+      expect(result).to include("<h2>Not A TOC Target</h2>")
+      expect(result).not_to match(/<h2 id="[^"]*">Not A TOC Target/)
+    end
+
+    it "does not let a callout heading collide with an outer heading of the same slug" do
+      md = "## Setup\n\nTop-level body.\n\n:::tip\n## Setup\n:::"
+      result = described_class.render(md)
+      # Only the outer heading should carry id="setup"
+      expect(result.scan(/id="setup"/).length).to eq(1)
+    end
+
     it "falls back to 'section' when a heading parameterizes to empty" do
       result = described_class.render("## !!!")
       expect(result).to include('<h2 id="section">')
@@ -234,6 +262,11 @@ RSpec.describe MarkdownRenderer do
   end
 
   describe ".render — sanitizer defense (filter_html is off)" do
+    it "preserves id attributes on allowed tags (needed by heading anchors)" do
+      result = described_class.render('<h2 id="keep-me">Hi</h2>')
+      expect(result).to include('id="keep-me"')
+    end
+
     it "strips raw <script> tags in prose (inner text passes through as text node, which is safe)" do
       # Rails::HTML5::SafeListSanitizer operates in "strip" mode — it removes
       # disallowed tags but keeps their inner text as text nodes. The text

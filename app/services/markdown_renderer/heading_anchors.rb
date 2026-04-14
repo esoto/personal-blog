@@ -19,12 +19,23 @@ class MarkdownRenderer
 
     private
 
+    # Track emitted slugs (not just bases) so that a natural
+    # "Setup 1" heading followed by two "Setup" headings doesn't
+    # wrap around and collide with "setup-1".
     def unique_slug_for(text)
       base = text.to_s.parameterize.presence || "section"
       @heading_slug_counts ||= Hash.new(0)
-      count = @heading_slug_counts[base]
-      @heading_slug_counts[base] += 1
-      count.zero? ? base : "#{base}-#{count}"
+      @heading_slug_emitted ||= Set.new
+
+      loop do
+        count = @heading_slug_counts[base]
+        candidate = count.zero? ? base : "#{base}-#{count}"
+        @heading_slug_counts[base] += 1
+        unless @heading_slug_emitted.include?(candidate)
+          @heading_slug_emitted << candidate
+          return candidate
+        end
+      end
     end
   end
 end

@@ -18,7 +18,7 @@
     <%= link_to "← Back to posts", posts_path, class: "text-accent-green hover:text-accent-green-light transition-fast inline-block" %>
   </div>
 
-  <div class="<%= 'lg:grid lg:grid-cols-[minmax(0,1fr)_16rem] lg:gap-10 lg:items-start' if show_toc %>">
+  <div class="<%= 'post-layout--with-toc' if show_toc %>">
     <!-- Post header -->
     <article class="bg-bg-surface border border-border rounded-lg p-8 md:p-12 mb-8">
       <header>
