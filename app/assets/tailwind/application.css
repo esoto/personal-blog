@@ -83,17 +83,87 @@
   /* Borders */
   --color-border:       var(--zinc-800);
   --color-border-hover: var(--color-accent-primary); /* interactive hover */
+
+  /* ----------------------------------------------------------
+     Typography
+     ----------------------------------------------------------
+     - --font-display: editorial serif for headings (the SIGNATURE
+       expressive channel of the design system per Working Notes).
+       Variable font; opsz 9..144, wght 300..700.
+     - --font-sans: body text. Variable font for fewer requests.
+     - --font-mono: code blocks and inline code. Variable font.
+
+     Tailwind v4 generates utilities from these:
+     - font-display, font-sans, font-mono  (font-family)
+     - text-xs..text-display              (font-size, fluid via clamp())
+  */
+
+  --font-display: "Fraunces", "Newsreader", Georgia, serif;
+  --font-sans:    "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono:    "JetBrains Mono", "SF Mono", Monaco, Menlo, monospace;
+
+  /* Type scale (1.25 modular ratio, fluid via clamp())
+     Each size has its own line-height and letter-spacing tokens
+     (Tailwind v4 --{name}--{property} syntax) so the text-* utility
+     applies all three together. Body sizes get loose line-heights
+     (1.5–1.65), heading sizes get tight ones (1.1–1.3) with slight
+     negative tracking on the largest scales. */
+  --text-xs:                       clamp(0.75rem, 0.72rem + 0.15vw, 0.8125rem);
+  --text-xs--line-height:          1.5;
+
+  --text-sm:                       clamp(0.875rem, 0.85rem + 0.15vw, 0.9375rem);
+  --text-sm--line-height:          1.55;
+
+  --text-base:                     clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+  --text-base--line-height:        1.65;
+
+  --text-lg:                       clamp(1.125rem, 1.07rem + 0.275vw, 1.25rem);
+  --text-lg--line-height:          1.6;
+
+  --text-xl:                       clamp(1.25rem, 1.18rem + 0.35vw, 1.375rem);
+  --text-xl--line-height:          1.45;
+
+  --text-2xl:                      clamp(1.5rem, 1.4rem + 0.5vw, 1.75rem);
+  --text-2xl--line-height:         1.3;
+
+  --text-3xl:                      clamp(1.875rem, 1.7rem + 0.875vw, 2.25rem);
+  --text-3xl--line-height:         1.25;
+  --text-3xl--letter-spacing:      -0.01em;
+
+  --text-4xl:                      clamp(2.25rem, 2.05rem + 1vw, 2.75rem);
+  --text-4xl--line-height:         1.2;
+  --text-4xl--letter-spacing:      -0.015em;
+
+  --text-5xl:                      clamp(2.75rem, 2.45rem + 1.5vw, 3.5rem);
+  --text-5xl--line-height:         1.15;
+  --text-5xl--letter-spacing:      -0.02em;
+
+  --text-6xl:                      clamp(3.5rem, 3rem + 2.5vw, 4.5rem);
+  --text-6xl--line-height:         1.1;
+  --text-6xl--letter-spacing:      -0.025em;
 }
 
 @layer base {
   body {
-    @apply bg-bg-primary text-text-primary;
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    @apply bg-bg-primary text-text-primary font-sans;
+    font-feature-settings: "cv11", "ss03";  /* Inter: alt single-storey a + curved characters */
+    line-height: 1.65;
   }
 
   code,
   pre {
-    font-family: 'JetBrains Mono', 'Monaco', 'Menlo', monospace;
+    @apply font-mono;
+    font-feature-settings: "ss06", "calt";  /* JetBrains Mono ligatures + alternates */
+  }
+
+  /* Display headings use Fraunces. Line-height and letter-spacing
+     are now baked into each text-* size via @theme tokens above,
+     so this class only needs to set the font-family + opentype
+     features. Apply via the `font-display` utility class on a
+     heading element. */
+  .font-display {
+    font-family: var(--font-display);
+    font-feature-settings: "ss01";  /* Fraunces "less normal" alt */
   }
 }
 
@@ -118,10 +188,13 @@
 
 .prose-dark h1, .prose-dark h2, .prose-dark h3, .prose-dark h4, .prose-dark h5, .prose-dark h6 {
   color: var(--color-text-primary);
-  font-weight: 700;
+  font-family: var(--font-display);
+  font-feature-settings: "ss01";
+  font-weight: 600;  /* Fraunces is heavier than typical sans, 600 is plenty */
   margin-top: 2em;
   margin-bottom: 0.75em;
-  line-height: 1.3;
+  line-height: 1.2;
+  letter-spacing: -0.015em;
 }
 
 .prose-dark h1 { font-size: 2.25em; }
