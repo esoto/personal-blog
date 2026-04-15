@@ -167,6 +167,15 @@ RSpec.describe MarkdownRenderer do
       ids = result.scan(/<h2 id="([^"]+)">/).flatten
       expect(ids).to eq(%w[whats-next whats-next-1])
     end
+
+    # Locks in the strip-tags-then-unescape ordering. If a future refactor
+    # reverses the order, `&lt;script&gt;` would unescape into `<script>`,
+    # the tag-strip would eat it, and the slug would drop the word
+    # "script" entirely — the assertion below catches that.
+    it "does not let entity-encoded tags survive as real tags during slug cleaning" do
+      result = described_class.render("## Using &lt;script&gt; safely")
+      expect(result).to match(/<h2 id="using-script-safely">/)
+    end
   end
 
   describe ".render — enhanced code block structure" do
