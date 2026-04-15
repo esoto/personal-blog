@@ -125,6 +125,57 @@ RSpec.describe MarkdownRenderer do
       result = described_class.render("## !!!")
       expect(result).to include('<h2 id="section">')
     end
+
+    it "produces a clean slug for headings containing an apostrophe" do
+      result = described_class.render("## What's Next")
+      expect(result).to include('<h2 id="whats-next">')
+      expect(result).not_to include("39")
+    end
+
+    it "produces a clean slug for headings containing quotes" do
+      result = described_class.render('## "Quoted" Heading')
+      expect(result).to include('<h2 id="quoted-heading">')
+      expect(result).not_to include("34")
+    end
+
+    it "produces a clean slug for headings containing an ampersand" do
+      result = described_class.render("## Two & Three")
+      expect(result).to include('<h2 id="two-three">')
+      expect(result).to match(/id="two-three"/)
+    end
+
+    it "produces a clean slug for headings containing inline code" do
+      result = described_class.render("## Using `CLAUDE.md` Well")
+      expect(result).to match(/<h2 id="using-claude-md-well">/)
+    end
+
+    it "does not duplicate heading ids when an apostrophe heading appears twice" do
+      md = "## What's Next\n\nA.\n\n## What's Next\n\nB."
+      result = described_class.render(md)
+      ids = result.scan(/<h2 id="([^"]+)">/).flatten
+      expect(ids).to eq(%w[whats-next whats-next-1])
+    end
+
+    it "produces a clean slug for headings containing a curly apostrophe" do
+      result = described_class.render("## What\u2019s Next")
+      expect(result).to include('<h2 id="whats-next">')
+    end
+
+    it "treats straight and curly apostrophe headings as the same slug and disambiguates" do
+      md = "## What's Next\n\nA.\n\n## What\u2019s Next\n\nB."
+      result = described_class.render(md)
+      ids = result.scan(/<h2 id="([^"]+)">/).flatten
+      expect(ids).to eq(%w[whats-next whats-next-1])
+    end
+
+    # Locks in the strip-tags-then-unescape ordering. If a future refactor
+    # reverses the order, `&lt;script&gt;` would unescape into `<script>`,
+    # the tag-strip would eat it, and the slug would drop the word
+    # "script" entirely — the assertion below catches that.
+    it "does not let entity-encoded tags survive as real tags during slug cleaning" do
+      result = described_class.render("## Using &lt;script&gt; safely")
+      expect(result).to match(/<h2 id="using-script-safely">/)
+    end
   end
 
   describe ".render — enhanced code block structure" do
