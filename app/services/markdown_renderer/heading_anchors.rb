@@ -21,6 +21,11 @@ class MarkdownRenderer
 
     private
 
+    # Matches ASCII apostrophe (U+0027), left single quote (U+2018), and
+    # right single quote (U+2019). Explicit codepoints because the glyphs
+    # are easy to normalize away during editor/terminal round-trips.
+    APOSTROPHES = /['\u2018\u2019]/
+
     # Redcarpet passes the already-rendered inner HTML to `header`, which
     # means inline tags (e.g. <code>) and escaped entities (&#39;, &amp;,
     # &quot;) land here. We strip tags first, then unescape entities, so
@@ -30,7 +35,7 @@ class MarkdownRenderer
     # becomes `whats` (GitHub-style) rather than `what-s`.
     def unique_slug_for(text)
       cleaned = CGI.unescapeHTML(text.to_s.gsub(/<[^>]*>/, ""))
-      cleaned = cleaned.gsub(/['']/, "")
+      cleaned = cleaned.gsub(APOSTROPHES, "")
       base = cleaned.parameterize.presence || "section"
       @heading_slug_counts ||= Hash.new(0)
       @heading_slug_emitted ||= Set.new

@@ -155,6 +155,18 @@ RSpec.describe MarkdownRenderer do
       ids = result.scan(/<h2 id="([^"]+)">/).flatten
       expect(ids).to eq(%w[whats-next whats-next-1])
     end
+
+    it "produces a clean slug for headings containing a curly apostrophe" do
+      result = described_class.render("## What\u2019s Next")
+      expect(result).to include('<h2 id="whats-next">')
+    end
+
+    it "treats straight and curly apostrophe headings as the same slug and disambiguates" do
+      md = "## What's Next\n\nA.\n\n## What\u2019s Next\n\nB."
+      result = described_class.render(md)
+      ids = result.scan(/<h2 id="([^"]+)">/).flatten
+      expect(ids).to eq(%w[whats-next whats-next-1])
+    end
   end
 
   describe ".render — enhanced code block structure" do
